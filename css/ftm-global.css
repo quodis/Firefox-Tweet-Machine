@@ -1,0 +1,115 @@
+/* by Quodis © 2010 */
+
+
+/* BEGIN General Styles */
+/* ----------------------------------------- */
+
+/* Global reset */
+/* Based upon 'reset.css' in the Yahoo! User Interface Library: http://developer.yahoo.com/yui */
+*, html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, label, fieldset, input, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+fieldset, img {
+	border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+
+ol, ul, li {
+	list-style: none;
+}
+
+caption, th {
+	text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+q:before,
+q:after {
+	content: '';
+}
+
+abbr, acronym {
+	border: 0;
+}
+
+/* Global reset-RESET */
+/* The below restores some sensible defaults */
+strong, b {
+	font-weight: bold;
+}
+
+em, i {
+	font-style: italic;
+}
+
+strike, s { text-decoration: line-through; }
+
+u { text-decoration: underline; }
+
+a img {
+	border: none; /* gets rid of IE's blue borders */
+} 
+
+p {
+	line-height: 20px;
+	margin-bottom: 20px;
+}
+
+p.last {
+	margin: 0;
+}
+
+/* clearfix */
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+	
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
+/* clearfix /*/
+
+/* helpers */
+button::-moz-focus-inner {
+	border: 0 none;
+}
+
+.text-replace {
+	text-indent: -9999px;
+	overflow: hidden;
+	display: block;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.hide { display: none; }
+/* helpers /*/

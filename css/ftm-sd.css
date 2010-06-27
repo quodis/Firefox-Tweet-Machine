@@ -1,0 +1,140 @@
+/* by Quodis © 2010 */
+
+html, body { height: 100%; }
+
+body {
+	color: #333;
+	font-family: Georgia, serif;
+	font-size: 13px;
+	line-height: 20px; /* baseline grid of 20px */
+	background: #ECF8FA url(../img/sd/main-bg-sd.jpg) no-repeat bottom center;
+	overflow: hidden;
+}
+
+a, a:visited {
+	color: #4999A3;
+	text-decoration: none;
+	outline: 0 none;
+}
+
+a:hover {
+	color: #4999A3; 
+	text-decoration: underline;
+	outline: 0 none;
+}
+
+a.more {
+	color: #4999A3;
+	text-transform: uppercase;
+	line-height: 20px;
+	font-size: 12px;
+}
+
+/* headings */
+h1 {
+}
+
+/* headings /*/
+
+/* ----------------------------------------- */
+/* END General Styles */
+
+
+/* BEGIN Page Structure */
+/* ----------------------------------------- */
+div#page {
+}
+
+div#farthest-tubes-wrapper {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent url(../img/sd/farthest-tubes-sd.png) no-repeat bottom center;
+}
+
+div#bubbles-wrapper {
+  position: absolute;
+  z-index: 30;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent url(../img/sd/machine-body-sd.png) no-repeat bottom center;
+}
+
+div#machine-body-wrapper {
+  position: absolute;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent;
+}
+
+div#machine-bottom-wrapper {
+  position: absolute;
+  z-index: 40;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent url(../img/sd/machine-bottom-sd.png) no-repeat bottom center;
+}
+
+div#nearest-tubes-wrapper {
+  position: absolute;
+  z-index: 50;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent url(../img/sd/nearest-tubes-sd.png) no-repeat bottom center;
+}
+
+div#dashboards-wrapper {
+  position: absolute;
+  z-index: 60;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 620px;
+  background: transparent url(../img/sd/dashboards-sd.png) no-repeat bottom center;
+}
+
+/* ----------------------------------------- */
+/* END Page Structure */
+
+
+/* BEGIN Page Components */
+/* ----------------------------------------- */
+
+/* header components */
+
+
+/* header /*/
+
+
+/* content components */
+/* ------------------ */
+
+/* content components /*/
+/* ------------------- */
+
+
+/* footer components */
+
+
+/* footer components /*/
+
+/* ----------------------------------------- */
+/* END Page Components */
+
+
+
+.bubble {
+  background-color: white
+}
