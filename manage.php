@@ -1,5 +1,11 @@
 <?
-  // auth real
+  // set the flash messages array
+  $flash = array();
+  
+  // settings filename
+  $settings_filename = 'ftm_config.yaml';
+  
+  // auth realm that'll be displayed in the auth dialog
   $realm = 'Restricted area';
   
   //user => password
@@ -28,10 +34,44 @@
       die('Wrong Credentials!');
   
   // ok, valid username & password
-/*   echo 'Your are logged in as: ' . $data['username']; */
-  $content = 'logged in';
-  
-  
+/*   $flash['notive'] = 'Your are logged in as: ' . $data['username']; */
+
+  // include "A simple YAML loader/dumper" named spyc
+  include_once('spyc.php');
+
+  // write the settings if we received $_POST content
+  if ($_POST) {
+
+    // check if the file is writable
+      if (is_writable($settings_filename)) {
+
+          // generate yaml to be written to file
+          $yaml_string = Spyc::YAMLDump($_POST);
+            
+          // open the file
+          if (!$handle = fopen($settings_filename, 'w+')) {
+               $flash['error'] = "Cannot open file ($settings_filename)";
+               exit;
+          }
+      
+          // Write $somecontent to our opened file.
+          if (fwrite($handle, $yaml_string) === FALSE) {
+              $flash['error'] = "Cannot write to file ($settings_filename)";
+              exit;
+          }
+      
+          $flash['notice'] = "Success, wrote ($yaml_string) to file ($settings_filename)";
+
+          fclose($handle);
+      
+      } else if (!is_writable($settings_filename)) {
+          $flash['error'] = "The file $settings_filename is not writable";
+      }
+    } // end if $_POST
+    
+  // read the current configs
+  $config = Spyc::YAMLLoad($settings_filename);
+
   // function to parse the http auth header
   function http_digest_parse($txt)
   {
@@ -78,11 +118,89 @@
   </head>
   <body>
     <div id="wrapper">
-      <div id="header">Firefox Tweet Machine - Admin</div>
+      <div id="header">
+        <h1>Firefox Tweet Machine - Admin</h1>
+        <p class="messages"><? print_r($flash); ?></p>
+      </div>
       <div id="body">
-        <? print($content) ?>
+        <h2>Settings</h2>
+        <form action="manage.php" method="post">
+          <fieldset>
+            <legend>Twitter:</legend>
+            
+            <fieldset>
+              <legend>Timeline</legend>
+              
+              <label for="username">Default Screen Name</label>
+              <input id="username" name="username" type="text" value="<? print $config['timeline_username']; ?>" />
+              <br />
+              
+              <label for="count">Timeline Tweet Count</label>
+              <input id="count" name="count" type="text" value="<? print $config['timeline_count']; ?>" />
+              <br />
+              
+              <label for="timeline_url">Timeline URL</label>
+              <input id="timeline_url" name="timeline_url" type="text" value="<? print $config['timeline_url']; ?>" />
+              <br />
+            </fieldset>
+
+            <fieldset>
+              <legend>Search</legend>
+              
+              <label for="default_keyword">Default Search Keyword</label>
+              <input id="default_keyword" name="keyword" type="text" value="<? print $config['keyword'] ?>" />
+              <br />
+              
+              <label for="results_per_page">Results per Page</label>
+              <input id="results_per_page" name="results_per_page" type="text" value="<? print $config['results_per_page'] ?>" />
+              <br />
+              
+              <label for="search_url">Search URL</label>
+              <input id="search_url" name="search_url" type="text" value="<? print $config['search_url']; ?>" />
+              <br />
+            </fieldset>
+                        
+            
+            <br/>
+
+          </fieldset>
+          <fieldset>
+            <legend>Memcache</legend>
+            
+            <label for="memcache_host">Memcache Host</label>
+            <input id="memcache_host" name="memcache_host" type="text" value="<? print $config['memcache_host']; ?>" />
+            <br />
+
+            <label for="memcache_port">Memcache Port</label>
+            <input id="memcache_port" name="memcache_port" type="text" value="<? print $config['memcache_port']; ?>" />
+            <br />
+            
+            <label for="memcache_port">Memcache TTL</label>
+            <input id="memcache_ttl" name="memcache_ttl" type="text" value="<? print $config['memcache_ttl']; ?>" />
+            <br />
+            
+          </fieldset>
+          
+          <fieldset>
+            <legend>Cron</legend>
+            
+            <label for="cron_on_demand">On Demand</label>
+            <input id="cron_on_demand" name="cron_on_demand" type="checkbox" value="true" <? if ($config['cron_on_demand']) print 'checked="true"'; ?> />
+            <br/>
+            
+            <label for="cron_url">URL</label>
+            <input id="cron_url" name="cron_url" type="text" value="<? print $config['cron_url']; ?>" />
+            <br/>
+          </fieldset>
+          
+          <br/>
+          <br/>
+          <button>Save</button>
+          <br/>
+          <br/>
+        </form>
 			</div>
-      <div id="footer">&copy; <? print date('Y') ?> - Mozilla</div>
+      <div id="footer"></div>
     </div>
   </body>
 </html>

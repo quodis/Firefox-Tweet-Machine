@@ -135,6 +135,11 @@
 // 
 // ############################################################################
 
+// include "A simple YAML loader/dumper" named spyc
+require_once "spyc.php";
+// read the current configs
+$config = Spyc::YAMLLoad($settings_filename);
+
 // Change these configuration options if needed, see above descriptions for info.
 $enable_jsonp    = false;
 $enable_native   = false;

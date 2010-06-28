@@ -1,5 +1,10 @@
 <?
 
+// include "A simple YAML loader/dumper" named spyc
+require_once "spyc.php";
+// read the current configs
+$config = Spyc::YAMLLoad($settings_filename);
+
 // ############################################################################
 // settings
   // include global settings
@@ -17,7 +22,7 @@
     $timeline['url'] = $_GET['timeline_url'] ? $_GET['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=' . $timeline['username'] . '&count=' . $timeline['count'];
     // search
     $search = array();
-    $search['results_per_page'] = ($_GET['rpp']) ? $_GET['rpp'] : 100 ;
+    $search['results_per_page'] = ($_GET['rpp']) ? $_GET['rpp'] : 40 ;
     $search['keyword'] = ($_GET['search_keyword']) ? $_GET['search_keyword'] : 'firefox';
     $search['url'] = ($_GET['search_url']) ? $_GET['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&rpp=' . $search['results_per_page'] . '&q=' . $search['keyword'];
     
@@ -39,11 +44,18 @@ curl_setopt($ch, CURLOPT_URL, $search['url']);
 list( $header, $search_results ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status = curl_getinfo( $ch );
 echo('search: ' . $status['http_code'] . "<br>\n");
+
 // query and store user timeline
 curl_setopt($ch, CURLOPT_URL, $timeline['url']);
 list( $header, $timeline ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status = curl_getinfo( $ch );
 echo('timeline: ' . $status['http_code'] . "<br>\n");
+
+// read and store the triggers array
+$triggers = array();
+$triggers['followers'] = 1000;
+$triggers['minutes'] = 60;
+$triggers['countdown'] = array('milestone' => date('d-m-Y'),'type' => 'event');
 
 // close the curl session
 curl_close( $ch );
@@ -56,7 +68,10 @@ $default_data = new stdClass;
   $default_data->search_results = (!$search_results) ? 'twitter search down' : json_decode($search_results);
   // store the firefox timeline
   $default_data->timeline = (!$timeline) ? 'twitter api down' : json_decode($timeline);
+  // store the triggers
+  $default_data->triggers = $triggers;
 
+  
   // connect to memcache
   $memcache = new Memcache;
   $memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");

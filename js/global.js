@@ -13,29 +13,102 @@ var bodies, elements, text;
 var PI2 = Math.PI * 2;
 
 $(document).ready(function(){
-  // 
   init();
-  // 
   play();
-  
-  setInterval( createSomeBubbles, 2000 );
+  setInterval(spawn, 1000);
+
 });
+
+var debug = true;
+
+var pool = [];
+var pool_index = 0;
+var firefox_data;
+var firefox_data_max_id = 0;
+var search_data;
+var search_data_max_id = 0;
+
+function getDataFromProxy() {
+  $.getJSON('http://192.168.1.84/proxy.php', function(data) {
+    // print it out to the wrapper
+    if (data.status.http_code == 200) {
+      
+      if (debug) console.log('Received code 200');
+      // Update variables with new data
+      // Reverse results, so we start with oldest
+      firefox_data = data.contents.timeline;
+      firefox_data.reverse();      
+      search_data = data.contents.search_results;
+      search_data.results.reverse();
+      
+      if (debug) console.log(search_data.results.length + ' results for search');
+      if (debug) console.log('Previous pool length: ' + pool.length);
+      
+    	for (var i = 0; i < search_data.results.length; i++) {
+        var result = search_data.results[i];
+        
+        // See if this is newer than what is already pooled
+        // If yes, add it at current position
+        // If not, do nothing
+        if (result.id > search_data_max_id) {
+          pool.splice(pool_index, 0, {type: 'search', data: result});
+          search_data_max_id = result.id;
+        }
+    	}
+      if (debug) console.log('New pool length: ' + pool.length);
+    } else {
+      contents = data.status.http_code;
+    }
+
+  });
+
+}
+
+function spawn() {
+
+  // Jump to next
+  pool_index ++;
+  
+  // Check if pool is empty
+  if (pool.length == 0) return;
+  
+  // Check if there are too many bubbles on display
+  if (bodies.length > 10) return;
+  
+  // Check if at end of pool
+  // If so, resort it by id and delete whatever is over 40 results
+  if ((pool_index+1) > pool.length) {
+    pool_index = 0;
+    
+  }
+  
+  // Show 
+  createBubble(pool[pool_index].type, pool[pool_index].data);
+  
+}
+
+function search() {
+  // Clear the pool
+  clearPool();
+}
+
+function clearPool () {
+  pool = [];
+  pool_index = 0;
+}
+
 
 function init() {
 
-  // select the DOM object that'll work as a bubbleWrapper
 	bubbleWrapper = document.getElementById('bubbles-wrapper');
 
-	// init box2d
-	// create and configure new worls
+	// create and configure new world
 	worldAABB = new b2AABB();
-	
-	// ???
 	worldAABB.minVertex.Set( 0, 0 );
 	worldAABB.maxVertex.Set( screen.width, screen.height + 200 );
 
   // x/y point of gravity - the further, the stronger
-  var gravity = new b2Vec2( 0, -500 );
+  var gravity = new b2Vec2( 0, -300 );
   
   // allow objects to sleep, 
   var doSleep = false;
@@ -44,21 +117,16 @@ function init() {
   // set walls around the world
 	setWalls();
 	reset();
+	getDataFromProxy();
 }
 
 
-function createSomeBubbles() {
-  for ( i = 0; i < 1  ; i++ ) {
-    createBubble(stage[2]/2, 300);
-  }
-}
-
-function createBubble( x, y ) {
+function createBubble(type, data) {
 
   // calculate the position, will be used to place the element once created
   // could be changed to a fixed spawn point that'd match the machine chimney
-	var x = x; // || Math.random() * stage[2];
-	var y = y; // || Math.random() * -200;
+	var x = stage[2]/2;
+	var y = 300;
 
   // generate the random size
 	var size = (Math.random() * 50 >> 0) + 200;
@@ -75,6 +143,10 @@ function createBubble( x, y ) {
 	element.style['position'] = 'absolute';
 	element.style['left'] = -200 + 'px';
 	element.style['top'] = -200 + 'px';
+	
+	if (type == 'search') {
+	 element.innerHTML = 'Time: ' + data.created_at + '<br>Text: ' + data.text;
+	}
 
   // append the element to the bubbleWrapper
 	$(bubbleWrapper).append(element);
@@ -173,6 +245,8 @@ function loop() {
 		if ((newLeft < (-element.width)) ||
 		  (newLeft > stage[2])){
 		  world.DestroyBody(body);
+		  bodies.splice(i, 1);
+		  elements.splice(i, 1);
 		  $(element).remove();
 		}
 
