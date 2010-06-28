@@ -8,7 +8,7 @@
 		<style type="text/css" media="all">
 			<!--
         
-/*         #wrapper { text-align: center; } */
+        #wrapper { text-align: center; }
         
 			-->
 		</style>
@@ -22,11 +22,14 @@
           $.getJSON('/proxy.php', function(data) {
             // print it out to the wrapper
             if (data.status.http_code == 200) {
-              contents = data.contents.search_results.results[0].text;
+              contents = '<strong>latest search result: </strong>' + data.contents.search_results.results[0].text + '<br>'
+                       + '<strong>latest firefox tweet: </strong>' + data.contents.timeline[0].text + '<br>'
+                       + '<strong>latest firefox follower count: </strong>' + data.contents.timeline[0].user.followers_count;
             } else {
               contents = data.status.http_code;
             }
-            $("#wrapper").append(contents);
+            // print out the contents
+            $("body").html(contents);
             // print it out to the console as well
             if ("console" in window) {
             	console.log(data);
@@ -41,7 +44,7 @@
 	</head>
 	<body>
 		<div id="wrapper">
-      
+      loading..
 		</div>
 	</body>
 </html>

@@ -145,7 +145,7 @@ $memcache_host = ($_GET['memcache_host']) ? $_GET['memcache_host'] : 'localhost'
 $memcache_port = ($_GET['memcache_port']) ? $_GET['memcache_port'] : 11211;
 // if true, this script will run the cron.php when there are no results in cache and client requests data as in this script is executed ~comment by: Captain Obvious
 $cron_on_demand = true;
-$cron_url = 'http://192.168.209.152/cron.php';
+$cron_url = $_SERVER['SERVER_ADDR'] . '/cron.php';
 // search
 $default_keyword = 'firefox';
 

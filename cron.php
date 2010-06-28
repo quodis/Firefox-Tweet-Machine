@@ -2,6 +2,8 @@
 
 // ############################################################################
 // settings
+  // include global settings
+
   // memcache
   $ttl = ($_GET['ttl']) ? $_GET['ttl'] : 60;
   $memcache_host = ($_GET['memcache_host']) ? $_GET['memcache_host'] : 'localhost';
