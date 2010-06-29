@@ -30,7 +30,7 @@
   $twitterInfo->response;
 
   // die if not athorized
-  if (!in_array($twitterInfo->screen_name, explode(',', $config['allowed_admins']) )) {
+  if ( !in_array( strtolower($twitterInfo->screen_name), explode(',', strtolower($config['allowed_admins']) ) ) ) {
     die('<a href="' . $twitterObj->getAuthorizationUrl() . '">Authorize with Twitter</a>');
   }
 
