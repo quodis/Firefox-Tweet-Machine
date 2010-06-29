@@ -164,7 +164,7 @@ function clearPool () {
 
 function init() {
 
-	bubbleWrapper = document.getElementById('bubbles-wrapper');
+	bubbleWrapper = document.getElementById('bubbles');
 
 	// create and configure new world
 	worldAABB = new b2AABB();

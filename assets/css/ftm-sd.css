@@ -1,0 +1,469 @@
+/* by Quodis © 2010 */
+
+html, body { height: 100%; }
+
+body {
+	position: relative;
+	width: 100%;
+	color: #333;
+	font-family: Georgia, serif;
+	font-size: 13px;
+	line-height: 20px; /* baseline grid of 20px */
+	background-color: #ECF8FA;
+	background-image: url("../img/sd/machine-tubes-sd.png"), url("../img/sd/main-bg-sd.jpg");
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+a, a:visited {
+	color: #4999A3;
+	text-decoration: none;
+	outline: 0 none;
+}
+
+a:hover {
+	color: #4999A3; 
+	text-decoration: underline;
+	outline: 0 none;
+}
+
+a.more {
+	color: #4999A3;
+	text-transform: uppercase;
+	line-height: 20px;
+	font-size: 12px;
+}
+/* ----------------------------------------- */
+/* END General Styles */
+
+
+/* BEGIN Page Structure */
+/* ----------------------------------------- */
+header#brand {
+	position: absolute;
+	z-index: 40;
+	left: 0;
+	top: 0;
+}
+
+section#bubbles {
+	position: absolute;
+	z-index: 10;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+section#machine {
+	position: absolute;
+	z-index: 20;
+	bottom: 0;
+	left: 50%;
+	width: 450px;
+	height: 315px;
+	margin: 0 0 0 -225px;
+	background: transparent url(../img/sd/machine-body-sd.png) no-repeat bottom center;
+}
+
+footer {
+	position: absolute;
+	z-index: 30;
+	left: 50%;
+	bottom: 0;
+	width: 320px;
+	height: 60px;
+	margin: 0 0 0 -160px;
+	text-align: center;
+}
+/* ----------------------------------------- */
+/* END Page Structure */
+
+
+/* BEGIN Page Components */
+/* ----------------------------------------- */
+
+/* search-box */
+form#search-box {
+	position: absolute;
+	z-index: 10;
+	top: 75px;
+	left: 115px;
+	height: 40px;
+	width: 220px;
+}
+
+form#search-box input.text {
+	display: block;
+	background: transparent;
+	border: 0 none;
+	color: #FFF;
+	float: left;
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 24px;
+	letter-spacing: 0.5px;
+	line-height: 30px;
+	height: 30px;
+	padding: 7px 45px 3px 10px;
+	width: 165px;
+	outline: 0;
+	vertical-align: baseline;
+}
+
+form#search-box .button {
+	background: transparent url("../img/sd/search-sbmt-bttn-sd.png") no-repeat center center;
+	border: 0 none;
+	display: block;
+	float: left;
+	width: 30px;
+	height: 30px;
+	margin: 8px 0 0 -40px;
+	outline: 0 none;
+	overflow: hidden;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+/* search-box /*/
+
+/* levers */
+li.lever a {
+	position: absolute;
+	z-index: 20;
+	display: block;
+	width: 50px;
+	height: 60px;
+	background: transparent url(../img/sd/machine-levers-sd.png) no-repeat;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+
+li#flow-increaser a {
+	top: 170px;
+	left: 80px;
+}
+
+li#flow-transposer a {
+	top: 170px;
+	right: 75px;
+}
+
+li#flow-increaser.up a { background-position: 0 0; }
+li#flow-increaser.down a { background-position: -50px 0; }
+
+li#flow-transposer.up a { background-position: -113px 0; }
+li#flow-transposer.down a { background-position: -163px 0; }
+/* levers /*/
+
+/* activity-indicator */
+li#activity-indicator {
+	position: absolute;
+	z-index: 30;
+	top: 18px;
+	right: 35px;
+	display: block;
+	width: 25px;
+	height: 50px;
+	background: transparent url(../img/sd/light-bulb-sd.png) no-repeat;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+
+li#activity-indicator.off {
+	background-position: top left;
+}
+
+li#activity-indicator.on {
+	background-position: -27px 0;
+}
+/* activity-indicator /*/
+
+/* pressure-indicator */
+li#pressure-indicator {
+	position: absolute;
+	z-index: 40;
+	top: 180px;
+	left: 155px;
+	display: block;
+	width: 140px;
+	height: 50px;
+	background: transparent url(../img/sd/pressure-display-sd.png) no-repeat bottom center;
+}
+
+li#pressure-indicator span.value {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 400;
+	text-shadow: 0 1px #BDF0F4;
+	color: #0D5C66;
+	font-size: 13px;
+	vertical-align: bottom;
+	width: 30px;
+	height: 18px;
+	margin: 32px 0 0 0;
+}
+
+li#pressure-indicator span.value.min {
+	text-align: right;
+	float: left;
+}
+
+li#pressure-indicator span.value.max {
+	text-align: left;
+	float: right;
+}
+
+li#pressure-indicator span.pointer {
+	position: absolute;
+	z-index: 40;
+	bottom: 0;
+	left: 35px;
+	display: block;
+	width: 70px;
+	height: 30px;
+	background: transparent url(../img/sd/pressure-display-pointer-sd.png) no-repeat bottom center;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+/* pressure-indicator /*/
+
+/* dashboards */
+dl.dashboard {
+	position: absolute;
+	z-index: 60;
+	bottom: 0;
+	width: 260px;
+	height: 130px;
+	background: transparent url(../img/sd/dashboard-sd.png) no-repeat top center;
+}
+
+dl#social-tools {
+	left: -180px;
+}
+
+dl#counter {
+	right: -190px;
+}
+
+dl#social-tools dt {
+	position: absolute;
+	z-index: 10px;
+	top: 54px;
+}
+
+dl#social-tools dd {
+	position: absolute;
+	z-index: 10px;
+	top: 26px;
+}
+
+dl#social-tools dt.twitter-follow,
+dl#social-tools dd.twitter-follow {
+	left: 30px;
+}
+
+dl#social-tools dt.twitter-retweet,
+dl#social-tools dd.twitter-retweet {
+	left: 94px;
+}
+
+dl#social-tools dt.fb-share,
+dl#social-tools dd.fb-share {
+	left: 158px;
+}
+
+dl#social-tools a {
+	background: transparent url(../img/sd/dashboard-bttns-sd.png) no-repeat;
+	width: 62px;
+	text-align: center;
+	display: block;
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	text-transform: lowercase;
+}
+
+dl#social-tools dt a {
+	height: 20px;
+	line-height: 20px;
+	padding: 0 0 5px 0;
+	font-size: 14px;
+	color: #FFF;
+	font-weight: 300;
+}
+
+dl#social-tools dd a {
+	height: 20px;
+	font-size: 14px;
+	padding: 0 0 5px 0;
+	font-weight: 400;
+}
+
+dl#social-tools dt.twitter-follow a {
+	background-position: 0 -26px;
+}
+
+dl#social-tools dd.twitter-follow a {
+	background-position: 0 0;
+}
+
+dl#social-tools dt.twitter-retweet a {
+}
+
+dl#social-tools dd.twitter-retweet a {
+}
+
+dl#social-tools dt.fb-share a {
+}
+
+dl#social-tools dd.fb-share a {
+}
+/* dashboards /*/
+
+/* bubbles */
+article.bubble.tweet {
+	position: absolute;
+	z-index: 10;
+	top: 20%;
+	left: 40%;
+	width: 170px;
+	height: 170px;
+	background: transparent url(../img/sd/tweet-bubble-sd.png) no-repeat center center;
+	padding: 35px 25px 25px 35px;
+	color: #3F4B4D;
+}
+
+article.bubble.tweet .avatar-wrapper {
+	position: absolute;
+	z-index: 10;
+	top: 20px;
+	left: -50px;
+	width: 80px;
+	height: 80px;
+}
+
+article.bubble.tweet .avatar-wrapper a {
+	display: block;
+	width: 80px;
+	height: 80px;
+	background-image: url(../img/sd/tweet-avatar-wrapper-sd.png), url(../img/sd/tweet-avatar-bubble-sd.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+	text-align: center;
+}
+
+article.bubble.tweet .avatar-wrapper img {
+	background: #FFF;
+	margin: 15px 0 0 0;
+}
+
+article.bubble.tweet p {
+	margin: 10px 0 0 0;
+}
+
+article.bubble.tweet a {
+	text-decoration: underline;
+}
+
+article.bubble.tweet h1 a {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 20px;
+	color: #1A7B82;
+	text-decoration: none;
+}
+
+article.bubble.tweet span.mood {
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background-color: #FFF;
+	padding: 1px 2px;
+}
+
+article.bubble.tweet span.mood.violet { color: #6B5DC1; }
+article.bubble.tweet span.mood.pink { color: #D05F6F; }
+article.bubble.tweet span.mood.green { color: #6C9931; }
+article.bubble.tweet span.mood.orange { color: #DF731B; }
+
+article.bubble.tweet dt {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 15px;
+	color: #1A7B82;
+	float: left;
+	text-align: right;
+	width: 45px;
+	line-height: 20px;
+	letter-spacing: 0.2px;
+}
+
+article.bubble.tweet dd {
+	padding: 0 0 0 55px;
+	width: 100px;
+	line-height: 20px;
+}
+
+
+article.bubble.tweet nav {
+	position: absolute;
+	z-index: 30;
+	top: 100px;
+	left: -40px;
+	width: 70px;
+	height: 100px; 
+	background: transparent url(../img/sd/tweet-nav-bubble-sd.png) no-repeat center center;
+}
+
+article.bubble.tweet nav ul {
+	margin: 15px 0 0 0;
+}
+
+article.bubble.tweet nav li {
+	margin: 2px 0 2px 0;
+	text-align: center;
+}
+
+article.bubble.tweet nav a {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 15px;
+	color: #FFF;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	padding: 2px 4px;
+	text-decoration: none;
+	text-align: center;
+	text-transform: lowercase;
+}
+
+article.bubble.tweet nav li.flip a { background: #3F4B4D; }
+article.bubble.tweet nav li.retweet a { background: #8DC339; }
+article.bubble.tweet nav li.follow a { background: #17ABBD; }
+/* bubbles  /*/
+
+/* footer */
+footer {
+	color: #0C5C66;
+}
+
+footer p {
+	margin: 20px 0 0 0;
+}
+
+footer a,
+footer a:visited {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	letter-spacing: 0.2px;
+	font-size: 15px;
+	color: #0C5C66;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	padding: 2px 6px;
+	background: #8AD7DD;
+	text-shadow: 0 1px #D7F2F4;
+	text-transform: lowercase;
+}
+/* footer /*/
+
+/* ----------------------------------------- */
+/* END Page Components */

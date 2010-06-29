@@ -1,131 +1,187 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
- 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
- 
-	<head profile="http://gmpg.org/xfn/11"> 
-    
-		<title>Firefox Tweet Machine</title> 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-		<meta http-equiv="content-language" content="en"> 
-		<meta http-equiv="x-ua-compatible" content="chrome=1"> 
-		<meta name="keywords" content="Mozilla,Firefox,Twitter,Tweet" /> 
- 
-		<meta name="description" content="A Twitter Visualization" /> 
-		<meta name="author" content="Quodis" /> 
-		<meta name="copyright" content="© 2010" /> 
-		<meta name="distribution" content="global" /> 
-		<meta name="revisit-after" content="15 days" /> 
-		
-		<link rel="shortcut icon" href="img/global/favicon.ico" /> 
-		<link rel="apple-touch-icon" type="image/png" href="img/global/ftm-apple-touch-icon.png"> 
-		<link rel="image_src" href="img/global/ftm-facebook-thumb.png"> 
-		<link href="css/ftm-global.css" rel="stylesheet" type="text/css" media="screen, projection" /> 
-		<link href="css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" /> 
-		
-    <script src="lib/protoclass.js"></script>
-    <script src="lib/jquery-1.4.2.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
 
+	<head>
+		
+		<title>Firefox Tweet Machine</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=980" />
+		<meta http-equiv="x-ua-compatible" content="chrome=1">
+		<meta name="keywords" content="Mozilla,Firefox,Twitter,Tweet" />
+		<meta name="description" content="A Twitter Visualization" />
+		<meta name="author" content="Quodis, Mozilla" />
+		<meta name="copyright" content="© 2010" />
+		<meta name="distribution" content="global" />
+		
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		
+		<link rel="stylesheet" href="assets/css/ftm-global.css" type="text/css" media="screen, projection" />
+		<link href="assets/css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" />
+		<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold" rel="stylesheet" type="text/css">
+		
+		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="assets/img/global/ftm-apple-touch-icon.png">
+		<link rel="image_src" href="assets/img/global/ftm-facebook-thumb.png">
+
+		<!-- scripts -->
+		<script src="assets/js/jquery-1.4.2.min.js"></script>
 		<!-- box2djs -->
-    <script src='js/box2d/common/b2Settings.js'></script>
-    <script src='js/box2d/common/math/b2Vec2.js'></script>
-    <script src='js/box2d/common/math/b2Mat22.js'></script>
-    <script src='js/box2d/common/math/b2Math.js'></script>
-    <script src='js/box2d/collision/b2AABB.js'></script>
-    <script src='js/box2d/collision/b2Bound.js'></script>
-    <script src='js/box2d/collision/b2BoundValues.js'></script>
-    <script src='js/box2d/collision/b2Pair.js'></script>
-    <script src='js/box2d/collision/b2PairCallback.js'></script>
-    <script src='js/box2d/collision/b2BufferedPair.js'></script>
-    <script src='js/box2d/collision/b2PairManager.js'></script>
-    <script src='js/box2d/collision/b2BroadPhase.js'></script>
-    <script src='js/box2d/collision/b2Collision.js'></script>
-    <script src='js/box2d/collision/Features.js'></script>
-    <script src='js/box2d/collision/b2ContactID.js'></script>
-    <script src='js/box2d/collision/b2ContactPoint.js'></script>
-    <script src='js/box2d/collision/b2Distance.js'></script>
-    <script src='js/box2d/collision/b2Manifold.js'></script>
-    <script src='js/box2d/collision/b2OBB.js'></script>
-    <script src='js/box2d/collision/b2Proxy.js'></script>
-    <script src='js/box2d/collision/ClipVertex.js'></script>
-    <script src='js/box2d/collision/shapes/b2Shape.js'></script>
-    <script src='js/box2d/collision/shapes/b2ShapeDef.js'></script>
-    <script src='js/box2d/collision/shapes/b2BoxDef.js'></script>
-    <script src='js/box2d/collision/shapes/b2CircleDef.js'></script>
-    <script src='js/box2d/collision/shapes/b2CircleShape.js'></script>
-    <script src='js/box2d/collision/shapes/b2MassData.js'></script>
-    <script src='js/box2d/collision/shapes/b2PolyDef.js'></script>
-    <script src='js/box2d/collision/shapes/b2PolyShape.js'></script>
-    <script src='js/box2d/dynamics/b2Body.js'></script>
-    <script src='js/box2d/dynamics/b2BodyDef.js'></script>
-    <script src='js/box2d/dynamics/b2CollisionFilter.js'></script>
-    <script src='js/box2d/dynamics/b2Island.js'></script>
-    <script src='js/box2d/dynamics/b2TimeStep.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2ContactNode.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2Contact.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2ContactConstraint.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2ContactConstraintPoint.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2ContactRegister.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2ContactSolver.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2CircleContact.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2Conservative.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2NullContact.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2PolyAndCircleContact.js'></script>
-    <script src='js/box2d/dynamics/contacts/b2PolyContact.js'></script>
-    <script src='js/box2d/dynamics/b2ContactManager.js'></script>
-    <script src='js/box2d/dynamics/b2World.js'></script>
-    <script src='js/box2d/dynamics/b2WorldListener.js'></script>
-    <script src='js/box2d/dynamics/joints/b2JointNode.js'></script>
-    <script src='js/box2d/dynamics/joints/b2Joint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2JointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2DistanceJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2DistanceJointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2Jacobian.js'></script>
-    <script src='js/box2d/dynamics/joints/b2GearJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2GearJointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2MouseJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2MouseJointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2PrismaticJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2PrismaticJointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2PulleyJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2PulleyJointDef.js'></script>
-    <script src='js/box2d/dynamics/joints/b2RevoluteJoint.js'></script>
-    <script src='js/box2d/dynamics/joints/b2RevoluteJointDef.js'></script>
+		<script src="assets/js/protoclass.js"></script>
+		<script src="assets/js/box2d/common/b2Settings.js"></script>
+		<script src="assets/js/box2d/common/math/b2Vec2.js"></script>
+		<script src="assets/js/box2d/common/math/b2Mat22.js"></script>
+		<script src="assets/js/box2d/common/math/b2Math.js"></script>
+		<script src="assets/js/box2d/collision/b2AABB.js"></script>
+		<script src="assets/js/box2d/collision/b2Bound.js"></script>
+		<script src="assets/js/box2d/collision/b2BoundValues.js"></script>
+		<script src="assets/js/box2d/collision/b2Pair.js"></script>
+		<script src="assets/js/box2d/collision/b2PairCallback.js"></script>
+		<script src="assets/js/box2d/collision/b2BufferedPair.js"></script>
+		<script src="assets/js/box2d/collision/b2PairManager.js"></script>
+		<script src="assets/js/box2d/collision/b2BroadPhase.js"></script>
+		<script src="assets/js/box2d/collision/b2Collision.js"></script>
+		<script src="assets/js/box2d/collision/Features.js"></script>
+		<script src="assets/js/box2d/collision/b2ContactID.js"></script>
+		<script src="assets/js/box2d/collision/b2ContactPoint.js"></script>
+		<script src="assets/js/box2d/collision/b2Distance.js"></script>
+		<script src="assets/js/box2d/collision/b2Manifold.js"></script>
+		<script src="assets/js/box2d/collision/b2OBB.js"></script>
+		<script src="assets/js/box2d/collision/b2Proxy.js"></script>
+		<script src="assets/js/box2d/collision/ClipVertex.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2Shape.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2ShapeDef.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2BoxDef.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2CircleDef.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2CircleShape.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2MassData.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2PolyDef.js"></script>
+		<script src="assets/js/box2d/collision/shapes/b2PolyShape.js"></script>
+		<script src="assets/js/box2d/dynamics/b2Body.js"></script>
+		<script src="assets/js/box2d/dynamics/b2BodyDef.js"></script>
+		<script src="assets/js/box2d/dynamics/b2CollisionFilter.js"></script>
+		<script src="assets/js/box2d/dynamics/b2Island.js"></script>
+		<script src="assets/js/box2d/dynamics/b2TimeStep.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2ContactNode.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2Contact.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2ContactConstraint.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2ContactConstraintPoint.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2ContactRegister.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2ContactSolver.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2CircleContact.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2Conservative.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2NullContact.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2PolyAndCircleContact.js"></script>
+		<script src="assets/js/box2d/dynamics/contacts/b2PolyContact.js"></script>
+		<script src="assets/js/box2d/dynamics/b2ContactManager.js"></script>
+		<script src="assets/js/box2d/dynamics/b2World.js"></script>
+		<script src="assets/js/box2d/dynamics/b2WorldListener.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2JointNode.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2Joint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2JointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2DistanceJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2DistanceJointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2Jacobian.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2GearJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2GearJointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2MouseJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2MouseJointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2PrismaticJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2PrismaticJointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2PulleyJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2PulleyJointDef.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2RevoluteJoint.js"></script>
+		<script src="assets/js/box2d/dynamics/joints/b2RevoluteJointDef.js"></script>
+		<!-- box2d /-->
+		<script src='assets/js/jquery.timeago.js'></script>
+		<script src='assets/js/global.js'></script>
+		<!-- scripts /-->
 
+	</head>
 
-    <script src='js/global.js'></script>
-    <script src='js/jquery.timeago.js'></script>
-    
-    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css'>
-
-  </head>
- 
 	<body>
-    
-    <div id="page">		
-			
-		  <h1 class="fn org">Firefox Tweet Machine</h1> 
-		  
-			<div id="farthest-tubes-wrapper"> 
-			</div> 
-			
-			<div id="bubbles-wrapper"> 
-		    <p>isto é um <a href="http://google.com/" title="teste">teste</a>!</p> 
-			</div> 
-			
-			<div id="machine-body-wrapper"> 
-			</div> 
-			
-			<div id="machine-bottom-wrapper"> 
-			</div> 
-			
-			<div id="nearest-tubes-wrapper"> 
-			</div> 
-			
-			<div id="dashboards-wrapper"> 
-			</div> 
-		  
-		</div> 
-	
-	</body> 
- 
+
+		<header id="brand">
+			<h1>Firefox Tweet Machine</h1>
+		</header>
+
+		<!-- bubbles -->
+		<section id="bubbles">
+
+			<!-- bubble tweet -->
+			<article id="id-01" class="bubble tweet">
+				<header class="show">
+					<h1><a href="#" title="Firefox" rel="author external">Firefox</a> wrote</h1>
+					<time datetime="2009-10-09" pubdate><a href="#" rel="bookmark external" title="permalink">two days ago</a></time>
+				</header>
+				<p class="avatar-wrapper show"><a href="#" title="Firefox" rel="author external"><img alt="Firefox avatar" src="http://a3.twimg.com/profile_images/267099709/firefox-for-twitter_normal.png" height="48" width="48" /></a></p>
+				<p class="show">Adopt <span class="mood orange">Mozilla</span>! Get a limited <span class="mood green">edition</span> dino T-shirt when you <span class="mood violet">donate</span> to our Drumbeat Open <span class="mood pink">Web</span> Fund. <a href="#" title="" rel="external">mzl.la/bBM5YP</a></p>
+				<section id="section-id-01" class="hide">
+					<dl>
+						<dt>Name</dt>
+						<dd>Firefox</dd>
+						<dt>Location</dt>
+						<dd>Lisbon</dd>
+						<dt>Web</dt>
+						<dd><a href="#" rel="author external" title="Web">firefox.com</a></dd>
+						<dt>Followers</dt>
+						<dd>40,000</dd>
+						<dt>Retweets</dt>
+						<dd>50</dd>
+						<dt>Bio</dt>
+						<dd>Lorem ipsum dolor sit amet.</dd>
+					</dl>
+				</section>
+				<nav class="hide">
+					<ul>
+						<li class="flip"><a href="#section-id-01" title="Flip bubble">Flip</a></li>
+						<li class="retweet"><a href="#" title="Retweet" rel="external">Retweet</a></li>
+						<li class="follow"><a href="#" title="Follow" rel="external">Follow</a></li>
+					</ul>
+				</nav>
+			</article>
+			<!-- bubble tweet /-->
+
+		</section>
+		<!-- bubbles /-->
+
+		<!-- machine -->
+		<section id="machine">
+
+			<form id="search-box">
+				<input type="text" name="search-input" class="text" value="Search">
+				<button name="search-bttn" type="submit" class="button" id="search-submit-bttn" title="Go!" value="Go!">Go!</button>
+			</form>
+
+			<ul id="machine-tools">
+				<li id="flow-increaser" class="lever up"><a href="#" title="Up">Increase tweet activity</a></li>
+				<li id="pressure-indicator"><span class="value min">0</span> <span class="pointer">></span> <span class="value max">100</span></li>
+				<li id="activity-indicator" class="off">Activity off</li>
+				<li id="flow-transposer" class="lever up"><a href="#" title="Up">Pause tweet activity</a></li>
+			</ul>
+
+			<dl id="social-tools" class="dashboard">
+				<dt class="twitter-follow"><a href="#" title="Follow on Twitter">Follow</a></dt>
+				<dd class="twitter-follow"><a href="#" title="Follow on Twitter">217,301</a></dd>
+				<dt class="twitter-retweet"><a href="#" title="Retweet">Retweet</a></dt>
+				<dd class="twitter-retweet"><a href="#" title="Retweet">351</a></dd>
+				<dt class="fb-share"><a href="#" title="Follow">Share</a></dt>
+				<dd class="fb-share"><a href="#" title="Follow">490</a></dd>
+			</dl>
+
+			<dl id="counter" class="dashboard">
+				<dt>The 2010 Mozilla Summit</dt>
+				<dd>03d : 22h : 01m : 15s</dd>
+			</dl>
+
+		</section>
+		<!-- machine /-->
+
+		<footer>
+			<p><a href="#" title="About the Machine">About the Machine</a></p>
+		</footer>
+
+	</body>
+
 </html>

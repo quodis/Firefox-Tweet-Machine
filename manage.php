@@ -2,7 +2,7 @@
   // set the flash messages array
   $flash = array();
   // include config file loader
-  require_once "yaml_loader.php";
+  require_once "lib/yaml_loader.php";
   // settings filename
   $settings_filename = 'ftm_config.yml';
 
@@ -17,10 +17,10 @@
     die( header('refresh:0;url=manage.php') );
   };
   
-  include 'admin/EpiCurl.php';
-  include 'admin/EpiOAuth.php';
-  include 'admin/EpiTwitter.php';
-  include 'admin/secret.php';
+  include 'lib/twitteroauth/EpiCurl.php';
+  include 'lib/twitteroauth/EpiOAuth.php';
+  include 'lib/twitteroauth/EpiTwitter.php';
+  include 'lib/twitteroauth/secret.php';
   
   $twitterObj = new EpiTwitter($consumer_key, $consumer_secret);
   
@@ -96,7 +96,7 @@
     } // end if $_POST
 
   // require config file loader
-  require "yaml_loader.php";
+  require "lib/yaml_loader.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -110,12 +110,12 @@
 
 			-->
     </style>
-    <link href="css/blueprint/src/reset.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="css/blueprint/src/grid.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="css/blueprint/src/forms.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="css/blueprint/src/typography.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="assets/css/blueprint/src/reset.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="assets/css/blueprint/src/grid.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="assets/css/blueprint/src/forms.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="assets/css/blueprint/src/typography.css" media="screen" rel="stylesheet" type="text/css" />
 
-    <script src="lib/jquery-1.4.2.min.js"></script>
+    <script src="assets/js/jquery-1.4.2.min.js"></script>
 
     <script type="text/javascript">
 		  //<![CDATA[

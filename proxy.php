@@ -11,7 +11,7 @@
  */
 
 // include config file loader
-require_once "yaml_loader.php";
+require_once "lib/yaml_loader.php";
 
 // Change these configuration options if needed, see above descriptions for info.
 $enable_jsonp    = false;

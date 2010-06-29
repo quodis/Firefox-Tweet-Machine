@@ -74,6 +74,11 @@ p.last {
 	margin: 0;
 }
 
+/* Tell the browser to render HTML 5 elements as block */
+header, footer, aside, nav, article {
+	display: block;
+}
+
 /* clearfix */
 .clearfix:after {
 	visibility: hidden;

@@ -8,10 +8,7 @@
 // ############################################################################
 // settings
   // include config file loader
-  require_once "yaml_loader.php";
-
-  // debug
-/*   print_r($config); */
+  require_once "lib/yaml_loader.php";
 
   // memcache
   $ttl = $config['memcache_ttl'];

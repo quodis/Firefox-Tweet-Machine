@@ -10,6 +10,7 @@ if (!file_exists('ftm_config.yml')) {
 
 // read the configuration file
 $config = Spyc::YAMLLoad('ftm_config.yml');
+
 // return the config array
 return($config);
 
