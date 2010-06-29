@@ -59,17 +59,25 @@ echo('timeline: ' . $status['timeline']['http_code'] . "<br>\n");
 
 // query and store firefox download stats
 curl_setopt($ch, CURLOPT_URL, $firefox['download_stats_url']);
-list( $header, $firefox_download_stats ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+list( $header, $firefox_downloads_total ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status['downloads'] = curl_getinfo( $ch );
 echo('firefox stats: ' . $status['downloads']['http_code'] . "<br>\n");
 
-// read and store the triggers array
-$triggers = array();
-$triggers['followers'] = $config['firefox_follower_milestone'];
-$triggers['minutes'] = $config['clock_step'];
-$triggers['countdown'] = array('milestone' => $config['countdown_date'],'type' => $config['countdown_type']);
-$triggers['firefox_download_stats'] = reset(json_decode($firefox_download_stats));
-$triggers['firefox_download_step'] = $config['firefox_download_step'];
+// read and store the special_bubbles values array
+$special_bubbles = array();
+$special_bubbles['sb_timeline_step'] = $config['specialbubble_timeline_step'];
+$special_bubbles['sb_followers_step'] = $config['specialbubble_followers_step'];
+$special_bubbles['sb_clock_step'] = $config['specialbubble_clock_step'];
+$special_bubbles['sb_ffdownloads_total'] = reset(json_decode($firefox_downloads_total));
+$special_bubbles['sb_ffdownloads_step'] = $config['specialbubble_firefox_downloads_step'];
+
+// read and store the display values array
+$display = array();
+$display['ds_type'] = $config['countdown_display_type'];
+$display['ds_datetime'] = $config['countdown_display_datetime'];
+$display['ds_datetime_description'] = $config['countdown_display_datetime_description'];
+$display['ds_followers'] = $config['countdown_display_followers'];
+$display['ds_followers_description'] = $config['countdown_display_followers_description'];
 
 // close the curl session
 curl_close( $ch );
@@ -81,7 +89,9 @@ $default_data->search_results = (!$search_results) ? 'twitter search down' : jso
 // store the firefox timeline
 $default_data->timeline = (!$timeline) ? 'twitter api down' : json_decode($timeline);
 // store the triggers
-$default_data->triggers = $triggers;
+$default_data->special_bubbles = $special_bubbles;
+// store the display values
+$default_data->display = $display;
 
 
 // connect to memcache

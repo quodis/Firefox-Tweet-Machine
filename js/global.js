@@ -15,13 +15,17 @@ var PI2 = Math.PI * 2;
 $(document).ready(function(){
   init();
   play();
+  
+  getDataFromProxy();
   setInterval(spawn, 1000);
-
+  
 });
 
 var debug = false;
 
 var data_update_count = 0;
+var max_bubbles_on_screen = 15;
+var loop_interval;
 
 var pool = [];
 var pool_index = 0;
@@ -29,7 +33,7 @@ var pool_count_spawned = 0;
 
 var timeline_data;
 var timeline_data_max_id = 0;
-var timeline_step = 0;
+var sb_timeline_step = 0;
 
 var search_data;
 var search_data_max_id = 0;
@@ -43,6 +47,17 @@ var sb_ffdownloads_step = 0; // At each step of downloads
 var sb_ffdownloads_last = 0;
 var sb_ffdownloads_total = 0;
 
+var sb_followers_step = 0;
+var sb_followers_last = 0;
+var sb_followers_total = 0;
+
+var ds_type;
+var ds_datetime;
+var ds_datetime_description;
+
+var ds_followers;
+var ds_followers_description;
+
 function getDataFromProxy() {
   $.getJSON('http://192.168.1.84/proxy.php', function(data) {
     // print it out to the wrapper
@@ -50,11 +65,25 @@ function getDataFromProxy() {
       
       if (debug) console.log('Received code 200');
       
-      // Update variables with new data
-      sb_clock_step = data.contents.triggers.minutes;
-      sb_ffdownloads_step = data.contents.triggers.firefox_download_step;
-      sb_ffdownloads_total = data.contents.triggers.firefox_download_stats;
+      data_update_count ++;
       
+      // Update variables with new data
+      sb_clock_step = data.contents.special_bubbles.sb_clock_step;
+      
+      sb_ffdownloads_step = data.contents.special_bubbles.sb_ffdownloads_step;
+      sb_ffdownloads_total = data.contents.special_bubbles.sb_ffdownloads_total;
+      
+      sb_followers_step = data.contents.special_bubbles.sb_followers_step;
+      sb_followers_total = data.contents.timeline[0].user.followers_count;
+      
+      sb_timeline_step = data.contents.special_bubbles.sb_timeline_step;
+      
+      ds_type = data.contents.display.ds_type;
+      ds_datetime = data.contents.display.ds_datetime;
+      ds_datetime_description = data.contents.display.ds_datetime_description;
+      ds_followers = data.contents.display.ds_followers;
+      ds_followers_description = data.contents.display.ds_followers_description;
+
       // Reverse results, so we start with oldest
       timeline_data = data.contents.timeline;
       timeline_data.reverse();      
@@ -77,17 +106,21 @@ function getDataFromProxy() {
     	}
       if (debug) console.log('New pool length: ' + pool.length);
       
-      // Run only the third and next times
+      // Run only the second and next times
       if (data_update_count >= 2) {
         specialBubbleFFDownloadsCheck();
       }
       
-      data_update_count ++;
+      // Run only the third and next times
+      if (data_update_count >= 3) {
+        specialBubbleFollowersCheck();
+      }
       
     } else {
       contents = data.status.http_code;
     }
-
+    
+    setTimeout(getDataFromProxy, 1000 * 60);
   });
 
 }
@@ -98,7 +131,7 @@ function spawn() {
   if (pool.length == 0) return;
   
   // Check if there are too many bubbles on display
-  if (bodies.length >= 10) return;
+  if (bodies.length >= max_bubbles_on_screen) return;
   
   // Check if at end of pool
   // If so, resort it by id and delete whatever is over 40 results
@@ -110,11 +143,11 @@ function spawn() {
   createBubble(pool[pool_index].type, pool[pool_index].data);
   pool_count_spawned ++;
   
-  // Check if I should show timeline tweets
-  specialBubbleTimelineCheck();
-  
   // Jump to next
   pool_index ++;
+  
+  // Check if I should show timeline tweets
+  specialBubbleTimelineCheck();
   
 }
 
@@ -148,7 +181,6 @@ function init() {
   // set walls around the world
 	setWalls();
 	reset();
-	getDataFromProxy();
 }
 
 
@@ -172,8 +204,8 @@ function createBubble(type, data) {
 	element.style['width'] = size + 'px';
 	element.style['height'] = size + 'px';
 	element.style['position'] = 'absolute';
-	element.style['left'] = -200 + 'px';
-	element.style['top'] = -200 + 'px';
+	element.style['left'] = -400 + 'px';
+	element.style['top'] = -400 + 'px';
 	
 	if (type == 'search') {
 	
@@ -188,6 +220,12 @@ function createBubble(type, data) {
 	} else if (type == 'ffdownloads') {
     
     element.innerHTML = data;
+    pool.splice(pool_index, 1);
+    pool_index --;
+
+	} else if (type == 'timeline') {
+    
+    element.innerHTML = 'Este é do firefox: ' + data.text;
     pool.splice(pool_index, 1);
     pool_index --;
 
@@ -284,29 +322,43 @@ function specialBubbleFFDownloadsCheck() {
   if (sb_ffdownloads_step > 0) {
     if ((sb_ffdownloads_total > sb_ffdownloads_last) &&
       (Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
-      sb_ffdownloads_last = sb_ffdownloads_stats;
+      sb_ffdownloads_last = sb_ffdownloads_total;
       pool.splice(pool_index, 0, {type: 'ffdownloads', data: 'Firefox just downloaded for the ' + Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) * sb_ffdownloads_step + 'th time'});
     }
   }
 }
 
+function specialBubbleFollowersCheck() {
+  if (sb_followers_step > 0) {
+    if ((sb_followers_total > sb_followers_last) &&
+      (Math.floor(sb_followers_total / sb_followers_step) > Math.floor(sb_followers_last / sb_followers_step))) {
+      sb_followers_last = sb_followers_total;
+      pool.splice(pool_index, 0, {type: 'followers', data: '@firefox just got its ' + Math.floor(sb_followers_total / sb_followers_step) * sb_followers_step + 'th follower'});
+    }
+  }
+}
+
 function specialBubbleTimelineCheck() {
-  if (timeline_step > 0) {
-    if (pool_count_spawned % timeline_step) {
+  if ((sb_timeline_step > 0) && (timeline_data.length > 0)) {
+    if ((pool_count_spawned % sb_timeline_step) == 0) {
     
-    	for (var i = 0; i < search_data.results.length; i++) {
-        var result = search_data.results[i];
-        
-        // See if this is newer than what is already pooled
-        // If yes, add it at current position
-        // If not, do nothing
-        if (result.id > search_data_max_id) {
-          pool.splice(pool_index, 0, {type: 'search', data: result});
-          search_data_max_id = result.id;
+      var i = 0;
+      var found = false;
+      while ((i < timeline_data.length) && (!found)) {
+        var result = timeline_data[i];
+        if (result.id > timeline_data_max_id) {
+          pool.splice(pool_index, 0, {type: 'timeline', data: result});
+          timeline_data_max_id = result.id;
+          found = true;
         }
+        i++;
     	}
     	
-      pool.splice(pool_index, 0, {type: 'timeline', data: data});
+    	// If none found, set max_id to 0 and start over
+    	if (!found) {
+      	timeline_data_max_id = 0;
+        specialBubbleTimelineCheck();
+      }
       
     }
   }
@@ -314,9 +366,8 @@ function specialBubbleTimelineCheck() {
 
 
 
-specialBubbleTimelineCheck
-// run this on every frame
 
+// run this on every frame
 function loop(){
   
   // check for changes in the viewport and adjust the walls if there's any change
@@ -388,7 +439,7 @@ function createPoly(world, x, y, points, fixed) {
 
 function play() {
 
-	setInterval( loop, 1000 / 30 );
+	loop_interval = setInterval( loop, 1000 / 30 );
 }
 
 function reset() {

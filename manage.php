@@ -10,11 +10,13 @@
 
   // logout
   if ($_GET['action'] == 'logout') {
+    // clear cookies
     setcookie('fftm_tok', '');
     setcookie('fftm_sec', '');
-    die(header('refresh:0;url=manage.php'));
+    // refresh page
+    die( header('refresh:0;url=manage.php') );
   };
-
+  
   include 'admin/EpiCurl.php';
   include 'admin/EpiOAuth.php';
   include 'admin/EpiTwitter.php';
@@ -22,18 +24,13 @@
   
   $twitterObj = new EpiTwitter($consumer_key, $consumer_secret);
   
-  // only when returning from twitter
+  // if we're returning from twitter
   if ($_GET['oauth_token']) {
     $twitterObj->setToken($_GET['oauth_token']);
     $token = $twitterObj->getAccessToken();
     // save token and secret using cookies
     setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
     setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
-    
-    // TODO: on first login (ie: no config file exists) try create it and add the current user to the allowed_admins
-    if (is_writable($settings_filename)) {
-      
-    }
   }
 
   // set token either from GET or stored COOKIE values
@@ -42,14 +39,33 @@
   $twitterInfo= $twitterObj->get_accountVerify_credentials();
   $twitterInfo->response;
 
-  // die if not athorized
-  if ( !in_array( strtolower($twitterInfo->screen_name), explode(',', strtolower($config['allowed_admins']) ) ) ) {
+  // if there are no allowed admins, and we're returning from twitter oauth (callback)
+  if ( empty($config['allowed_admins']) && $_GET['oauth_token'] ) {
+  
+    // if the file isn't writable
+    if (!is_writable($settings_filename)) {
+      die('config file is not writable');
+    // if we can write to the file
+    } else {
+      // generate the yaml
+      $yaml_string = Spyc::YAMLDump(array('allowed_admins' => $twitterInfo->screen_name));
+      // write it to the config file
+      $handle = fopen($settings_filename, 'w+');
+      fwrite($handle, $yaml_string);
+      fclose($handle);
+      // refresh page
+      die(header('refresh:0'));
+    };
+  }
+
+  // die if not authenticated
+  if ( empty($config['allowed_admins']) || !in_array( strtolower($twitterInfo->screen_name), explode(',', strtolower($config['allowed_admins']) ) ) ) {
     die('<a href="' . $twitterObj->getAuthorizationUrl() . '">Authorize with Twitter</a>');
   }
 
   // AUTH - END ###########################################################################
 
-  // write the settings if we received $_POST content
+  // write the settings if we received $_POST content and we're authenticated
   if ($_POST && $twitterInfo->screen_name) {
 
     // check if the file is writable
@@ -112,11 +128,15 @@
         */
           // show appropriate trigger input on Countdown fieldset based on selected Countdown type
           function init_select() {
-            $('#countdown_type option').each(function() {
+            $('#countdown_display_type option').each(function() {
               // build the id of the input to be manipulated
               target_fieldset_id = '#' + $(this).val();
               // set the option_not_selected variable
               option_not_selected = $(this).not(':selected');
+
+              if ("console" in window) {
+              	console.log(target_fieldset_id);
+              }
 
               // if the option isn't selected, hide the correspondent fieldset
               if (option_not_selected.length && $(this).val()) {
@@ -129,10 +149,10 @@
           };
           // rerun the init_select function on change 
           $('#countdown_type').change(function() {
-            init_select();
+            //init_select();
           });
 
-          init_select();
+          //init_select();
 
           /*
           //////////
@@ -228,62 +248,70 @@
           </fieldset>
 
           <fieldset>
-            <legend>Other</legend>
+            <legend>Downloads</legend>
 
-            <fieldset>
-              <legend>Downloads</legend>
+            <label for="firefox_download_stats_url">Downloads URL</label>
+            <input id="firefox_download_stats_url" name="firefox_download_stats_url" type="text" size="100" value="<? print $config['firefox_download_stats_url']; ?>"/>
+            <br />
 
-              <label for="firefox_download_stats_url">Downloads URL</label>
-              <input id="firefox_download_stats_url" name="firefox_download_stats_url" type="text" size="100" value="<? print $config['firefox_download_stats_url']; ?>"/>
-              <br />
+          </fieldset>
 
-              <label for="firefox_download_step">Downloads Step</label>
-              <input id="firefox_download_step" name="firefox_download_step" type="text" size="100" value="<? print $config['firefox_download_step']; ?>"/>
-              <br />
-            </fieldset>
+
+          <fieldset>
+            <legend>Triggers</legend>
 
             <fieldset>
               <legend>Special Bubbles</legend>
-              
-              <label for="firefox_follower_milestone">Follower Milestone</label>
-              <input id="firefox_follower_milestone" name="firefox_follower_milestone" type="text" size="100" value="<? print $config['firefox_follower_milestone']; ?>"/>
-              <br />
 
-              <label for="clock_step">Clock Step</label>
-              <input id="clock_step" name="clock_step" type="text" size="100" value="<? print $config['clock_step']; ?>"/>
-              <br />
+                <label for="specialbubble_timeline_step">Timeline Step</label>
+                <input id="specialbubble_timeline_step" name="specialbubble_timeline_step" type="text" size="100" value="<? print $config['specialbubble_timeline_step']; ?>"/>
+                <br />
+
+                <label for="specialbubble_followers_step">Followers Step</label>
+                <input id="specialbubble_followers_step" name="specialbubble_followers_step" type="text" size="100" value="<? print $config['specialbubble_followers_step']; ?>"/>
+                <br />
+
+                <label for="specialbubble_clock_step">Clock Step</label>
+                <input id="specialbubble_clock_step" name="specialbubble_clock_step" type="text" size="100" value="<? print $config['specialbubble_clock_step']; ?>"/>
+                <br />
+
+                <label for="specialbubble_firefox_downloads_step">Downloads Step</label>
+                <input id="specialbubble_firefox_downloads_step" name="specialbubble_firefox_downloads_step" type="text" size="100" value="<? print $config['specialbubble_firefox_downloads_step']; ?>"/>
+                <br />
+
+
             </fieldset>
 
             <fieldset>
-              <legend>Countdown</legend>
+              <legend>Countdown Display</legend>
 
-              <label for="countdown_type">Type</label>
-              <select id="countdown_type" name="countdown_type">
+              <label for="countdown_display_type">Type</label>
+              <select id="countdown_display_type" name="countdown_display_type">
                 <option value=""></option>
-                <option value="event" <? if ($config['countdown_type'] == 'event') { print 'selected'; } ?>>Event</option>
-                <option value="downloads" <? if ($config['countdown_type'] == 'downloads') { print 'selected'; } ?>>Downloads</option>
+                <option value="datetime" <? if ($config['countdown_display_type'] == 'datetime') { print 'selected'; } ?>>Date</option>
+                <option value="followers" <? if ($config['countdown_display_type'] == 'followers') { print 'selected'; } ?>>Followers</option>
               </select>
               <br />
 
-              <fieldset id="event">
-                <legend>Date Trigger</legend>
+              <fieldset id="datetime">
+                <legend>Date</legend>
 
-                <label for="countdown_trigger_date">Trigger</label>
-                <input id="countdown_trigger_date" name="countdown_trigger_date" type="text" size="100" value="<? print $config['countdown_trigger_date']; ?>"/>
+                <label for="countdown_display_datetime">Trigger</label>
+                <input id="countdown_display_datetime" name="countdown_display_datetime" type="text" size="100" value="<? print $config['countdown_display_datetime']; ?>"/>
                 <br />
-                <label for="countdown_trigger_date_description">Description</label>
-                <input id="countdown_trigger_date_description" name="countdown_trigger_date_description" type="text" size="100" value="<? print $config['countdown_trigger_date_description']; ?>"/><br />
+                <label for="countdown_display_datetime_description">Description</label>
+                <input id="countdown_display_datetime_description" name="countdown_display_datetime_description" type="text" size="100" value="<? print $config['countdown_display_datetime_description']; ?>"/><br />
 
               </fieldset>
 
-              <fieldset id="downloads">
-                <legend>Download Count Trigger</legend>
+              <fieldset id="followers">
+                <legend>Followers</legend>
 
-                <label for="countdown_trigger_downloads">Trigger</label>
-                <input id="countdown_trigger_downloads" name="countdown_trigger_downloads" type="text" size="100" value="<? print $config['countdown_trigger_downloads']; ?>"/>
+                <label for="countdown_display_followers">Trigger</label>
+                <input id="countdown_display_followers" name="countdown_display_followers" type="text" size="100" value="<? print $config['countdown_display_followers']; ?>"/>
                 <br />
-                <label for="countdown_trigger_downloads_description">Description</label>
-                <input id="countdown_trigger_downloads_description" name="countdown_trigger_downloads_description" type="text" size="100" value="<? print $config['countdown_trigger_downloads_description']; ?>"/>
+                <label for="countdown_display_followers_description">Description</label>
+                <input id="countdown_display_followers_description" name="countdown_display_followers_description" type="text" size="100" value="<? print $config['countdown_display_followers_description']; ?>"/>
 
               </fieldset>
 
