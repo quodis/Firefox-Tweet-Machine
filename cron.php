@@ -1,30 +1,36 @@
 <?
 
-// include "A simple YAML loader/dumper" named spyc
-require_once "spyc.php";
-// read the current configs
-$config = Spyc::YAMLLoad($settings_filename);
+/**
+ * @file cron.php
+ * fetches data and stores it in a memcache daemon for later retrieval
+ */
 
 // ############################################################################
 // settings
-  // include global settings
+  // include config file loader
+  require_once "yaml_loader.php";
+
+  // debug
+/*   print_r($config); */
 
   // memcache
-  $ttl = ($_GET['ttl']) ? $_GET['ttl'] : 60;
-  $memcache_host = ($_GET['memcache_host']) ? $_GET['memcache_host'] : 'localhost';
-  $memcache_port = ($_GET['memcache_port']) ? $_GET['memcache_port'] : 11211;
+  $ttl = $config['memcache_ttl'];
+  $memcache_host = $config['memcache_host'];
+  $memcache_port = $config['memcache_port'];
 
   // twitter
-    // username timeline to cache
-    $timeline = array();
-    $timeline['username'] = $_GET['timeline_username'] ? $_GET['timeline_username'] : 'firefox' ;
-    $timeline['count'] = $_GET['timeline_count'] ? $_GET['timeline_count'] : 20 ;
-    $timeline['url'] = $_GET['timeline_url'] ? $_GET['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=' . $timeline['username'] . '&count=' . $timeline['count'];
     // search
     $search = array();
-    $search['results_per_page'] = ($_GET['rpp']) ? $_GET['rpp'] : 40 ;
-    $search['keyword'] = ($_GET['search_keyword']) ? $_GET['search_keyword'] : 'firefox';
-    $search['url'] = ($_GET['search_url']) ? $_GET['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&rpp=' . $search['results_per_page'] . '&q=' . $search['keyword'];
+    $search['results_per_page'] = $config['search_results_per_page'];
+    $search['keyword'] = urlencode($config['search_default_keyword']);
+    $search['url'] = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&rpp=';
+    // username timeline to cache
+    $timeline = array();
+    $timeline['username'] = $config['timeline_username'];
+    $timeline['count'] = $config['timeline_count'];
+    $timeline['url'] = ($config['timeline_url']) ? $config['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=';
+    // firefox downloads
+    $firefox['download_stats_url'] = $config['firefox_download_stats_url'];
     
 // ############################################################################
 
@@ -40,51 +46,55 @@ $ch = curl_init();
 
 // TODO: perhaps we need to iterate through requests: user timeline, default search
 // query and store search results
-curl_setopt($ch, CURLOPT_URL, $search['url']);
+curl_setopt($ch, CURLOPT_URL, $search['url'] . $search['results_per_page'] . '&q=' . $search['keyword']);
 list( $header, $search_results ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-$status = curl_getinfo( $ch );
-echo('search: ' . $status['http_code'] . "<br>\n");
+$status['search'] = curl_getinfo( $ch );
+echo('search: ' . $status['search']['http_code'] . "<br>\n");
 
 // query and store user timeline
-curl_setopt($ch, CURLOPT_URL, $timeline['url']);
+curl_setopt($ch, CURLOPT_URL, $timeline['url'] . $timeline['username'] . '&count=' . $timeline['count']);
 list( $header, $timeline ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-$status = curl_getinfo( $ch );
-echo('timeline: ' . $status['http_code'] . "<br>\n");
+$status['timeline'] = curl_getinfo( $ch );
+echo('timeline: ' . $status['timeline']['http_code'] . "<br>\n");
+
+// query and store firefox download stats
+curl_setopt($ch, CURLOPT_URL, $firefox['download_stats_url']);
+list( $header, $firefox_download_stats ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+$status['downloads'] = curl_getinfo( $ch );
+echo('firefox stats: ' . $status['downloads']['http_code'] . "<br>\n");
 
 // read and store the triggers array
 $triggers = array();
-$triggers['followers'] = 1000;
-$triggers['minutes'] = 60;
-$triggers['countdown'] = array('milestone' => date('d-m-Y'),'type' => 'event');
+$triggers['followers'] = $config['firefox_follower_milestone'];
+$triggers['minutes'] = $config['clock_step'];
+$triggers['countdown'] = array('milestone' => $config['countdown_date'],'type' => $config['countdown_type']);
+$triggers['firefox_download_stats'] = reset(json_decode($firefox_download_stats));
+$triggers['firefox_download_step'] = $config['firefox_download_step'];
 
 // close the curl session
 curl_close( $ch );
 
 $default_data = new stdClass;
-// never know when the twitter api is gonna go kaput
-// when it goes the response from curl is nil
-/* if ($status['http_code'] == 200 || $search_results) { */
-  // store the search results
-  $default_data->search_results = (!$search_results) ? 'twitter search down' : json_decode($search_results);
-  // store the firefox timeline
-  $default_data->timeline = (!$timeline) ? 'twitter api down' : json_decode($timeline);
-  // store the triggers
-  $default_data->triggers = $triggers;
 
-  
-  // connect to memcache
-  $memcache = new Memcache;
-  $memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");
-  
-  // store the contents in memcache
-  $memcache->set('default_data', $default_data, false, $ttl) or die ("Failed to save data at the server");
-  echo "Store data in the cache (data will expire in " . $ttl . " seconds)<br/>\n";
-  
-  $get_result = $memcache->get('default_data');
-  echo "Data from the cache:<br/>\n";
-  
-  var_dump($get_result);
+// store the search results
+$default_data->search_results = (!$search_results) ? 'twitter search down' : json_decode($search_results);
+// store the firefox timeline
+$default_data->timeline = (!$timeline) ? 'twitter api down' : json_decode($timeline);
+// store the triggers
+$default_data->triggers = $triggers;
 
-/* } */
+
+// connect to memcache
+$memcache = new Memcache;
+$memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");
+
+// store the contents in memcache
+$memcache->set('default_data', $default_data, false, $ttl) or die ("Failed to save data at the server");
+echo "Store data in the cache (data will expire in " . $ttl . " seconds)<br/>\n";
+
+$get_result = $memcache->get('default_data');
+echo "Data from the cache:<br/>\n";
+
+var_dump($get_result);
 
 ?>

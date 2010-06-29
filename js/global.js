@@ -25,8 +25,18 @@ var pool = [];
 var pool_index = 0;
 var firefox_data;
 var firefox_data_max_id = 0;
+
 var search_data;
 var search_data_max_id = 0;
+
+
+// Special bubbles
+var sb_clock_step = 0; // Minutes
+var sb_clock_last = 0;
+
+var sb_ffdownloads_step = 0; // At each step of downloads
+var sb_ffdownloads_last = 0;
+var sb_ffdownloads_stats = 0;
 
 function getDataFromProxy() {
   $.getJSON('http://192.168.1.84/proxy.php', function(data) {
@@ -34,7 +44,14 @@ function getDataFromProxy() {
     if (data.status.http_code == 200) {
       
       if (debug) console.log('Received code 200');
+      
       // Update variables with new data
+      sb_clock_step = data.contents.triggers.minutes;
+      sb_ffdownloads_step = data.contents.triggers.firefox_download_step;
+      sb_ffdownloads_stats = data.contents.triggers.firefox_download_stats;
+      
+      specialBubbleFFDownloadsCheck();
+      
       // Reverse results, so we start with oldest
       firefox_data = data.contents.timeline;
       firefox_data.reverse();      
@@ -65,9 +82,6 @@ function getDataFromProxy() {
 }
 
 function spawn() {
-
-  // Jump to next
-  pool_index ++;
   
   // Check if pool is empty
   if (pool.length == 0) return;
@@ -84,6 +98,9 @@ function spawn() {
   
   // Show 
   createBubble(pool[pool_index].type, pool[pool_index].data);
+  
+  // Jump to next
+  pool_index ++;
   
 }
 
@@ -145,7 +162,21 @@ function createBubble(type, data) {
 	element.style['top'] = -200 + 'px';
 	
 	if (type == 'search') {
-	 element.innerHTML = 'Time: ' + data.created_at + '<br>Text: ' + data.text;
+	
+    element.innerHTML = 'Time: ' + jQuery.timeago(data.created_at.substring(4)) + '<br>Text: ' + data.text;
+	
+  } else if (type == 'clock') {
+	
+    element.innerHTML = data; 
+    pool.splice(pool_index, 1);
+    pool_index --;
+  	 
+	} else if (type == 'ffdownloads') {
+    
+    element.innerHTML = data;
+    pool.splice(pool_index, 1);
+    pool_index --;
+
 	}
 
   // append the element to the bubbleWrapper
@@ -208,7 +239,7 @@ function setWalls() {
 	walls[2] = createPoly(world, stage[2] / 2, (stage[3]-310), [
 	 [0, 0],
 	 [100, 20],
-	 [300, 200],
+	[300, 200],
 	 [-300, 200],
 	 [-100, 20]
   ], true);
@@ -218,16 +249,45 @@ function setWalls() {
 }
 
 
+// Check to see if it's time to spawn a Clock bubble
+function specialBubbleClockCheck() {
+  if (sb_clock_step > 0) {
+    var now = new Date();
+    hours = now.getHours();
+    minutes = now.getMinutes();
+    seconds = now.getSeconds();
+    
+    if ((seconds == 0) && 
+      ((minutes % sb_clock_step) == 0) && 
+      ((hours + ':' + minutes) != sb_clock_last)) {
+      sb_clock_last = hours + ':' + minutes
+      pool.splice(pool_index, 0, {type: 'clock', data: 'It is ' + sb_clock_last});
+    }
+  }
+}
+
+function specialBubbleFFDownloadsCheck() {
+  if (sb_ffdownloads_step > 0) {
+    if ((sb_ffdownloads_stats > sb_ffdownloads_last) &&
+      (Math.floor(sb_ffdownloads_stats / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
+      sb_ffdownloads_last = sb_ffdownloads_stats;
+      pool.splice(pool_index, 0, {type: 'ffdownloads', data: 'Firefox just downloaded for the ' + Math.floor(sb_ffdownloads_stats*sb_ffdownloads_step) + 'th time'});
+      console.log('ffdownloads created');
+    }
+  }
+}
+
+
 // run this on every frame
-function loop() {
-
+function loop(){
+  
   // check for changes in the viewport and adjust the walls if there's any change
-	if (getBrowserDimensions()) {
-
-		setWalls();
-
-	}
-
+  if (getBrowserDimensions()) {
+    setWalls();
+  }
+  
+  specialBubbleClockCheck();
+  
 	// make the time advance
 	world.Step(timeStep, iterations);
 
@@ -241,8 +301,9 @@ function loop() {
 		element.style.left = newLeft + 'px';
 		element.style.top = newTop + 'px';
 
+
 		// Destroy bubble if it's out of the screen
-		if ((newLeft < (-element.width)) ||
+		if (((newLeft + Math.floor(element.width)) <= 1) ||
 		  (newLeft > stage[2])){
 		  world.DestroyBody(body);
 		  bodies.splice(i, 1);

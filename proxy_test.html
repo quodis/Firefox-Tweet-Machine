@@ -24,7 +24,8 @@
             if (data.status.http_code == 200) {
               contents = '<strong>latest search result: </strong>' + data.contents.search_results.results[0].text + '<br>'
                        + '<strong>latest firefox tweet: </strong>' + data.contents.timeline[0].text + '<br>'
-                       + '<strong>latest firefox follower count: </strong>' + data.contents.timeline[0].user.followers_count;
+                       + '<strong>latest firefox follower count: </strong>' + data.contents.timeline[0].user.followers_count + '<br>'
+                       + '<strong>latest firefox download stats: </strong>' + data.contents.firefox_download_stats;
             } else {
               contents = data.status.http_code;
             }
