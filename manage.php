@@ -4,7 +4,7 @@
   // include config file loader
   require_once "yaml_loader.php";
   // settings filename
-  $settings_filename = 'ftm_config.yaml';
+  $settings_filename = 'ftm_config.yml';
 
   // AUTH - START ###########################################################################
 
