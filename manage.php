@@ -6,10 +6,33 @@
   // settings filename
   $settings_filename = 'ftm_config.yaml';
 
-
   // AUTH - START ###########################################################################
 
-  include_once('auth.php');
+  include 'admin/EpiCurl.php';
+  include 'admin/EpiOAuth.php';
+  include 'admin/EpiTwitter.php';
+  include 'admin/secret.php';
+  
+  $twitterObj = new EpiTwitter($consumer_key, $consumer_secret);
+  
+  // only when returning from twitter
+  if ($_GET['oauth_token']) {
+    $twitterObj->setToken($_GET['oauth_token']);
+    $token = $twitterObj->getAccessToken();
+    // save token and secret using cookies
+    setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
+    setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
+  }
+  // set token either from GET or stored COOKIE values
+  $twitterObj->setToken(($token->oauth_token) ? $token->oauth_token : $_COOKIE['fftm_tok'] , ($token->oauth_token_secret) ? $token->oauth_token_secret : $_COOKIE['fftm_sec']);
+  // authenticate with twitter
+  $twitterInfo= $twitterObj->get_accountVerify_credentials();
+  $twitterInfo->response;
+
+  // die if not athorized
+  if (!in_array($twitterInfo->screen_name, explode(',', $config['allowed_admins']) )) {
+    die('<a href="' . $twitterObj->getAuthorizationUrl() . '">Authorize with Twitter</a>');
+  }
 
   // AUTH - END ###########################################################################
 
@@ -19,8 +42,6 @@
     // check if the file is writable
       if (is_writable($settings_filename)) {
 
-          // include "A simple YAML loader/dumper" named spyc
-          require_once "spyc.php";
           // generate yaml to be written to file
           $yaml_string = Spyc::YAMLDump($_POST);
 
@@ -45,7 +66,7 @@
       }
     } // end if $_POST
 
-  // include config file loader
+  // require config file loader
   require "yaml_loader.php";
 ?>
 <!DOCTYPE html>
@@ -92,19 +113,9 @@
           <fieldset>
             <legend>Admin</legend>
 
-            <label for="admin_username">Username</label>
-            <input id="admin_username" name="admin_username" type="text" value="<? print $config['admin_username']; ?>"/>
-            <br />
-            <label for="admin_password">Password</label>
-            <input id="admin_password" name="admin_password" type="password" value="<? print $config['admin_password']; ?>"/>
+            <label for="allowed_admins">Allowed Administrators</label>
+            <input id="allowed_admins" name="allowed_admins" type="text" size="100" value="<? print $config['allowed_admins']; ?>"/>
           </fieldset>
-
-          <?
-            // 
-            // only display the rest of the form when admin user is set
-            if ($config['admin_username'] && $config['admin_password']) :
-          ?>
-
 
           <fieldset>
             <legend>Twitter:</legend>
@@ -201,7 +212,7 @@
               <label for="">Date</label>
               <input id="countdown_date" name="countdown_date" type="text" size="100" value="<? print $config['countdown_date']; ?>"/>
               <br />
-    
+
               <label for="">Type</label>
               <select id="countdown_type" name="countdown_type">
                 <option value=""></option>
@@ -211,14 +222,12 @@
             </fieldset>
 
           </fieldset>
-          
-          <? endif // end admin user conditional ?>
-          
+
           <button>Save</button>
         </form>
 			</div>
       <div id="footer">
-        <pre><? print_r($config) ?></pre>
+        <pre><? //print_r($config) ?></pre>
       </div>
     </div>
   </body>
