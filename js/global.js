@@ -19,12 +19,17 @@ $(document).ready(function(){
 
 });
 
-var debug = true;
+var debug = false;
+
+var data_update_count = 0;
 
 var pool = [];
 var pool_index = 0;
-var firefox_data;
-var firefox_data_max_id = 0;
+var pool_count_spawned = 0;
+
+var timeline_data;
+var timeline_data_max_id = 0;
+var timeline_step = 0;
 
 var search_data;
 var search_data_max_id = 0;
@@ -36,7 +41,7 @@ var sb_clock_last = 0;
 
 var sb_ffdownloads_step = 0; // At each step of downloads
 var sb_ffdownloads_last = 0;
-var sb_ffdownloads_stats = 0;
+var sb_ffdownloads_total = 0;
 
 function getDataFromProxy() {
   $.getJSON('http://192.168.1.84/proxy.php', function(data) {
@@ -48,13 +53,11 @@ function getDataFromProxy() {
       // Update variables with new data
       sb_clock_step = data.contents.triggers.minutes;
       sb_ffdownloads_step = data.contents.triggers.firefox_download_step;
-      sb_ffdownloads_stats = data.contents.triggers.firefox_download_stats;
-      
-      specialBubbleFFDownloadsCheck();
+      sb_ffdownloads_total = data.contents.triggers.firefox_download_stats;
       
       // Reverse results, so we start with oldest
-      firefox_data = data.contents.timeline;
-      firefox_data.reverse();      
+      timeline_data = data.contents.timeline;
+      timeline_data.reverse();      
       search_data = data.contents.search_results;
       search_data.results.reverse();
       
@@ -73,6 +76,14 @@ function getDataFromProxy() {
         }
     	}
       if (debug) console.log('New pool length: ' + pool.length);
+      
+      // Run only the third and next times
+      if (data_update_count >= 2) {
+        specialBubbleFFDownloadsCheck();
+      }
+      
+      data_update_count ++;
+      
     } else {
       contents = data.status.http_code;
     }
@@ -87,17 +98,20 @@ function spawn() {
   if (pool.length == 0) return;
   
   // Check if there are too many bubbles on display
-  if (bodies.length > 10) return;
+  if (bodies.length >= 10) return;
   
   // Check if at end of pool
   // If so, resort it by id and delete whatever is over 40 results
   if ((pool_index+1) > pool.length) {
     pool_index = 0;
-    
   }
   
-  // Show 
+  // Create the bubble 
   createBubble(pool[pool_index].type, pool[pool_index].data);
+  pool_count_spawned ++;
+  
+  // Check if I should show timeline tweets
+  specialBubbleTimelineCheck();
   
   // Jump to next
   pool_index ++;
@@ -268,17 +282,41 @@ function specialBubbleClockCheck() {
 
 function specialBubbleFFDownloadsCheck() {
   if (sb_ffdownloads_step > 0) {
-    if ((sb_ffdownloads_stats > sb_ffdownloads_last) &&
-      (Math.floor(sb_ffdownloads_stats / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
+    if ((sb_ffdownloads_total > sb_ffdownloads_last) &&
+      (Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
       sb_ffdownloads_last = sb_ffdownloads_stats;
-      pool.splice(pool_index, 0, {type: 'ffdownloads', data: 'Firefox just downloaded for the ' + Math.floor(sb_ffdownloads_stats*sb_ffdownloads_step) + 'th time'});
-      console.log('ffdownloads created');
+      pool.splice(pool_index, 0, {type: 'ffdownloads', data: 'Firefox just downloaded for the ' + Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) * sb_ffdownloads_step + 'th time'});
+    }
+  }
+}
+
+function specialBubbleTimelineCheck() {
+  if (timeline_step > 0) {
+    if (pool_count_spawned % timeline_step) {
+    
+    	for (var i = 0; i < search_data.results.length; i++) {
+        var result = search_data.results[i];
+        
+        // See if this is newer than what is already pooled
+        // If yes, add it at current position
+        // If not, do nothing
+        if (result.id > search_data_max_id) {
+          pool.splice(pool_index, 0, {type: 'search', data: result});
+          search_data_max_id = result.id;
+        }
+    	}
+    	
+      pool.splice(pool_index, 0, {type: 'timeline', data: data});
+      
     }
   }
 }
 
 
+
+specialBubbleTimelineCheck
 // run this on every frame
+
 function loop(){
   
   // check for changes in the viewport and adjust the walls if there's any change
