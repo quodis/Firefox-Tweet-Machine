@@ -36,3 +36,9 @@ Permission is granted to anyone to use this software for any purpose, including 
 // in which this PHP script can be used.
 // 
 // Simple - http://benalman.com/code/projects/php-simple-proxy/examples/simple/
+
+###############################################################
+
+abraham / twitteroauth
+  http://twitteroauth.labs.poseurtech.com - http://github.com/abraham/twitteroauth
+  The first PHP Library to support OAuth for Twitter's REST API. — Read more

@@ -22,6 +22,8 @@
     // save token and secret using cookies
     setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
     setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
+    
+    // TODO: on first login (ie: no config file exists) try create it and add the current user to the allowed_admins
   }
   // set token either from GET or stored COOKIE values
   $twitterObj->setToken(($token->oauth_token) ? $token->oauth_token : $_COOKIE['fftm_tok'] , ($token->oauth_token_secret) ? $token->oauth_token_secret : $_COOKIE['fftm_sec']);
