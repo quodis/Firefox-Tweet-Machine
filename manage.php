@@ -29,8 +29,8 @@
     $twitterObj->setToken($_GET['oauth_token']);
     $token = $twitterObj->getAccessToken();
     // save token and secret using cookies
-    setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
-    setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_ADDR'], false, true);
+    setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+    setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
   }
 
   // set token either from GET or stored COOKIE values

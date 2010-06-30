@@ -62,7 +62,7 @@ var ds_followers;
 var ds_followers_description;
 
 function getDataFromProxy() {
-  $.getJSON('http://192.168.1.84/proxy.php', function(data) {
+  $.getJSON('/proxy.php', function(data) {
     // print it out to the wrapper
     if (data.status.http_code == 200) {
       
