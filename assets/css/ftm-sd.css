@@ -15,25 +15,6 @@ body {
 	background-repeat: no-repeat;
 	overflow: hidden;
 }
-
-a, a:visited {
-	color: #4999A3;
-	text-decoration: none;
-	outline: 0 none;
-}
-
-a:hover {
-	color: #4999A3; 
-	text-decoration: underline;
-	outline: 0 none;
-}
-
-a.more {
-	color: #4999A3;
-	text-transform: uppercase;
-	line-height: 20px;
-	font-size: 12px;
-}
 /* ----------------------------------------- */
 /* END General Styles */
 
@@ -45,6 +26,7 @@ header#brand {
 	z-index: 40;
 	left: 0;
 	top: 0;
+	padding: 20px;
 }
 
 section#bubbles {
@@ -84,6 +66,16 @@ footer {
 
 /* BEGIN Page Components */
 /* ----------------------------------------- */
+
+/* brand */
+header#brand h1 {
+	width: 220px;
+	height: 120px;
+	background: transparent url(../img/sd/ftm-brand-logo-sd.png) no-repeat center center;
+	overflow: hidden;
+	text-indent: -9999px;
+}
+/* brand /*/
 
 /* search-box */
 form#search-box {
@@ -242,10 +234,6 @@ dl#social-tools {
 	left: -180px;
 }
 
-dl#counter {
-	right: -190px;
-}
-
 dl#social-tools dt {
 	position: absolute;
 	z-index: 10px;
@@ -255,7 +243,7 @@ dl#social-tools dt {
 dl#social-tools dd {
 	position: absolute;
 	z-index: 10px;
-	top: 26px;
+	top: 28px;
 }
 
 dl#social-tools dt.twitter-follow,
@@ -283,39 +271,118 @@ dl#social-tools a {
 }
 
 dl#social-tools dt a {
-	height: 20px;
+	height: 22px;
 	line-height: 20px;
-	padding: 0 0 5px 0;
-	font-size: 14px;
+	padding: 0 0 0 18px;
+	font-size: 15px;
 	color: #FFF;
 	font-weight: 300;
+	width: 44px;
+	text-align: left;
 }
 
 dl#social-tools dd a {
 	height: 20px;
-	font-size: 14px;
+	font-size: 15px;
 	padding: 0 0 5px 0;
 	font-weight: 400;
 }
 
-dl#social-tools dt.twitter-follow a {
-	background-position: 0 -26px;
+dl#social-tools dt.twitter-follow a,
+dl#social-tools dt.twitter-follow a:visited {
+	background-position: 0 -25px;
+	text-decoration: none;
 }
 
-dl#social-tools dd.twitter-follow a {
+dl#social-tools dt.twitter-follow a:hover {
+	background-position: 0 -75px;
+}
+
+dl#social-tools dd.twitter-follow a,
+dl#social-tools dd.twitter-follow a:visited {
 	background-position: 0 0;
+	color: #0A454D;
+	text-decoration: none;
 }
 
-dl#social-tools dt.twitter-retweet a {
+dl#social-tools dd.twitter-follow a:hover {
+	color: #0A454D;
 }
 
-dl#social-tools dd.twitter-retweet a {
+dl#social-tools dt.twitter-retweet a,
+dl#social-tools dt.twitter-retweet a:visited {
+	background-position: -65px -25px;
+	text-decoration: none;
 }
 
-dl#social-tools dt.fb-share a {
+dl#social-tools dt.twitter-retweet a:hover {
+	background-position: -65px -75px;
 }
 
-dl#social-tools dd.fb-share a {
+dl#social-tools dd.twitter-retweet a,
+dl#social-tools dd.twitter-retweet a:visited {
+	background-position: -65px 0px;
+	color: #374D17;
+	text-decoration: none;
+}
+
+dl#social-tools dd.twitter-retweet a:hover {
+	color: #374D17;
+}
+
+dl#social-tools dt.fb-share a,
+dl#social-tools dt.fb-share a:visited {
+	background-position: -130px -25px;
+	text-decoration: none;
+}
+
+dl#social-tools dt.fb-share a:hover {
+	background-position: -130px -75px;
+}
+
+dl#social-tools dd.fb-share a,
+dl#social-tools dd.fb-share a:visited {
+	background-position: -130px 0px;
+	text-decoration: none;
+	color: #2B5072;
+}
+
+dl#social-tools dd.fb-share a:hover {
+	color: #2B5072;
+}
+
+dl#counter {
+	right: -190px;
+	text-align: center;
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+}
+
+dl#counter dt {
+	position: absolute;
+	z-index: 10px;
+	top: 56px;
+	left: 35px;
+	width: 180px;
+	height: 25px;
+	color: #805957;
+	font-weight: 300;
+	font-size: 16px;
+	letter-spacing: 0.2;
+}
+
+dl#counter dd {
+	position: absolute;
+	z-index: 10px;
+	top: 28px;
+	left: 35px;
+	width: 180px;
+	height: 26px;
+	padding: 0 0 5px 0;
+	color: #593F3E;
+	background: transparent url(../img/sd/dashboard-bttns-sd.png) no-repeat -195px -2px;
+	font-size: 20px;
+	font-weight: 400;
+	letter-spacing: 0.5px;
 }
 /* dashboards /*/
 
@@ -325,12 +392,22 @@ article.bubble.tweet {
 	z-index: 10;
 	top: 20%;
 	left: 40%;
-	width: 170px;
-	height: 170px;
+	width: 180px;
+	height: 180px;
 	background: transparent url(../img/sd/tweet-bubble-sd.png) no-repeat center center;
-	padding: 35px 25px 25px 35px;
-	color: #3F4B4D;
+	padding: 30px;
+	color: #3E6163;
 }
+
+article.bubble.tweet header,
+article.bubble.tweet p {
+	text-align: center;
+}
+
+article.bubble.tweet h1 {
+	line-height: 20px;
+}
+
 
 article.bubble.tweet .avatar-wrapper {
 	position: absolute;
@@ -339,6 +416,7 @@ article.bubble.tweet .avatar-wrapper {
 	left: -50px;
 	width: 80px;
 	height: 80px;
+	-moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg);
 }
 
 article.bubble.tweet .avatar-wrapper a {
@@ -357,14 +435,15 @@ article.bubble.tweet .avatar-wrapper img {
 }
 
 article.bubble.tweet p {
-	margin: 10px 0 0 0;
+	margin: 15px 0 0 0;
 }
 
 article.bubble.tweet a {
 	text-decoration: underline;
 }
 
-article.bubble.tweet h1 a {
+article.bubble.tweet h1 a,
+article.bubble.tweet h1 a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	font-size: 20px;
@@ -377,12 +456,17 @@ article.bubble.tweet span.mood {
 	-webkit-border-radius: 4px;
 	background-color: #FFF;
 	padding: 1px 2px;
+	font-style: italic;
 }
 
 article.bubble.tweet span.mood.violet { color: #6B5DC1; }
 article.bubble.tweet span.mood.pink { color: #D05F6F; }
 article.bubble.tweet span.mood.green { color: #6C9931; }
 article.bubble.tweet span.mood.orange { color: #DF731B; }
+
+article.bubble.tweet dl {
+	padding: 20px 0 0 0;
+}
 
 article.bubble.tweet dt {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
@@ -391,15 +475,15 @@ article.bubble.tweet dt {
 	color: #1A7B82;
 	float: left;
 	text-align: right;
-	width: 45px;
+	width: 50px;
 	line-height: 20px;
 	letter-spacing: 0.2px;
 }
 
 article.bubble.tweet dd {
-	padding: 0 0 0 55px;
-	width: 100px;
 	line-height: 20px;
+	padding: 0 0 0 60px;
+	width: 115px;
 }
 
 
@@ -420,7 +504,12 @@ article.bubble.tweet nav ul {
 article.bubble.tweet nav li {
 	margin: 2px 0 2px 0;
 	text-align: center;
+	-moz-transform: rotate(5deg);
 }
+
+article.bubble.tweet nav li.flip { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); }
+article.bubble.tweet nav li.retweet { -moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg); }
+article.bubble.tweet nav li.follow { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); }
 
 article.bubble.tweet nav a {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
@@ -433,11 +522,15 @@ article.bubble.tweet nav a {
 	text-decoration: none;
 	text-align: center;
 	text-transform: lowercase;
+	letter-spacing: 0.5px;
 }
 
-article.bubble.tweet nav li.flip a { background: #3F4B4D; }
-article.bubble.tweet nav li.retweet a { background: #8DC339; }
-article.bubble.tweet nav li.follow a { background: #17ABBD; }
+article.bubble.tweet nav li.flip a, article.bubble.tweet nav li.flip a:visited { background: #536366; }
+article.bubble.tweet nav li.flip a:hover { background: #2A3233; }
+article.bubble.tweet nav li.retweet a, article.bubble.tweet nav li.retweet a:visited { background: #8DC339; }
+article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
+article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
+article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
 /* bubbles  /*/
 
 /* footer */
@@ -453,15 +546,23 @@ footer a,
 footer a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	letter-spacing: 0.2px;
+	letter-spacing: 0.5px;
 	font-size: 15px;
 	color: #0C5C66;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	padding: 2px 6px;
-	background: #8AD7DD;
-	text-shadow: 0 1px #D7F2F4;
+	text-shadow: 0 1px #BFEDEF;
 	text-transform: lowercase;
+	text-decoration: none;
+	background: transparent url(../img/sd/footer-bttn-sd.png) no-repeat top center;
+}
+
+footer a:hover {
+	color: #C1E7EA;
+	text-shadow: 0 -1px #3C6868;
+	background: transparent url(../img/sd/footer-bttn-sd.png) no-repeat bottom center;
+	text-decoration: none;
 }
 /* footer /*/
 

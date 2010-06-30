@@ -17,14 +17,14 @@ $(document).ready(function(){
   play();
   
   getDataFromProxy();
-  setInterval(spawn, 1000);
+  setInterval(spawn, 3000);
   
 });
 
 var debug = false;
 
 var data_update_count = 0;
-var max_bubbles_on_screen = 15;
+var max_bubbles_on_screen = 9;
 var loop_interval;
 
 var pool = [];
@@ -38,6 +38,9 @@ var sb_timeline_step = 0;
 var search_data;
 var search_data_max_id = 0;
 
+// BASE SPEED OF BOUNCING. WILL ADD RAINDOM 0-100 TO UNSYNC BOUNCING
+var wobble_speed = 1000;
+var wobble_distance = 20;
 
 // Special bubbles
 var sb_clock_step = 0; // Minutes
@@ -75,6 +78,7 @@ function getDataFromProxy() {
       
       sb_followers_step = data.contents.special_bubbles.sb_followers_step;
       sb_followers_total = data.contents.timeline[0].user.followers_count;
+      $('dd.twitter-follow a').text(addCommas(sb_followers_total));
       
       sb_timeline_step = data.contents.special_bubbles.sb_timeline_step;
       
@@ -120,6 +124,7 @@ function getDataFromProxy() {
       contents = data.status.http_code;
     }
     
+    spawn();
     setTimeout(getDataFromProxy, 1000 * 60);
   });
 
@@ -189,48 +194,67 @@ function createBubble(type, data) {
   // calculate the position, will be used to place the element once created
   // could be changed to a fixed spawn point that'd match the machine chimney
 	var x = stage[2]/2;
-	var y = 300;
+	var y = stage[3]-200;
 
   // generate the random size
-	var size = (Math.random() * 50 >> 0) + 200;
-
+	// var size = (Math.random() * 50 >> 0) + 200;
+	var size = 230;
+  var bubbleClass;
+  
+  turnLampOn();
+  
   // create the DOM element to be animated
-  
-  
-	var element = document.createElement("div");
-	element.className = 'bubble';
+	var element = document.createElement("article");
 	element.width = size;
 	element.height = size;
-	element.style['width'] = size + 'px';
-	element.style['height'] = size + 'px';
 	element.style['position'] = 'absolute';
 	element.style['left'] = -400 + 'px';
 	element.style['top'] = -400 + 'px';
 	
-	if (type == 'search') {
 	
-    element.innerHTML = 'Time: ' + jQuery.timeago(data.created_at.substring(4)) + '<br>Text: ' + data.text;
+	switch (type) {
 	
-  } else if (type == 'clock') {
-	
-    element.innerHTML = data; 
-    pool.splice(pool_index, 1);
-    pool_index --;
-  	 
-	} else if (type == 'ffdownloads') {
-    
-    element.innerHTML = data;
-    pool.splice(pool_index, 1);
-    pool_index --;
-
-	} else if (type == 'timeline') {
-    
-    element.innerHTML = 'Este é do firefox: ' + data.text;
-    pool.splice(pool_index, 1);
-    pool_index --;
+    case 'search':
+  	
+      element.className = 'bubble tweet';
+      element.innerHTML = buildBubbleTweet(data);
+      break;
+      
+    case 'clock':
+  	
+      element.className = 'bubble clock';
+      element.innerHTML = buildBubbleClock(data);
+      pool.splice(pool_index, 1);
+      pool_index --;
+      break;
+    	 
+  	case 'ffdownloads':
+      
+      element.className = 'bubble ffdownloads';
+      //element.innerHTML = buildBubbleTweet(data);
+      pool.splice(pool_index, 1);
+      pool_index --;
+      break;
+  
+  	case 'timeline':
+      
+      element.className = 'bubble tweet firefox';
+      element.innerHTML = buildBubbleTweet(data);
+      pool.splice(pool_index, 1);
+      pool_index --;
+      break;
 
 	}
-
+	
+	
+  $(element).hover(function() {
+    $(this).find("nav").fadeIn();
+  }, function() {
+    $(this).find("nav").fadeOut();
+  });
+  
+  wobbleTheBubble($(element));
+  
   // append the element to the bubbleWrapper
 	$(bubbleWrapper).append(element);
 
@@ -257,9 +281,11 @@ function createBubble(type, data) {
 
 	// define initial velocity on x, y axis
 /* 	b2body.linearVelocity.Set( Math.random() * 400 - 200, Math.random() * 400 - 200 ); */
-	b2body.linearVelocity.Set( Math.random() * 400 - 200, -10 );
+	b2body.linearVelocity.Set( Math.random() * 800 - 400, -10 );
 	// add the box2d body to the real world and bodies array
 	bodies.push( world.CreateBody(b2body) );
+	
+	setTimeout(turnLampOff, 1000);
 }
 
 
@@ -288,6 +314,7 @@ function setWalls() {
 	walls[1] = createBox(world, stage[2] / 2, stage[3], stage[2], 70);
 	
 	// machine polygon
+	/*
 	walls[2] = createPoly(world, stage[2] / 2, (stage[3]-310), [
 	 [0, 0],
 	 [100, 20],
@@ -295,6 +322,7 @@ function setWalls() {
 	 [-300, 200],
 	 [-100, 20]
   ], true);
+  */
 
 	wallsSetted = true;
 
@@ -498,4 +526,124 @@ function getBrowserDimensions() {
 
 	return changed;
 
+}
+
+function buildBubbleTweet(data) {
+  
+  //<p class="show">Adopt <span class="mood orange">Mozilla</span>! Get a limited <span class="mood green">edition</span> dino T-shirt when you <span class="mood violet">donate</span> to our Drumbeat Open <span class="mood pink">Web</span> Fund. <a href="#" title="" rel="external">mzl.la/bBM5YP</a></p>\
+  /*
+  html = '\
+		<header>\
+			<h1><a href="#" title="' + data.screen_name + '" rel="author external">' + data.screen_name + '</a> wrote</h1>\
+			<time datetime="2009-10-09" pubdate><a href="#" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
+		</header>\
+		<p class="avatar-wrapper"><a href="#" title="Firefox" rel="author external"><img alt="Firefox avatar" src="\
+		' + data.profile_image_url + '" height="48" width="48" /></a></p>\
+		<p>' + data.text + '</p>\
+		<section class="hide">\
+			<dl>\
+				<dt>Name</dt>\
+				<dd>' + data.screen_name + '</dd>\
+				<dt>Location</dt>\
+				<dd>' + data.location + '</dd>\
+				<dt>Web</dt>\
+				<dd><a href="#" rel="author external" title="Web">' + data.url + '</a></dd>\
+				<dt>Followers</dt>\
+				<dd>' + data.followers_count + '</dd>\
+				<dt>Retweets</dt>\
+				<dd>?</dd>\
+				<dt>Bio</dt>\
+				<dd>' + data.description + '</dd>\
+			</dl>\
+		</section>\
+		<nav class="hide">\
+			<ul>\
+				<li class="flip"><a href="#section-id-01" title="Flip bubble">Flip</a></li>\
+				<li class="retweet"><a href="#" title="Retweet" rel="external">Retweet</a></li>\
+				<li class="follow"><a href="#" title="Follow" rel="external">Follow</a></li>\
+			</ul>\
+		</nav>\
+	';
+	*/
+	
+  html = '\
+		<header>\
+			<h1><a href="#" title="' + data.from_user + '" rel="author external">' + data.from_user + '</a> wrote</h1>\
+			<time datetime="2009-10-09" pubdate><a href="#" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
+		</header>\
+		<p class="avatar-wrapper"><a href="#" title="Firefox" rel="author external"><img alt="Firefox avatar" src="\
+		' + data.profile_image_url + '" height="48" width="48" /></a></p>\
+		<p>' + data.text + '</p>\
+		<section class="hide">\
+			<dl>\
+				<dt>Name</dt>\
+				<dd>' + data.from_user + '</dd>\
+				<dt>Location</dt>\
+				<dd>?</dd>\
+				<dt>Web</dt>\
+				<dd><a href="#" rel="author external" title="Web">?</a></dd>\
+				<dt>Followers</dt>\
+				<dd>?</dd>\
+				<dt>Retweets</dt>\
+				<dd>?</dd>\
+				<dt>Bio</dt>\
+				<dd>?</dd>\
+			</dl>\
+		</section>\
+		<nav class="hide">\
+			<ul>\
+				<li class="flip"><a href="#section-id-01" title="Flip bubble">Flip</a></li>\
+				<li class="retweet"><a href="#" title="Retweet" rel="external">Retweet</a></li>\
+				<li class="follow"><a href="#" title="Follow" rel="external">Follow</a></li>\
+			</ul>\
+		</nav>\
+	';
+	
+	return html;
+}
+
+
+function buildBubbleClock(data) {
+  
+  html = 'The time is: <strong>' + data + '</strong>';
+	
+	return html;
+}
+
+
+
+
+
+// BOUNCER. CALLBACK OF ANIMATION IS THE BOUNCER ITSELF, TO LOOP ALL NIGHT LONG
+function wobbleTheBubble(bubbleToWobble) {
+	newx = Math.floor(wobble_distance*Math.random());
+	newy = Math.floor(wobble_distance*Math.random());
+	new_random_speed = wobble_speed + Math.floor(100*Math.random());
+	$(bubbleToWobble).animate(
+		{ backgroundPosition: newx + 'px ' + newy + 'px' },
+		new_random_speed,
+		'linear',
+		function() {
+			wobbleTheBubble(bubbleToWobble);
+		}
+	);
+}
+
+function addCommas(nStr) {
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+
+function turnLampOn() {
+  $('#activity-indicator').removeClass('off').addClass('on');
+}
+function turnLampOff() {
+  $('#activity-indicator').removeClass('on').addClass('off');
 }

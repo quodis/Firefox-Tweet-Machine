@@ -20,7 +20,7 @@
     $search = array();
     $search['results_per_page'] = $config['search_results_per_page'];
     $search['keyword'] = urlencode($config['search_default_keyword']);
-    $search['url'] = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&rpp=';
+    $search['url'] = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&show_user=true&rpp=';
     // username timeline to cache
     $timeline = array();
     $timeline['username'] = $config['timeline_username'];

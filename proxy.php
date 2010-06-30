@@ -33,7 +33,7 @@ $cron_url = $config['cron_url'];
 $keyword = ($_GET['q']) ? $_GET['q'] : $config['search_default_keyword'];
 
 // fetch the gived url or a default one (twitter api - search)
-$url = ($_GET['url']) ? $_GET['url'] : 'http://search.twitter.com/search.json?result_type=recent&q=' . urlencode($keyword);
+$url = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&show_user=true&rpp=';
 
 if ( ($keyword == $config['search_default_keyword']) ) {
 

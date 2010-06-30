@@ -118,3 +118,15 @@ button::-moz-focus-inner {
 
 .hide { display: none; }
 /* helpers /*/
+
+a, a:visited {
+	color: #4999A3;
+	text-decoration: none;
+	outline: 0 none;
+}
+
+a:hover {
+	color: #4999A3; 
+	text-decoration: underline;
+	outline: 0 none;
+}
