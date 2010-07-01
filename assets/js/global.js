@@ -4,7 +4,7 @@ var stage = [ window.screenX, window.screenY, window.innerWidth, window.innerHei
 getBrowserDimensions();
 
 /* var worldAABB, world, iterations = 1, timeStep = 1 / 20; */
-var worldAABB, world, iterations = 1, timeStep = 1 / 100;
+var worldAABB, world, iterations = 1, timeStep = 1 / 20;
 
 var walls = [];
 var wall_thickness = 200; // Seems to have no effect
@@ -12,12 +12,39 @@ var wallsSetted = false;
 var bodies, elements, text;
 var PI2 = Math.PI * 2;
 
+var gravity_y = -50;
+var gravity_y_inverted = 350;
+
+var interval_spawn;
+var interval_loop;
+
 $(document).ready(function(){
+  
   init();
+  getDataFromProxy();
   play();
   
-  getDataFromProxy();
-  setInterval(spawn, 3000);
+  $('#flow-transposer a').click(function(){
+    var parent = $(this).parent();
+    if (parent.hasClass('up')) {
+      parent.removeClass('up').addClass('down');
+      pause();
+    } else {
+      parent.removeClass('down').addClass('up');
+      play();
+    }
+  })
+  
+  $('#gravity-inverter a').click(function(){
+    var parent = $(this).parent();
+    if (world.m_gravity.y == gravity_y) {
+      parent.removeClass('up').addClass('down');
+      world.m_gravity.y = gravity_y_inverted;
+    } else {
+      parent.removeClass('down').addClass('up');
+      world.m_gravity.y = gravity_y;
+    }
+  })
   
 });
 
@@ -25,7 +52,6 @@ var debug = false;
 
 var data_update_count = 0;
 var max_bubbles_on_screen = 9;
-var loop_interval;
 
 var pool = [];
 var pool_index = 0;
@@ -77,8 +103,8 @@ function getDataFromProxy() {
       sb_ffdownloads_total = data.contents.special_bubbles.sb_ffdownloads_total;
       
       sb_followers_step = data.contents.special_bubbles.sb_followers_step;
-      sb_followers_total = data.contents.timeline[0].user.followers_count;
-      $('dd.twitter-follow a').text(addCommas(sb_followers_total));
+    //  sb_followers_total = data.contents.timeline[0].user.followers_count;
+    //  $('dd.twitter-follow a').text(addCommas(sb_followers_total));
       
       sb_timeline_step = data.contents.special_bubbles.sb_timeline_step;
       
@@ -90,7 +116,7 @@ function getDataFromProxy() {
 
       // Reverse results, so we start with oldest
       timeline_data = data.contents.timeline;
-      timeline_data.reverse();      
+   //   timeline_data.reverse();      
       search_data = data.contents.search_results;
       search_data.results.reverse();
       
@@ -154,6 +180,7 @@ function spawn() {
   // Check if I should show timeline tweets
   specialBubbleTimelineCheck();
   
+  
 }
 
 function search() {
@@ -176,13 +203,11 @@ function init() {
 	worldAABB.minVertex.Set( 0, 0 );
 	worldAABB.maxVertex.Set( screen.width, screen.height + 200 );
 
-  // x/y point of gravity - the further, the stronger
-  var gravity = new b2Vec2( 0, -300 );
-  
   // allow objects to sleep, 
-  var doSleep = false;
-	world = new b2World( worldAABB, gravity, doSleep );
-
+  var doSleep = true;
+	world = new b2World( worldAABB, new b2Vec2( 0, 0 ), doSleep );
+  world.m_gravity.y = gravity_y;
+  
   // set walls around the world
 	setWalls();
 	reset();
@@ -194,11 +219,11 @@ function createBubble(type, data) {
   // calculate the position, will be used to place the element once created
   // could be changed to a fixed spawn point that'd match the machine chimney
 	var x = stage[2]/2;
-	var y = stage[3]-200;
+	var y = stage[3]-215;
 
   // generate the random size
 	// var size = (Math.random() * 50 >> 0) + 200;
-	var size = 230;
+	var size = 200;
   var bubbleClass;
   
   turnLampOn();
@@ -209,14 +234,14 @@ function createBubble(type, data) {
 	element.height = size;
 	element.style['position'] = 'absolute';
 	element.style['left'] = -400 + 'px';
-	element.style['top'] = -400 + 'px';
+	element.style['top'] = 0 + 'px';
 	
 	
 	switch (type) {
 	
     case 'search':
   	
-      element.className = 'bubble tweet';
+      element.className = 'bubble tweet vhigh';
       element.innerHTML = buildBubbleTweet(data);
       break;
       
@@ -238,7 +263,7 @@ function createBubble(type, data) {
   
   	case 'timeline':
       
-      element.className = 'bubble tweet firefox';
+      element.className = 'bubble tweet firefox vhigh';
       element.innerHTML = buildBubbleTweet(data);
       pool.splice(pool_index, 1);
       pool_index --;
@@ -253,12 +278,11 @@ function createBubble(type, data) {
     $(this).find("nav").fadeOut();
   });
   
-  wobbleTheBubble($(element));
+  //wobbleTheBubble($(element));
   
   // append the element to the bubbleWrapper
 	$(bubbleWrapper).append(element);
-
-  // add that element to the elements array (needs to check this a bit more)
+	$(bubbleWrapper).find('.avatar-wrapper').delay(200).animate({left: '-15%', top: '10%'}, 1000);
 	elements.push( element );
 
   // create a new box2d body
@@ -270,7 +294,7 @@ function createBubble(type, data) {
 	circle.density = 1;
 	circle.friction = 0.3;
   // Restitution is how elastic something is 0 being in elastic and 1 being totally elastic
-  circle.restitution = 0.1;
+  circle.restitution = 0.5;
 	circle.preventRotation = true;
 	b2body.AddShape(circle);
 	// add the body to userData, so that all the elements can be addressed and manipulated later on, reset(); clears them all for eg.
@@ -305,24 +329,30 @@ function setWalls() {
   // arguments: world, x, y, width, height, fixed
   // top box wall
 	walls[0] = createPoly(world, stage[2] / 2, 0, [
-	 [(stage[2] / 2)+100, 0],
-	 [0, 20],
-	 [- (stage[2] / 2) - 100, 0]
+	 [(stage[2] / 2) + 200, 0],
+	 [0, 10],
+	 [- (stage[2] / 2) - 200, 0]
   ], true);
   
   // bottom machine base box
 	walls[1] = createBox(world, stage[2] / 2, stage[3], stage[2], 70);
 	
-	// machine polygon
-	/*
-	walls[2] = createPoly(world, stage[2] / 2, (stage[3]-310), [
-	 [0, 0],
-	 [100, 20],
-	[300, 200],
-	 [-300, 200],
-	 [-100, 20]
+	// machine polygon left
+	walls[2] = createPoly(world, (stage[2] / 2) + 120, (stage[3]-310), [
+    [0, 0],
+    [80, 0],
+    [160, 200],
+    [0, 200]
   ], true);
-  */
+  
+  
+  walls[3] = createPoly(world, (stage[2] / 2) - 280, (stage[3]-310), [
+    [80, 0],
+    [160, 0],
+    [160, 200],
+    [0, 200]
+  ], true);
+  
 
 	wallsSetted = true;
 
@@ -413,8 +443,8 @@ function loop(){
 		var body = bodies[i];
 		var element = elements[i];
 		
-		newLeft = (body.m_position0.x - (element.width >> 1))
-		newTop = (body.m_position0.y - (element.height >> 1))
+		newLeft = (body.m_position0.x - (element.width >> 1));
+		newTop = (body.m_position0.y - (element.height >> 1) - 15);
 		element.style.left = newLeft + 'px';
 		element.style.top = newTop + 'px';
 
@@ -466,8 +496,12 @@ function createPoly(world, x, y, points, fixed) {
 }
 
 function play() {
-
-	loop_interval = setInterval( loop, 1000 / 30 );
+	interval_loop = setInterval( loop, 1000 / 40 );
+	interval_spwan = setInterval(spawn, 3000);
+}
+function pause() {
+  clearInterval(interval_loop);
+  clearInterval(interval_spwan);
 }
 
 function reset() {
@@ -573,7 +607,7 @@ function buildBubbleTweet(data) {
 		</header>\
 		<p class="avatar-wrapper"><a href="#" title="Firefox" rel="author external"><img alt="Firefox avatar" src="\
 		' + data.profile_image_url + '" height="48" width="48" /></a></p>\
-		<p>' + data.text + '</p>\
+		<p>' + create_urls(data.text) + '</p>\
 		<section class="hide">\
 			<dl>\
 				<dt>Name</dt>\
@@ -646,4 +680,13 @@ function turnLampOn() {
 }
 function turnLampOff() {
   $('#activity-indicator').removeClass('on').addClass('off');
+}
+
+// Parse tweets to make links to links, @usernames and #hashtags
+function create_urls(input) {
+  return input
+  .replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim, '<a href="$&" class="my_link" target="_blank">$&</a>')
+  .replace(/([^\/])(www[\S]+(\b|$))/gim, '$1<a href="http://$2" class="my_link" target="_blank">$2</a>')
+  .replace(/(^|\s)@(\w+)/g, '$1<a href="http://twitter.com/$2" class="my_link" target="_blank">@$2</a>')
+  .replace(/(^|\s)#(\S+)/g, '$1<a href="http://search.twitter.com/search?q=%23$2" class="my_link" target="_blank">#$2</a>');
 }

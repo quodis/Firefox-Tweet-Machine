@@ -184,6 +184,18 @@
 
           <fieldset>
             <legend>Twitter:</legend>
+            
+          <fieldset>
+            <legend>Whitelisted User Details</legend>
+            
+            <label for="whitelisted_username">Username</label>
+            <input id="whitelisted_username" name="whitelisted_username" type="text" value="<? print $config['whitelisted_username']; ?>"/>
+            <br />
+
+            <label for="whitelisted_password">Password</label>
+            <input id="whitelisted_password" name="whitelisted_password" type="password" value="<? print $config['whitelisted_password']; ?>"/>
+            <br />
+          </fieldset>
 
             <fieldset>
               <legend>Timeline</legend>

@@ -82,9 +82,9 @@ form#search-box {
 	position: absolute;
 	z-index: 10;
 	top: 75px;
-	left: 115px;
+	left: 95px;
 	height: 40px;
-	width: 220px;
+	width: 260px;
 }
 
 form#search-box input.text {
@@ -100,7 +100,7 @@ form#search-box input.text {
 	line-height: 30px;
 	height: 30px;
 	padding: 7px 45px 3px 10px;
-	width: 165px;
+	width: 205px;
 	outline: 0;
 	vertical-align: baseline;
 }
@@ -132,7 +132,7 @@ li.lever a {
 	text-indent: -9999px;
 }
 
-li#flow-increaser a {
+li#gravity-inverter a {
 	top: 170px;
 	left: 80px;
 }
@@ -142,8 +142,8 @@ li#flow-transposer a {
 	right: 75px;
 }
 
-li#flow-increaser.up a { background-position: 0 0; }
-li#flow-increaser.down a { background-position: -50px 0; }
+li#gravity-inverter.up a { background-position: 0 0; }
+li#gravity-inverter.down a { background-position: -50px 0; }
 
 li#flow-transposer.up a { background-position: -113px 0; }
 li#flow-transposer.down a { background-position: -163px 0; }
@@ -154,7 +154,7 @@ li#activity-indicator {
 	position: absolute;
 	z-index: 30;
 	top: 18px;
-	right: 35px;
+	right: 25px;
 	display: block;
 	width: 25px;
 	height: 50px;
@@ -392,10 +392,16 @@ article.bubble.tweet {
 	z-index: 10;
 	top: 20%;
 	left: 40%;
-	width: 180px;
-	height: 180px;
-	background: transparent url(../img/sd/tweet-bubble-sd.png) no-repeat center center;
-	padding: 30px;
+	width: 160px;
+	height: auto;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-position: 10px 10px; 
+	-moz-background-size: 220px 90%;
+	-webkit-background-size: 220px 90%;
+  	-o-background-size: 220px 90%;
+  	background-size: 220px 90%;
+	padding: 40px;
 	color: #3E6163;
 }
 
@@ -412,11 +418,13 @@ article.bubble.tweet h1 {
 article.bubble.tweet .avatar-wrapper {
 	position: absolute;
 	z-index: 10;
-	top: 20px;
-	left: -50px;
+	top: 50%; /* final: 10% */
+	left: 50%; /* final: -15% */
 	width: 80px;
 	height: 80px;
-	-moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg);
+	-moz-transform: rotate(-3deg);
+	-webkit-transform: rotate(-3deg);
+	-o-transform: rotate(-3deg);
 }
 
 article.bubble.tweet .avatar-wrapper a {
@@ -454,6 +462,7 @@ article.bubble.tweet h1 a:visited {
 article.bubble.tweet span.mood {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
+	border-radius: 4px;
 	background-color: #FFF;
 	padding: 1px 2px;
 	font-style: italic;
@@ -504,12 +513,11 @@ article.bubble.tweet nav ul {
 article.bubble.tweet nav li {
 	margin: 2px 0 2px 0;
 	text-align: center;
-	-moz-transform: rotate(5deg);
 }
 
-article.bubble.tweet nav li.flip { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); }
-article.bubble.tweet nav li.retweet { -moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg); }
-article.bubble.tweet nav li.follow { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); }
+article.bubble.tweet nav li.flip { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
+article.bubble.tweet nav li.retweet { -moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg); -o-transform:rotate(-3deg); }
+article.bubble.tweet nav li.follow { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
 
 article.bubble.tweet nav a {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
@@ -518,6 +526,7 @@ article.bubble.tweet nav a {
 	color: #FFF;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
+	border-radius: 4px;
 	padding: 2px 4px;
 	text-decoration: none;
 	text-align: center;
@@ -531,6 +540,11 @@ article.bubble.tweet nav li.retweet a, article.bubble.tweet nav li.retweet a:vis
 article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
 article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
 article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
+
+article.bubble.tweet.vhigh { background-image: url(../img/sd/tweet-normal-bubble-vhigh-sd.png); }
+article.bubble.tweet.high { background-image: url(../img/sd/tweet-normal-bubble-high-sd.png); }
+article.bubble.tweet.med { background-image: url(../img/sd/tweet-normal-bubble-med-sd.png); }
+article.bubble.tweet.low { background-image: url(../img/sd/tweet-normal-bubble-low-sd.png); }
 /* bubbles  /*/
 
 /* footer */
@@ -551,6 +565,7 @@ footer a:visited {
 	color: #0C5C66;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
+	border-radius: 6px;
 	padding: 2px 6px;
 	text-shadow: 0 1px #BFEDEF;
 	text-transform: lowercase;

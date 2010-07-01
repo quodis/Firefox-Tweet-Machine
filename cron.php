@@ -16,6 +16,10 @@
   $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 
   // twitter
+    // whitelisted user
+    $whitelisted = array();
+    $whitelisted['user'] = $config['whitelisted_username'];
+    $whitelisted['password'] = $config['whitelisted_password'];
     // search
     $search = array();
     $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
@@ -41,6 +45,12 @@ $ch = curl_init();
   // return curl output instead of boolean
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 
+// query and store firefox download stats
+curl_setopt($ch, CURLOPT_URL, $firefox['download_stats_url']);
+list( $header, $firefox_downloads_total ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+$status['downloads'] = curl_getinfo( $ch );
+echo('firefox stats: ' . $status['downloads']['http_code'] . "<br>\n");
+
 // TODO: perhaps we need to iterate through requests: user timeline, default search
 // query and store search results
 curl_setopt($ch, CURLOPT_URL, $search['url'] . $search['results_per_page'] . '&q=' . $search['keyword']);
@@ -49,16 +59,15 @@ $status['search'] = curl_getinfo( $ch );
 echo('search: ' . $status['search']['http_code'] . "<br>\n");
 
 // query and store user timeline
+  // set http auth for timeline 
+curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+curl_setopt($ch, CURLOPT_USERPWD, $whitelisted['user'] . ':' . $whitelisted['password']);
+  // make "the call"
 curl_setopt($ch, CURLOPT_URL, $timeline['url'] . $timeline['username'] . '&count=' . $timeline['count']);
 list( $header, $timeline ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status['timeline'] = curl_getinfo( $ch );
 echo('timeline: ' . $status['timeline']['http_code'] . "<br>\n");
 
-// query and store firefox download stats
-curl_setopt($ch, CURLOPT_URL, $firefox['download_stats_url']);
-list( $header, $firefox_downloads_total ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-$status['downloads'] = curl_getinfo( $ch );
-echo('firefox stats: ' . $status['downloads']['http_code'] . "<br>\n");
 
 // read and store the special_bubbles values array
 $special_bubbles = array();
