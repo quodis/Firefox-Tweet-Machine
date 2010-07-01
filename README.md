@@ -3,9 +3,7 @@ Firefox Tweet Machine
 
 ## Requirements
 
-- PHP 5.2
- - php-curl
- - [memcache](http://pecl.php.net/package/memcache)
+- PHP 5.2 ( with: php-curl, [memcache](http://pecl.php.net/package/memcache) )
 - Memcached
 - The app must be able to write to a ftm_config.yml in the app root dir
 
