@@ -11,23 +11,23 @@
   require_once "lib/yaml_loader.php";
 
   // memcache
-  $ttl = $config['memcache_ttl'];
-  $memcache_host = $config['memcache_host'];
-  $memcache_port = $config['memcache_port'];
+  $ttl = ($config['memcache_ttl']) ? $config['memcache_ttl'] : '60';
+  $memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
+  $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 
   // twitter
     // search
     $search = array();
-    $search['results_per_page'] = $config['search_results_per_page'];
-    $search['keyword'] = urlencode($config['search_default_keyword']);
+    $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
+    $search['keyword'] = ($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox';
     $search['url'] = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&show_user=true&rpp=';
     // username timeline to cache
     $timeline = array();
-    $timeline['username'] = $config['timeline_username'];
-    $timeline['count'] = $config['timeline_count'];
+    $timeline['username'] = ($config['timeline_username']) ? $config['timeline_username'] : 'firefox';
+    $timeline['count'] = ($config['timeline_count']) ? $config['timeline_count'] : 20 ;
     $timeline['url'] = ($config['timeline_url']) ? $config['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=';
     // firefox downloads
-    $firefox['download_stats_url'] = $config['firefox_download_stats_url'];
+    $firefox['download_stats_url'] = ($config['firefox_download_stats_url']) ? $config['firefox_download_stats_url'] : 'http://www.mozilla.com/en-US/firefox/stats/total.php' ;
     
 // ############################################################################
 
@@ -62,19 +62,19 @@ echo('firefox stats: ' . $status['downloads']['http_code'] . "<br>\n");
 
 // read and store the special_bubbles values array
 $special_bubbles = array();
-$special_bubbles['sb_timeline_step'] = $config['specialbubble_timeline_step'];
-$special_bubbles['sb_followers_step'] = $config['specialbubble_followers_step'];
-$special_bubbles['sb_clock_step'] = $config['specialbubble_clock_step'];
+$special_bubbles['sb_timeline_step'] = ($config['specialbubble_timeline_step']) ? $config['specialbubble_timeline_step'] : 10;
+$special_bubbles['sb_followers_step'] = ($config['specialbubble_followers_step']) ? $config['specialbubble_followers_step'] : 20;
+$special_bubbles['sb_clock_step'] = ($config['specialbubble_clock_step']) ? $config['specialbubble_clock_step'] : 1;
 $special_bubbles['sb_ffdownloads_total'] = reset(json_decode($firefox_downloads_total));
-$special_bubbles['sb_ffdownloads_step'] = $config['specialbubble_firefox_downloads_step'];
+$special_bubbles['sb_ffdownloads_step'] = ($config['specialbubble_firefox_downloads_step']) ? $config['specialbubble_firefox_downloads_step'] : 100000;
 
 // read and store the display values array
 $display = array();
-$display['ds_type'] = $config['countdown_display_type'];
-$display['ds_datetime'] = $config['countdown_display_datetime'];
-$display['ds_datetime_description'] = $config['countdown_display_datetime_description'];
-$display['ds_followers'] = $config['countdown_display_followers'];
-$display['ds_followers_description'] = $config['countdown_display_followers_description'];
+$display['ds_type'] = ($config['countdown_display_type']) ? $config['countdown_display_type'] : 'followers';
+$display['ds_datetime'] = ($config['countdown_display_datetime']) ? $config['countdown_display_datetime'] : '';
+$display['ds_datetime_description'] = ($config['countdown_display_datetime_description']) ? $config['countdown_display_datetime_description'] : '';
+$display['ds_followers'] = ($config['countdown_display_followers']) ? $config['countdown_display_followers'] : 5000;
+$display['ds_followers_description'] = ($config['countdown_display_followers_description']) ? $config['countdown_display_followers_description'] : 'Firefox download count just increased by 5000!';
 
 // close the curl session
 curl_close( $ch );

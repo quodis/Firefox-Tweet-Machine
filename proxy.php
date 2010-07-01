@@ -19,12 +19,12 @@ $enable_native   = false;
 $valid_url_regex = '/.*/';
 
 // memcache
-$memcache_host = $config['memcache_host'];
-$memcache_port = $config['memcache_port'];
+$memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
+$memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 // if true, this script will run the cron.php when there are no results in cache and client requests data as in: this script is executed ~comment by: Captain Obvious
-$cron_on_demand = true;
+$cron_on_demand = ($config['cron_on_demand']) ? $config['cron_on_demand'] : true;
 // cron_url is actually cron php filename
-$cron_url = $config['cron_url'];
+$cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://localhost/cron.php';
 
 
 // ############################################################################

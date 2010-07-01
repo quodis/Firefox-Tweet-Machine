@@ -11,8 +11,8 @@
   // logout
   if ($_GET['action'] == 'logout') {
     // clear cookies
-    setcookie('fftm_tok', '');
-    setcookie('fftm_sec', '');
+    setcookie('fftm_tok', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+    setcookie('fftm_sec', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
     // refresh page
     die( header('refresh:0;url=manage.php') );
   };
