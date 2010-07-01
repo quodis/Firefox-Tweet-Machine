@@ -21,4 +21,4 @@ Upon first login a config file (ftm_config.yml) will be created in the root dire
 
 Every configuration field, except allowed admins, has a hard coded default value,
 so the app should be up and running right after deployment unless the default values aren't appropriate
-ex: memcache host/port (localhost:11211), cron url(htp://localhost/cron.php)
+ex: memcache host/port (localhost:11211), cron url(htp://[SERVER_NAME]/cron.php)
