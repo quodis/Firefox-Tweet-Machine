@@ -392,15 +392,15 @@ article.bubble.tweet {
 	z-index: 10;
 	top: 20%;
 	left: 40%;
-	width: 160px;
+	width: 140px;
 	height: auto;
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: 10px 10px; 
-	-moz-background-size: 220px 90%;
-	-webkit-background-size: 220px 90%;
-  	-o-background-size: 220px 90%;
-  	background-size: 220px 90%;
+	background-position: center center; 
+	-moz-background-size: 100% 100%;
+	-webkit-background-size: 100% 100%;
+  	-o-background-size: 100% 100%;
+  	background-size: 100% 100%;
 	padding: 40px;
 }
 

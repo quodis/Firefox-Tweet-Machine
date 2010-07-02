@@ -73,7 +73,7 @@ list( $header, $firefox_downloads_total ) = preg_split( '/([\r\n][\r\n])\\1/', c
 $status['download_stats'] = curl_getinfo( $ch );
 echo('HTTP_CODE for FIREFOX DOWNLOAD COUNT: ' . $status['download_stats']['http_code'] . "<br>\n");
 
-// TODO: perhaps we need to iterate through requests: user timeline, default search
+// NOTE: perhaps we need to iterate through requests: user timeline, default search
 // query and store search results
 curl_setopt($ch, CURLOPT_URL, $search['url'] . $search['results_per_page'] . '&q=' . $search['keyword']);
 list( $header, $search_results ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
@@ -86,17 +86,19 @@ list( $header, $timeline_statuses ) = preg_split( '/([\r\n][\r\n])\\1/', curl_ex
 $status['timeline'] = curl_getinfo( $ch );
 echo('HTTP_CODE for TIMELINE: ' . $status['timeline']['http_code'] . "<br>\n");
 
-
-/*
 // add retweet count to retweets from FF timeline
-echo('retweets: <br /><pre>');
+echo('<br />retweets: <br /><pre>');
+
+// debug
+echo 'fetching retweet counts for ' . count(json_decode($timeline_statuses)) . ' statuses <br /><br />';
+
+// we have to convert the json to an array beforehand, json_decode($timeline_statuses)[$id] doesn't work =| oh PHP..
+$timeline_statuses_decoded = json_decode($timeline_statuses);
+
 // for each search result fetch the number of retweets
 foreach (json_decode($timeline_statuses) as $id => $timeline_status) {
 
-  echo 'there are ' . count($timeline_statuses) . ' statuses <br /><br />';
-
-  print_r($timeline_status);
-  exit();
+  //print_r($timeline_status);
   // configure the curl object
   curl_setopt($ch_auth, CURLOPT_URL, 'http://api.twitter.com/1/statuses/' . $timeline_status->id . '/retweeted_by/ids.json?count=100');
 
@@ -104,18 +106,16 @@ foreach (json_decode($timeline_statuses) as $id => $timeline_status) {
   list( $header, $timeline_status_retweets ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 
   // debug, show how many retweets for a given tweet
-  print('was retweeted: ' . count(json_decode($timeline_status_retweets)) . ' times.');
-  
+  print($timeline_statuses_decoded[$id]->id . ' was retweeted: ' . count(json_decode($timeline_status_retweets)) . ' times.<br />');
+
   // add the retweet count to the tweet
-  //$timeline_status->retweet_count = count(json_decode($timeline_status_retweets));
-  echo('timeline_status: ' . $timeline_status);
+  $timeline_statuses_decoded[$id]->retweet_count = count(json_decode($timeline_status_retweets));
+  //echo('timeline_status retweets: ');
+  //print_r($timeline_statuses_decoded[$id]);
+  //exit();
   
-  // recreate $timeline_statuses array
-  $timeline_statuses_with_retweets[] = $timeline_status;
 }
-die($timeline_statuses_with_retweets);
 echo('</pre>');
-*/
 
 // close the curl session
 curl_close( $ch );
@@ -140,7 +140,7 @@ $display['ds_stats_facebook_shares'] = reset($firefox_tweet_machine_facebook_sta
 // store the search results
 $default_data->search_results = (!$search_results) ? 'twitter search down' : json_decode($search_results);
 // store the firefox timeline
-$default_data->timeline = (!$timeline_statuses) ? 'twitter api down' : json_decode($timeline_statuses);
+$default_data->timeline = (!$timeline_statuses_decoded) ? 'twitter api down' : $timeline_statuses_decoded;
 // store the triggers
 $default_data->special_bubbles = $special_bubbles;
 // store the display values
