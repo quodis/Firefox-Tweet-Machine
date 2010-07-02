@@ -402,7 +402,6 @@ article.bubble.tweet {
   	-o-background-size: 220px 90%;
   	background-size: 220px 90%;
 	padding: 40px;
-	color: #3E6163;
 }
 
 article.bubble.tweet header,
@@ -420,21 +419,28 @@ article.bubble.tweet .avatar-wrapper {
 	z-index: 10;
 	top: 50%; /* final: 10% */
 	left: 50%; /* final: -15% */
-	width: 80px;
-	height: 80px;
-	-moz-transform: rotate(-3deg);
-	-webkit-transform: rotate(-3deg);
-	-o-transform: rotate(-3deg);
+	width: auto;
+	height: auto;
+	-moz-background-size: 100%;
+	-webkit-background-size: 100%;
+  	-o-background-size: 100%;
+  	background-size: 100%;
+  	background-position: center center;
+  	background-repeat: no-repeat;
+  	margin: 0;
 }
 
 article.bubble.tweet .avatar-wrapper a {
 	display: block;
 	width: 80px;
 	height: 80px;
-	background-image: url(../img/sd/tweet-avatar-wrapper-sd.png), url(../img/sd/tweet-avatar-bubble-sd.png);
+	background-image: url(../img/sd/tweet-avatar-wrapper-sd.png);
 	background-position: center center;
 	background-repeat: no-repeat;
 	text-align: center;
+	-moz-transform: rotate(-5deg);
+	-webkit-transform: rotate(-5deg);
+	-o-transform: rotate(-5deg);
 }
 
 article.bubble.tweet .avatar-wrapper img {
@@ -455,8 +461,33 @@ article.bubble.tweet h1 a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	font-size: 20px;
-	color: #1A7B82;
 	text-decoration: none;
+}
+
+article.bubble.tweet time a,
+article.bubble.tweet time a:visited {
+	font-style: italic;
+	text-decoration: none;
+}
+
+/* Normal text color */
+article.bubble.tweet {
+	color: #3E6163;
+}
+
+article.bubble.tweet a,
+article.bubble.tweet a:visited {
+	color: #3DA6B3;
+}
+
+/* Firefox txt colors */
+article.bubble.tweet.firefox {
+	color: #4C3E01;
+}
+
+article.bubble.tweet.firefox a,
+article.bubble.tweet.firefox a:visited {
+	color: #8C7202;
 }
 
 article.bubble.tweet span.mood {
@@ -495,19 +526,22 @@ article.bubble.tweet dd {
 	width: 115px;
 }
 
-
 article.bubble.tweet nav {
 	position: absolute;
 	z-index: 30;
-	top: 100px;
-	left: -40px;
+	top: 110px;
+	left: -10%;
 	width: 70px;
-	height: 100px; 
-	background: transparent url(../img/sd/tweet-nav-bubble-sd.png) no-repeat center center;
-}
-
-article.bubble.tweet nav ul {
-	margin: 15px 0 0 0;
+	height: auto; 
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-moz-background-size: 70px 100%;
+	-webkit-background-size: 70px 100%;
+  	-o-background-size: 70px 100%;
+  	background-size: 70px 100%;
+  	padding: 10px 0;
+  	-moz-transform: rotate(-8deg); -webkit-transform:rotate(-8deg); -o-transform:rotate(-8deg);
 }
 
 article.bubble.tweet nav li {
@@ -519,7 +553,10 @@ article.bubble.tweet nav li.flip { -moz-transform: rotate(3deg); -webkit-transfo
 article.bubble.tweet nav li.retweet { -moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg); -o-transform:rotate(-3deg); }
 article.bubble.tweet nav li.follow { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
 
-article.bubble.tweet nav a {
+article.bubble.tweet nav a,
+article.bubble.tweet nav a:visited,
+article.bubble.tweet.firefox nav a,
+article.bubble.tweet.firefox nav a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	font-size: 15px;
@@ -541,10 +578,42 @@ article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
 article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
 article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
 
-article.bubble.tweet.vhigh { background-image: url(../img/sd/tweet-normal-bubble-vhigh-sd.png); }
-article.bubble.tweet.high { background-image: url(../img/sd/tweet-normal-bubble-high-sd.png); }
-article.bubble.tweet.med { background-image: url(../img/sd/tweet-normal-bubble-med-sd.png); }
-article.bubble.tweet.low { background-image: url(../img/sd/tweet-normal-bubble-low-sd.png); }
+/* RT vhigh */
+article.bubble.tweet.vhigh,
+article.bubble.tweet.vhigh .avatar-wrapper,
+article.bubble.tweet.vhigh nav { background-image: url(../img/sd/tweet-normal-bubble-vhigh-sd.png); }
+
+article.bubble.tweet.firefox.vhigh,
+article.bubble.tweet.firefox.vhigh .avatar-wrapper,
+article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/sd/tweet-firefox-bubble-vhigh-sd.png); }
+
+/* RT high */
+article.bubble.tweet.high,
+article.bubble.tweet.high .avatar-wrapper,
+article.bubble.tweet.high nav { background-image: url(../img/sd/tweet-normal-bubble-high-sd.png); }
+
+article.bubble.tweet.firefox.high,
+article.bubble.tweet.firefox.high .avatar-wrapper,
+article.bubble.tweet.firefox.high nav { background-image: url(../img/sd/tweet-firefox-bubble-high-sd.png); }
+
+/* RT med */
+article.bubble.tweet.med,
+article.bubble.tweet.med .avatar-wrapper,
+article.bubble.tweet.med nav { background-image: url(../img/sd/tweet-normal-bubble-med-sd.png); }
+
+article.bubble.tweet.firefox.med,
+article.bubble.tweet.firefox.med .avatar-wrapper,
+article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/tweet-firefox-bubble-med-sd.png); }
+
+/* RT low */
+article.bubble.tweet.low,
+article.bubble.tweet.low .avatar-wrapper,
+article.bubble.tweet.low nav { background-image: url(../img/sd/tweet-normal-bubble-low-sd.png); }
+
+article.bubble.tweet.firefox.low,
+article.bubble.tweet.firefox.low .avatar-wrapper,
+article.bubble.tweet.firefox.low nav { background-image: url(../img/sd/tweet-firefox-bubble-low-sd.png); }
+
 /* bubbles  /*/
 
 /* footer */

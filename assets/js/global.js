@@ -1,4 +1,4 @@
-var bubbleWrapper;
+
 
 var stage = [ window.screenX, window.screenY, window.innerWidth, window.innerHeight ];
 getBrowserDimensions();
@@ -9,49 +9,20 @@ var worldAABB, world, iterations = 1, timeStep = 1 / 20;
 var walls = [];
 var wall_thickness = 200; // Seems to have no effect
 var wallsSetted = false;
-var bodies, elements, text;
+var bodies, elements, text, bubbleWrapper;
 var PI2 = Math.PI * 2;
 
 var gravity_y = -50;
-var gravity_y_inverted = 350;
+var gravity_y_inverted = 150;
 
-var interval_spawn;
-var interval_loop;
-
-$(document).ready(function(){
-  
-  init();
-  getDataFromProxy();
-  play();
-  
-  $('#flow-transposer a').click(function(){
-    var parent = $(this).parent();
-    if (parent.hasClass('up')) {
-      parent.removeClass('up').addClass('down');
-      pause();
-    } else {
-      parent.removeClass('down').addClass('up');
-      play();
-    }
-  })
-  
-  $('#gravity-inverter a').click(function(){
-    var parent = $(this).parent();
-    if (world.m_gravity.y == gravity_y) {
-      parent.removeClass('up').addClass('down');
-      world.m_gravity.y = gravity_y_inverted;
-    } else {
-      parent.removeClass('down').addClass('up');
-      world.m_gravity.y = gravity_y;
-    }
-  })
-  
-});
+var interval_spawn, interval_loop;
 
 var debug = false;
 
 var data_update_count = 0;
+var bubble_count = 0;
 var max_bubbles_on_screen = 9;
+var lamp_time_on = 1000;
 
 var pool = [];
 var pool_index = 0;
@@ -80,12 +51,52 @@ var sb_followers_step = 0;
 var sb_followers_last = 0;
 var sb_followers_total = 0;
 
-var ds_type;
-var ds_datetime;
-var ds_datetime_description;
+// Displays
 
-var ds_followers;
-var ds_followers_description;
+  // Countdown
+  var ds_type;
+  var ds_datetime;
+  var ds_datetime_description;
+  var ds_datetime_interval;
+  
+  var ds_followers;
+  var ds_followers_description;
+  
+  // Social Media Stats
+  var ds_stats_retweets = 0;
+  var ds_stats_facebook_shares = 0;
+
+$(document).ready(function(){
+  
+  init();
+  getDataFromProxy();
+  play();
+  
+  $('#flow-transposer a').click(function(){
+    var parent = $(this).parent();
+    if (parent.hasClass('up')) {
+      parent.removeClass('up').addClass('down');
+      pause();
+    } else {
+      parent.removeClass('down').addClass('up');
+      play();
+    }
+    return false;
+  })
+  
+  $('#gravity-inverter a').click(function(){
+    var parent = $(this).parent();
+    if (world.m_gravity.y == gravity_y) {
+      parent.removeClass('up').addClass('down');
+      world.m_gravity.y = gravity_y_inverted;
+    } else {
+      parent.removeClass('down').addClass('up');
+      world.m_gravity.y = gravity_y;
+    }
+    return false;
+  })
+  
+});
 
 function getDataFromProxy() {
   $.getJSON('/proxy.php', function(data) {
@@ -103,9 +114,8 @@ function getDataFromProxy() {
       sb_ffdownloads_total = data.contents.special_bubbles.sb_ffdownloads_total;
       
       sb_followers_step = data.contents.special_bubbles.sb_followers_step;
-    //  sb_followers_total = data.contents.timeline[0].user.followers_count;
-    //  $('dd.twitter-follow a').text(addCommas(sb_followers_total));
-      
+      sb_followers_total = data.contents.timeline[0].user.followers_count;
+
       sb_timeline_step = data.contents.special_bubbles.sb_timeline_step;
       
       ds_type = data.contents.display.ds_type;
@@ -113,15 +123,14 @@ function getDataFromProxy() {
       ds_datetime_description = data.contents.display.ds_datetime_description;
       ds_followers = data.contents.display.ds_followers;
       ds_followers_description = data.contents.display.ds_followers_description;
+      ds_stats_facebook_shares = data.contents.display.ds_stats_facebook_shares;
+      ds_stats_retweets = data.contents.display.ds_stats_retweets;
 
       // Reverse results, so we start with oldest
       timeline_data = data.contents.timeline;
-   //   timeline_data.reverse();      
+      timeline_data.reverse();      
       search_data = data.contents.search_results;
       search_data.results.reverse();
-      
-      if (debug) console.log(search_data.results.length + ' results for search');
-      if (debug) console.log('Previous pool length: ' + pool.length);
       
     	for (var i = 0; i < search_data.results.length; i++) {
         var result = search_data.results[i];
@@ -134,17 +143,11 @@ function getDataFromProxy() {
           search_data_max_id = result.id;
         }
     	}
-      if (debug) console.log('New pool length: ' + pool.length);
       
-      // Run only the second and next times
-      if (data_update_count >= 2) {
-        specialBubbleFFDownloadsCheck();
-      }
-      
-      // Run only the third and next times
-      if (data_update_count >= 3) {
-        specialBubbleFollowersCheck();
-      }
+      specialBubbleFFDownloadsCheck();
+      specialBubbleFollowersCheck();
+      updateStats();
+      updateCountdown();
       
     } else {
       contents = data.status.http_code;
@@ -155,6 +158,65 @@ function getDataFromProxy() {
   });
 
 }
+
+// Updates the Countdown Display
+// Can be a countdown to a @firefox followers milestone
+// or a countdown to a datetime
+function updateCountdown() {
+
+  var counter_dt;
+  clearInterval(ds_datetime_interval);
+  
+  if (ds_type == 'followers') {
+  
+    counter_dt = ds_followers_description;
+    
+    if (sb_followers_total > ds_followers) {
+    
+      // Milestone surpassed!
+      counter_dd = 0
+    
+    } else {
+    
+      // Milestone not yet reached
+      counter_dd = addCommas(ds_followers - sb_followers_total)
+      
+    }
+    
+    
+  } else if (ds_type == 'event') {
+  
+    //if (ds_datetime_description)
+    counter_dt = ds_datetime_description;
+    //ds_datetime_interval
+    
+  } else {
+  
+    counter_dd = '';
+    counter_dt = '';
+    
+  }
+  
+  $('#counter dd').text(counter_dd);
+  $('#counter dt').text(counter_dt);
+
+}
+
+
+// Updates the counts on the Social Media Display
+function updateStats() {
+  
+  // Followers
+  $('dd.twitter-follow a').text(addCommas(sb_followers_total));
+
+  // Retweets
+  $('dd.twitter-retweet a').text(addCommas(ds_stats_retweets));
+
+  // Facebook Shares
+  $('dd.fb-share a').text(addCommas(ds_stats_facebook_shares));
+  
+}
+
 
 function spawn() {
   
@@ -220,14 +282,16 @@ function createBubble(type, data) {
   // could be changed to a fixed spawn point that'd match the machine chimney
 	var x = stage[2]/2;
 	var y = stage[3]-215;
-
+  bubble_count ++;
+  
   // generate the random size
 	// var size = (Math.random() * 50 >> 0) + 200;
-	var size = 200;
+	var size = 220;
   var bubbleClass;
   
   turnLampOn();
-  
+	setTimeout(turnLampOff, lamp_time_on);
+	
   // create the DOM element to be animated
 	var element = document.createElement("article");
 	element.width = size;
@@ -235,7 +299,7 @@ function createBubble(type, data) {
 	element.style['position'] = 'absolute';
 	element.style['left'] = -400 + 'px';
 	element.style['top'] = 0 + 'px';
-	
+	element.id = bubble_count;
 	
 	switch (type) {
 	
@@ -274,15 +338,51 @@ function createBubble(type, data) {
 	
   $(element).hover(function() {
     $(this).find("nav").fadeIn();
+    	for (var i = 0; i < bodies.length; i++) {
+    		var body = bodies[i];
+    		// Destroy bubble if it's out of the screen
+    		if (body.m_userData.id == $(this).attr('id')) {
+    		  //console.log(bodies[i])
+    		  //bodies[i].Freeze();
+    		  
+bodies[i].m_linearVelocity.SetZero();
+bodies[i].m_angularVelocity = 0.0;
+
+    		  //bodies[i]
+    		  /*
+    		  world.DestroyBody(body);
+    		  bodies.splice(i, 1);
+    		  elements.splice(i, 1);
+    		  */
+    		}
+    
+    	}
+    	
   }, function() {
     $(this).find("nav").fadeOut();
+    
+    	for (var i = 0; i < bodies.length; i++) {
+    		var body = bodies[i];
+    		// Destroy bubble if it's out of the screen
+    		if (body.m_userData.id == $(this).attr('id')) {
+    		  //bodies[i].Initialize();
+    		  //bodies[i]
+    		  /*
+    		  world.DestroyBody(body);
+    		  bodies.splice(i, 1);
+    		  elements.splice(i, 1);
+    		  */
+    		}
+    
+    	}
+    	
   });
   
   //wobbleTheBubble($(element));
   
   // append the element to the bubbleWrapper
 	$(bubbleWrapper).append(element);
-	$(bubbleWrapper).find('.avatar-wrapper').delay(200).animate({left: '-15%', top: '10%'}, 1000);
+	$(bubbleWrapper).find('.avatar-wrapper').delay(500).animate({left: '-15%', top: '10%'}, 1000);
 	elements.push( element );
 
   // create a new box2d body
@@ -296,20 +396,22 @@ function createBubble(type, data) {
   // Restitution is how elastic something is 0 being in elastic and 1 being totally elastic
   circle.restitution = 0.5;
 	circle.preventRotation = true;
+	
 	b2body.AddShape(circle);
+	
 	// add the body to userData, so that all the elements can be addressed and manipulated later on, reset(); clears them all for eg.
-	b2body.userData = {element: element};
+	b2body.userData = {element: element, id: bubble_count};
 
   // define position where the body will be spawned
 	b2body.position.Set( x, y );
 
 	// define initial velocity on x, y axis
-/* 	b2body.linearVelocity.Set( Math.random() * 400 - 200, Math.random() * 400 - 200 ); */
-	b2body.linearVelocity.Set( Math.random() * 800 - 400, -10 );
+	// This is a one-time impulse
+	b2body.linearVelocity.Set( Math.random() * 400 - 200, -10 );
+	
 	// add the box2d body to the real world and bodies array
 	bodies.push( world.CreateBody(b2body) );
-	
-	setTimeout(turnLampOff, 1000);
+
 }
 
 
@@ -320,39 +422,46 @@ function setWalls() {
 		world.DestroyBody(walls[0]);
 		world.DestroyBody(walls[1]);
 		world.DestroyBody(walls[2]);
+		world.DestroyBody(walls[3]);
 
 		walls[0] = null; 
 		walls[1] = null; 
 		walls[2] = null; 
+		walls[3] = null; 
 	}
 
   // arguments: world, x, y, width, height, fixed
   // top box wall
+  walls[0] = createBox(world, stage[2] / 2, 0, stage[2], 10);
+	/*
 	walls[0] = createPoly(world, stage[2] / 2, 0, [
-	 [(stage[2] / 2) + 200, 0],
-	 [0, 10],
-	 [- (stage[2] / 2) - 200, 0]
+    [0,0],
+    [(stage[2] / 2) + 200, 0],
+    [(stage[2] / 2) + 200, 10],
+    [0, 10],
+    [- (stage[2] / 2) - 200, 10],
+    [- (stage[2] / 2) - 200, 0]
   ], true);
-  
+  */
   // bottom machine base box
 	walls[1] = createBox(world, stage[2] / 2, stage[3], stage[2], 70);
 	
 	// machine polygon left
 	walls[2] = createPoly(world, (stage[2] / 2) + 120, (stage[3]-310), [
     [0, 0],
-    [80, 0],
-    [160, 200],
-    [0, 200]
+    [20, 0],
+    [70, 60],
+    [70, 240],
+    [0, 240]
   ], true);
   
-  
-  walls[3] = createPoly(world, (stage[2] / 2) - 280, (stage[3]-310), [
+  // machine polygon right
+  walls[3] = createPoly(world, (stage[2] / 2) - 260, (stage[3]-310), [
     [80, 0],
     [160, 0],
     [160, 200],
     [0, 200]
   ], true);
-  
 
 	wallsSetted = true;
 
@@ -371,27 +480,37 @@ function specialBubbleClockCheck() {
       ((minutes % sb_clock_step) == 0) && 
       ((hours + ':' + minutes) != sb_clock_last)) {
       sb_clock_last = hours + ':' + minutes
-      pool.splice(pool_index, 0, {type: 'clock', data: 'It is ' + sb_clock_last});
+      pool.splice(pool_index, 0, {type: 'clock', data: sb_clock_last});
     }
   }
 }
 
 function specialBubbleFFDownloadsCheck() {
   if (sb_ffdownloads_step > 0) {
+  
+    if (sb_ffdownloads_last == 0) sb_ffdownloads_last = sb_ffdownloads_total;
+    
     if ((sb_ffdownloads_total > sb_ffdownloads_last) &&
       (Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
+      
       sb_ffdownloads_last = sb_ffdownloads_total;
       pool.splice(pool_index, 0, {type: 'ffdownloads', data: 'Firefox just downloaded for the ' + Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) * sb_ffdownloads_step + 'th time'});
+      
     }
   }
 }
 
 function specialBubbleFollowersCheck() {
   if (sb_followers_step > 0) {
+  
+    if (sb_followers_last == 0) sb_followers_last = sb_followers_total;
+    
     if ((sb_followers_total > sb_followers_last) &&
       (Math.floor(sb_followers_total / sb_followers_step) > Math.floor(sb_followers_last / sb_followers_step))) {
+      
       sb_followers_last = sb_followers_total;
       pool.splice(pool_index, 0, {type: 'followers', data: '@firefox just got its ' + Math.floor(sb_followers_total / sb_followers_step) * sb_followers_step + 'th follower'});
+      
     }
   }
 }
@@ -405,9 +524,11 @@ function specialBubbleTimelineCheck() {
       while ((i < timeline_data.length) && (!found)) {
         var result = timeline_data[i];
         if (result.id > timeline_data_max_id) {
+        
           pool.splice(pool_index, 0, {type: 'timeline', data: result});
           timeline_data_max_id = result.id;
           found = true;
+          
         }
         i++;
     	}
@@ -452,10 +573,12 @@ function loop(){
 		// Destroy bubble if it's out of the screen
 		if (((newLeft + Math.floor(element.width)) <= 1) ||
 		  (newLeft > stage[2])){
+		  
 		  world.DestroyBody(body);
 		  bodies.splice(i, 1);
 		  elements.splice(i, 1);
 		  $(element).remove();
+		  
 		}
 
 	}
@@ -484,11 +607,15 @@ function createBox(world, x, y, width, height, fixed) {
 
 function createPoly(world, x, y, points, fixed) {
 	var polySd = new b2PolyDef();
+	
 	if (!fixed) polySd.density = 1.0;
+	
 	polySd.vertexCount = points.length;
+	
 	for (var i = 0; i < points.length; i++) {
 		polySd.vertices[i].Set(points[i][0], points[i][1]);
 	}
+	
 	var polyBd = new b2BodyDef();
 	polyBd.AddShape(polySd);
 	polyBd.position.Set(x,y);
@@ -496,7 +623,7 @@ function createPoly(world, x, y, points, fixed) {
 }
 
 function play() {
-	interval_loop = setInterval( loop, 1000 / 40 );
+	interval_loop = setInterval( loop, 1000 / 30 );
 	interval_spwan = setInterval(spawn, 3000);
 }
 function pause() {

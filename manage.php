@@ -330,6 +330,35 @@
             </fieldset>
 
           </fieldset>
+          
+          <fieldset>
+            <legend>Keywords</legend>
+            
+            <fieldset>
+              <legend>Highlights</legend>
+              
+              <label for="keywords_highlights_green">Green</label>
+              <input id="keywords_highlights_green" name="keywords_highlights_green" type="text" size="100" value="<? print $config['keywords_highlights_green']; ?>"/>
+              <br />
+
+              <label for="keywords_highlights_orange">Orange</label>
+              <input id="keywords_highlights_orange" name="keywords_highlights_orange" type="text" size="100" value="<? print $config['keywords_highlights_orange']; ?>"/>
+              <br />
+              
+              <label for="keywords_highlights_pink">Pink</label>
+              <input id="keywords_highlights_pink" name="keywords_highlights_pink" type="text" size="100" value="<? print $config['keywords_highlights_pink']; ?>"/>
+              <br />
+              
+              <label for="keywords_highlights_violet">Violet</label>
+              <input id="keywords_highlights_violet" name="keywords_highlights_violet" type="text" size="100" value="<? print $config['keywords_highlights_violet']; ?>"/>
+              <br />
+
+            </fieldset>
+
+            <label for="keywords_excluded">Excluded</label>
+            <input id="keywords_excluded" name="keywords_excluded" type="text" size="100" value="<? print $config['keywords_excluded']; ?>"/>
+            
+          </fieldset>
 
           <button>Save</button>
         </form>
