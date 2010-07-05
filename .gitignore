@@ -2,3 +2,4 @@
 Icon*
 .dropbox
 ftm_config.yml
+lib/twitteroauth/secret.php

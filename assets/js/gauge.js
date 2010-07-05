@@ -2,7 +2,7 @@ $(document).ready(function(){
   // define img source
   gauge_indicator_needle_src = res.gaugeIndicatorNeedleSrc[res_current];
   // define default angle
-  gauge_indicator_needle_angle = 0;
+  gauge_indicator_needle_angle = -90;
   // get holder dom element and clear its contents
   $('.pointer').attr('id', 'pointer').text('');
   // place the raphael object inside the holder
@@ -14,9 +14,9 @@ $(document).ready(function(){
 });
 
 function gaugeIndicatorNeedleMove(gauge_indicator_needle_angle) {
-  // reset the needle, helps when switching from 90 to 100, otherwise the animation woul be too subtle
-  gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
+  // reset the needle, helps when switching from 90 to 100, otherwise the animation would be too subtle
+  gauge_indicator_needle.animate({rotation: -90}, 300, "linear");
   // move it to the new position
   gauge_indicator_needle_angle -= 90;
-  gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
+  setTimeout(function() { gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 2500, "bounce"); }, 300)
 };
