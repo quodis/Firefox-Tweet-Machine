@@ -24,7 +24,8 @@
     // search
     $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
     $search['keyword'] = ($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox';
-    $search['url'] = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&show_user=true&rpp=';
+    $search_url = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent';
+    $search['url'] = $search_url . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
     // username timeline to cache
     $timeline['username'] = ($config['timeline_username']) ? $config['timeline_username'] : 'firefox';
     $timeline['count'] = ($config['timeline_count']) ? $config['timeline_count'] : 20 ;
@@ -47,11 +48,15 @@ $ch = curl_init();
   curl_setopt( $ch, CURLOPT_HEADER, true );
   // return curl output instead of boolean
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+  // set curl timeout in seconds
+  curl_setopt( $ch, CURLOPT_TIMEOUT, 15 );
   
   // init curl with http auth resource
   $ch_auth = $ch;
-  curl_setopt($ch_auth, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-  curl_setopt($ch_auth, CURLOPT_USERPWD, $whitelisted['user'] . ':' . $whitelisted['password']);
+  if ($whitelisted['user'] && $whitelisted['password']) {
+    curl_setopt($ch_auth, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+    curl_setopt($ch_auth, CURLOPT_USERPWD, $whitelisted['user'] . ':' . $whitelisted['password']);  
+  }
 
 // query and store FTM retweet stats
 curl_setopt($ch, CURLOPT_URL, $stats['firefox_tweet_machine_retweet_stats_url']);
@@ -75,47 +80,72 @@ echo('HTTP_CODE for FIREFOX DOWNLOAD COUNT: ' . $status['download_stats']['http_
 
 // NOTE: perhaps we need to iterate through requests: user timeline, default search
 // query and store search results
-curl_setopt($ch, CURLOPT_URL, $search['url'] . $search['results_per_page'] . '&q=' . $search['keyword']);
+curl_setopt($ch, CURLOPT_URL, $search['url']);
 list( $header, $search_results ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status['search'] = curl_getinfo( $ch );
 echo('HTTP_CODE for SEARCH: ' . $status['search']['http_code'] . "<br>\n");
 
+// DISABLED
+/*
+// we have to convert the json to an array beforehand, same issue as below when traversing through timeline statuses
+$search_results_decoded = json_decode($search_results)->results;
+
+// for each search result fetch the number of retweets
+foreach ($search_results_decoded as $id => $search_result) {
+
+  // fetch the user page
+  curl_setopt($ch, CURLOPT_URL, 'http://api.twitter.com/1/users/show.json?screen_name=' . $search_result->from_user);
+  // make 'the call'
+  list( $header, $user_profile ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+
+  // alter the original search result to include the user_profile_vcard array
+  $search_results_decoded[$id]->user = json_decode($user_profile);
+  
+}
+*/
+
 // query and store user timeline
 curl_setopt($ch_auth, CURLOPT_URL, $timeline['url'] . $timeline['username'] . '&count=' . $timeline['count']);
-list( $header, $timeline_statuses ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+list( $header, $timeline_statuses ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch_auth ), 2 );
 $status['timeline'] = curl_getinfo( $ch );
 echo('HTTP_CODE for TIMELINE: ' . $status['timeline']['http_code'] . "<br>\n");
 
-// add retweet count to retweets from FF timeline
-echo('<br />retweets: <br /><pre>');
+// check for 200 http code before fetching retweet counts
+if ( $status['timeline']['http_code'] == 200 ) {
 
-// debug
-echo 'fetching retweet counts for ' . count(json_decode($timeline_statuses)) . ' statuses <br /><br />';
-
-// we have to convert the json to an array beforehand, json_decode($timeline_statuses)[$id] doesn't work =| oh PHP..
-$timeline_statuses_decoded = json_decode($timeline_statuses);
-
-// for each search result fetch the number of retweets
-foreach (json_decode($timeline_statuses) as $id => $timeline_status) {
-
-  //print_r($timeline_status);
-  // configure the curl object
-  curl_setopt($ch_auth, CURLOPT_URL, 'http://api.twitter.com/1/statuses/' . $timeline_status->id . '/retweeted_by/ids.json?count=100');
-
-  // make 'the call'
-  list( $header, $timeline_status_retweets ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-
-  // debug, show how many retweets for a given tweet
-  print($timeline_statuses_decoded[$id]->id . ' was retweeted: ' . count(json_decode($timeline_status_retweets)) . ' times.<br />');
-
-  // add the retweet count to the tweet
-  $timeline_statuses_decoded[$id]->retweet_count = count(json_decode($timeline_status_retweets));
-  //echo('timeline_status retweets: ');
-  //print_r($timeline_statuses_decoded[$id]);
-  //exit();
+  // add retweet count to retweets from FF timeline
+  echo('<br />retweets: <br /><pre>');
   
-}
-echo('</pre>');
+  // debug
+  echo 'fetching retweet counts for ' . count(json_decode($timeline_statuses)) . ' statuses <br /><br />';
+  
+  // we have to convert the json to an array beforehand, json_decode($timeline_statuses)[$id] doesn't work =| oh PHP..
+  $timeline_statuses_decoded = json_decode($timeline_statuses);
+  
+  // for each timeline status fetch the number of retweets
+  foreach (json_decode($timeline_statuses) as $id => $timeline_status) {
+  
+    // configure the curl object
+    curl_setopt($ch_auth, CURLOPT_URL, 'http://api.twitter.com/1/statuses/' . $timeline_status->id . '/retweeted_by/ids.json?count=100');
+    // make 'the call'
+    list( $header, $timeline_status_retweets ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
+  
+    // debug, show how many retweets for a given tweet
+    print($timeline_statuses_decoded[$id]->id . ' was retweeted: ' . count(json_decode($timeline_status_retweets)) . ' times.<br />');
+  
+    // add the retweet count to the tweet
+    $timeline_statuses_decoded[$id]->retweet_count = count(json_decode($timeline_status_retweets));
+    //echo('timeline_status retweets: ');
+    //print_r($timeline_statuses_decoded[$id]);
+    //exit();
+    
+  }
+  echo('</pre>');
+
+} else {
+  // clear the results on request error
+  $timeline_statuses_decoded = '';
+};
 
 // close the curl session
 curl_close( $ch );
@@ -135,12 +165,12 @@ $display['ds_datetime_description'] = ($config['countdown_display_datetime_descr
 $display['ds_followers'] = ($config['countdown_display_followers']) ? $config['countdown_display_followers'] : 5000;
 $display['ds_followers_description'] = ($config['countdown_display_followers_description']) ? $config['countdown_display_followers_description'] : 'Firefox download count just increased by 5000!';
 $display['ds_stats_retweets'] = json_decode($firefox_tweet_machine_retweet_stats)->response->all;
-$display['ds_stats_facebook_shares'] = reset($firefox_tweet_machine_facebook_stats->link_stat->share_count);
+$display['ds_stats_facebook_shares'] = intval(reset($firefox_tweet_machine_facebook_stats->link_stat->share_count));
 
 // store the search results
-$default_data->search_results = (!$search_results) ? 'twitter search down' : json_decode($search_results);
+$search_data = (!$search_results) ? '' : json_decode($search_results);
 // store the firefox timeline
-$default_data->timeline = (!$timeline_statuses_decoded) ? 'twitter api down' : $timeline_statuses_decoded;
+$timeline_data = (!$timeline_statuses_decoded) ? '' : $timeline_statuses_decoded;
 // store the triggers
 $default_data->special_bubbles = $special_bubbles;
 // store the display values
@@ -153,14 +183,23 @@ $memcache = new Memcache;
 $memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");
 
 // store the contents in memcache
-$memcache->set('default_data', $default_data, false, $ttl) or die ("Failed to save data at the server");
-echo "Stored data in memcache (data will expire in " . $ttl . " seconds)<br/>\n";
+// conditional to only store results if twitter is up and returns results
+if ( count($search_data->results) || ($status['timeline']['http_code'] == 200) ) {
 
-$get_result = $memcache->get('default_data');
-echo "Data from the cache:<br/>\n";
-
-echo '<pre>';
-print_r($get_result);
-echo '</pre>';
+  $memcache->set('timeline_data', $timeline_data, false, $ttl) or die ("Failed to save data at the server");
+  $memcache->set('search_data', $search_data, false, $ttl) or die ("Failed to save data at the server");
+  $memcache->set('default_data', $default_data, false, $ttl) or die ("Failed to save data at the server");
+  echo "Stored data in memcache (data will expire in " . $ttl . " seconds)<br/>\n";
+  
+  $get_result = array_merge( array($memcache->get('search_data')), array($memcache->get('timeline_data')), array($memcache->get('default_data')) );
+  echo "Data from the cache:<br/>\n";
+  
+  echo '<pre>';
+  print_r($get_result);
+  echo '</pre>';
+  
+} else {
+  echo '<br /> unable to fetch data <br />';
+}
 
 ?>

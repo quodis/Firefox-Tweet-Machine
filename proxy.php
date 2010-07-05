@@ -15,7 +15,7 @@ require_once "lib/yaml_loader.php";
 
 // Change these configuration options if needed, see above descriptions for info.
 $enable_jsonp    = false;
-$enable_native   = false;
+$enable_native   = true;
 $valid_url_regex = '/.*/';
 
 // memcache
@@ -25,31 +25,48 @@ $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211'
 $cron_on_demand = ($config['cron_on_demand']) ? $config['cron_on_demand'] : true;
 // cron_url is actually cron php filename
 $cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://' . $_SERVER['SERVER_NAME'] . '/cron.php';
-
-
-// ############################################################################
-
+// search
+$search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
 // search keyword
-$keyword = ($_GET['q']) ? $_GET['q'] : $config['search_default_keyword'];
+$search['keyword'] = ($_GET['q']) ? urlencode($_GET['q']) : (($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox');
+// set search url from config file values
+$search['url'] = (($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent')  . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
 
-// fetch the gived url or a default one (twitter api - search)
-$url = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent&show_user=true&rpp=';
+// ############################### set $url ##################################
 
-if ( ($keyword == $config['search_default_keyword']) ) {
+
+// if a URL is given, set it as $url and will proxy it
+if ($_GET['url']) {
+  $url = $_GET['url'];
+
+// if a keyword is given build the search url with it
+} else if ($_GET['q']) {
+  $url = $search['url'];
+}
+
+// ############################### fetch the response data ##################################
+
+// get results from memcache if no url or keyword is given
+if ( !$_GET['url'] && !$_GET['q'] ) {
 
   // connect to memcache
   $memcache = new Memcache;
   $memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");
   
-  // fetch the default_data
-  $contents = json_encode($memcache->get('default_data'));
+  // fetch data
+  $search_data = array($memcache->get('search_data'));
+  $timeline_data = array($memcache->get('timeline_data'));
+  $default_data = array($memcache->get('default_data'));
   
-  // Passed url not specified.
+  // build the contents json
+  $contents = json_encode(array_merge( array('search_results' => reset($search_data)), array('timeline' => reset($timeline_data)), array('special_bubbles' => reset($default_data)->special_bubbles), array('display' => reset($default_data)->display), array('keywords' => reset($default_data)->keywords))  );
+  
+  // set status to ERROR if there are no contents, 200 OK otherwise
   $status = array( 'http_code' => ($contents == "false") ? 'ERROR' : 200 );
   
-  // just an experiment, force cache refresh when it expires
+  // force cache refresh when it expires
   if ($contents == "false" && $cron_on_demand) {
-/*     echo 'nothing in cache, forcing refresh'; */
+    // nothing in cache, forcing refresh
     // init curl resource
     $ch = curl_init();
     // configure curl session
@@ -67,33 +84,17 @@ if ( ($keyword == $config['search_default_keyword']) ) {
     $status = array( 'http_code' => ($contents === "false") ? 'ERROR' : 200 );
 
   }
-  
+
+// if the url is invalid
 } else if ( !preg_match( $valid_url_regex, $url ) ) {
   
   // Passed url doesn't match $valid_url_regex.
   $contents = 'ERROR: invalid url';
   $status = array( 'http_code' => 'ERROR' );
-  
+
+// proxy the contents of the parameter url
 } else {
   $ch = curl_init( $url );
-  
-  if ( strtolower($_SERVER['REQUEST_METHOD']) == 'post' ) {
-    curl_setopt( $ch, CURLOPT_POST, true );
-    curl_setopt( $ch, CURLOPT_POSTFIELDS, $_POST );
-  }
-  
-  if ( $_GET['send_cookies'] ) {
-    $cookie = array();
-    foreach ( $_COOKIE as $key => $value ) {
-      $cookie[] = $key . '=' . $value;
-    }
-    if ( $_GET['send_session'] ) {
-      $cookie[] = SID;
-    }
-    $cookie = implode( '; ', $cookie );
-    
-    curl_setopt( $ch, CURLOPT_COOKIE, $cookie );
-  }
   
   curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
   curl_setopt( $ch, CURLOPT_HEADER, true );
@@ -108,48 +109,30 @@ if ( ($keyword == $config['search_default_keyword']) ) {
   curl_close( $ch );
 }
 
+// ############################### build the response data ##################################
+
 // Split header text into an array.
 $header_text = preg_split( '/[\r\n]+/', $header );
 
+// if native mode is specified return the raw contents
 if ( $_GET['mode'] == 'native' ) {
+
+  // only return raw contents if allowed
   if ( !$enable_native ) {
     $contents = 'ERROR: invalid mode';
     $status = array( 'http_code' => 'ERROR' );
   }
   
-  // Propagate headers to response.
-  foreach ( $header_text as $header ) {
-    if ( preg_match( '/^(?:Content-Type|Content-Language|Set-Cookie):/i', $header ) ) {
-      header( $header );
-    }
-  }
-  
   print $contents;
-  
+
+// if native mode isn't specified return JSON data  
 } else {
   
   // $data will be serialized into JSON data.
   $data = array();
   
-  // Propagate all HTTP headers into the JSON data object.
-  if ( $_GET['full_headers'] ) {
-    $data['headers'] = array();
-    
-    foreach ( $header_text as $header ) {
-      preg_match( '/^(.+?):\s+(.*)$/', $header, $matches );
-      if ( $matches ) {
-        $data['headers'][ $matches[1] ] = $matches[2];
-      }
-    }
-  }
-  
   // Propagate all cURL request / response info to the JSON data object.
-  if ( $_GET['full_status'] ) {
-    $data['status'] = $status;
-  } else {
-    $data['status'] = array();
-    $data['status']['http_code'] = $status['http_code'];
-  }
+  $data['status']['http_code'] = $status['http_code'];
   
   // Set the JSON data object contents, decoding it from JSON if possible.
   $decoded_json = json_decode( $contents );
@@ -159,13 +142,8 @@ if ( $_GET['mode'] == 'native' ) {
   $is_xhr = strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
   header( 'Content-type: application/' . ( $is_xhr ? 'json' : 'x-javascript' ) );
   
-  // Get JSONP callback.
-  $jsonp_callback = $enable_jsonp && isset($_GET['callback']) ? $_GET['callback'] : null;
-  
   // Generate JSON/JSONP string
-  $json = json_encode( $data );
-  
-  print $jsonp_callback ? "$jsonp_callback($json)" : $json;
+  print json_encode( $data );
   
 }
 

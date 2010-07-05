@@ -18,7 +18,7 @@
 		<![endif]-->
 		
 		<link rel="stylesheet" href="assets/css/ftm-global.css" type="text/css" media="screen, projection" />
-		<link href="assets/css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" />
+		<!--<link href="assets/css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
 		<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold" rel="stylesheet" type="text/css">
 		
 		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
@@ -28,6 +28,8 @@
 		<!-- scripts -->
 		<script src="assets/js/jquery-1.4.2.min.js"></script>
 		<!-- box2djs -->
+		<script src="assets/js/box2d-min.js"></script>
+<!--
 		<script src="assets/js/protoclass.js"></script>
 		<script src="assets/js/box2d/common/b2Settings.js"></script>
 		<script src="assets/js/box2d/common/math/b2Vec2.js"></script>
@@ -77,26 +79,12 @@
 		<script src="assets/js/box2d/dynamics/b2ContactManager.js"></script>
 		<script src="assets/js/box2d/dynamics/b2World.js"></script>
 		<script src="assets/js/box2d/dynamics/b2WorldListener.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2JointNode.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2Joint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2JointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2DistanceJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2DistanceJointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2Jacobian.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2GearJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2GearJointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2MouseJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2MouseJointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2PrismaticJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2PrismaticJointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2PulleyJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2PulleyJointDef.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2RevoluteJoint.js"></script>
-		<script src="assets/js/box2d/dynamics/joints/b2RevoluteJointDef.js"></script>
+-->
 		<!-- box2d /-->
 		<script src='assets/js/jquery.timeago.js'></script>
-		<script src='assets/js/jquery.backgroundPosition.js'></script>
+		<script src="assets/js/raphael-min.js"></script>
 		<script src='assets/js/global.js'></script>
+		<script src="assets/js/gauge.js"></script>
 		<!-- scripts /-->
 
 	</head>
@@ -109,6 +97,22 @@
 
 		<!-- bubbles -->
 		<section id="bubbles">
+			
+			<!-- followers bubble -->
+			<article class="bubble followers">
+				<a href="http://twitter.com/firefox/followers" title="Firefox followers" rel="external">
+					<h1>@firefox followers</h1>
+					<p>223,000</p>
+				</a>
+			</article>
+			<!-- followers bubble /-->
+			
+			<!-- error bubble -->
+			<article class="bubble error">
+				<h1>Malfunction!</h1>
+				<p>Lorem ipsum dolor sit amet...</p>
+			</article>
+			<!-- error bubble /-->
 		</section>
 		<!-- bubbles /-->
 
@@ -116,36 +120,36 @@
 		<section id="machine">
 
 			<form id="search-box">
-				<input type="text" name="search-input" class="text" value="Search">
+				<input type="text" name="search-input" class="text" value="Search" id="search-input">
 				<button name="search-bttn" type="submit" class="button" id="search-submit-bttn" title="Go!" value="Go!">Go!</button>
 			</form>
 
 			<ul id="machine-tools">
-				<li id="gravity-inverter" class="lever up"><a href="#" title="Up">Invert world gravity</a></li>
+				<li id="gravity-inverter" class="lever up"><a href="#" title="Invert world gravity">Invert world gravity</a></li>
 				<li id="pressure-indicator"><span class="value min">0</span> <span class="pointer">></span> <span class="value max">100</span></li>
 				<li id="activity-indicator" class="off">Activity off</li>
-				<li id="flow-transposer" class="lever up"><a href="#" title="Up">Pause tweet activity</a></li>
+				<li id="flow-transposer" class="lever up"><a href="#" title="Pause tweet activity">Pause tweet activity</a></li>
 			</ul>
 
 			<dl id="social-tools" class="dashboard">
-				<dt class="twitter-follow"><a href="http://twitter.com/firefox" title="Follow on Twitter">Follow</a></dt>
-				<dd class="twitter-follow"><a href="http://twitter.com/firefox/followers" title="Follow on Twitter">000,000</a></dd>
-				<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&title=Firefox Tweet Machine&url=http://www.firefox.com/tweetmachine/" title="Retweet">Retweet</a></dt>
-				<dd class="twitter-retweet"><a href="http://topsy.com/www.firefox.com/tweetmachine" title="Retweet">000</a></dd>
-				<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://www.firefox.com/tweetmachine/&amp;t=Firefox Tweet Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook">Share</a></dt>
+				<dt class="twitter-follow"><a href="http://twitter.com/firefox" title="Follow on Twitter" rel="external">Follow</a></dt>
+				<dd class="twitter-follow"><a href="http://twitter.com/firefox/followers" title="View followers" rel="external">000,000</a></dd>
+				<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&title=Firefox Tweet Machine&url=http://www.firefox.com/tweetmachine/" title="Retweet" rel="external">Retweet</a></dt>
+				<dd class="twitter-retweet"><a href="http://topsy.com/www.firefox.com/tweetmachine" title="View retweets" rel="external">000</a></dd>
+				<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://www.firefox.com/tweetmachine/&amp;t=Firefox Tweet Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook" rel="external">Share</a></dt>
 				<dd class="fb-share"><a href="#" onclick="return false;" title="Share on Facebook">000</a></dd>
 			</dl>
 
 			<dl id="counter" class="dashboard">
-				<dt>The 2010 Mozilla Summit</dt>
-				<dd>03d : 22h : 01m : 15s</dd>
+				<dt></dt>
+				<dd></dd>
 			</dl>
 
 		</section>
 		<!-- machine /-->
 
 		<footer>
-			<p><a href="#" title="About the Machine">About the Machine</a></p>
+			<p><a href="#" title="About the Machine">About the Machine</a> <a href="http://firefox.com/" title="Visit firefox.com">Visit firefox.com</a></p>
 		</footer>
 
 	</body>

@@ -10,7 +10,7 @@ body {
 	font-size: 13px;
 	line-height: 20px; /* baseline grid of 20px */
 	background-color: #ECF8FA;
-	background-image: url("../img/sd/machine-tubes-sd.png"), url("../img/sd/main-bg-sd.jpg");
+	background-image: url("../img/hd/machine-tubes-hd.png"), url("../img/hd/main-bg-hd.jpg");
 	background-position: bottom center;
 	background-repeat: no-repeat;
 	overflow: hidden;
@@ -44,10 +44,10 @@ section#machine {
 	z-index: 20;
 	bottom: 0;
 	left: 50%;
-	width: 450px;
-	height: 315px;
-	margin: 0 0 0 -225px;
-	background: transparent url(../img/sd/machine-body-sd.png) no-repeat bottom center;
+	width: 630px;
+	height: 440px;
+	margin: 0 0 0 -315px;
+	background: transparent url(../img/hd/machine-body-hd.png) no-repeat bottom center;
 }
 
 footer {
@@ -55,9 +55,9 @@ footer {
 	z-index: 30;
 	left: 50%;
 	bottom: 0;
-	width: 320px;
-	height: 60px;
-	margin: 0 0 0 -160px;
+	width: 448px;
+	height: 84px;
+	margin: 0 0 0 -224px;
 	text-align: center;
 }
 /* ----------------------------------------- */
@@ -69,9 +69,9 @@ footer {
 
 /* brand */
 header#brand h1 {
-	width: 210px;
-	height: 112px;
-	background: transparent url(../img/sd/ftm-brand-logo-sd.png) no-repeat center center;
+	width: 290px;
+	height: 156px;
+	background: transparent url(../img/hd/ftm-brand-logo-hd.png) no-repeat center center;
 	overflow: hidden;
 	text-indent: -9999px;
 }
@@ -81,10 +81,10 @@ header#brand h1 {
 form#search-box {
 	position: absolute;
 	z-index: 10;
-	top: 75px;
-	left: 95px;
-	height: 40px;
-	width: 260px;
+	top: 104px;
+	left: 132px;
+	height: 56px;
+	width: 364px;
 }
 
 form#search-box input.text {
@@ -95,24 +95,24 @@ form#search-box input.text {
 	float: left;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	font-size: 24px;
+	font-size: 34px;
 	letter-spacing: 0.5px;
-	line-height: 30px;
-	height: 30px;
-	padding: 7px 45px 3px 10px;
-	width: 205px;
+	line-height: 40px;
+	height: 40px;
+	padding: 10px 66px 6px 14px;
+	width: 286px;
 	outline: 0;
 	vertical-align: baseline;
 }
 
 form#search-box .button {
-	background: transparent url("../img/sd/search-sbmt-bttn-sd.png") no-repeat center center;
+	background: transparent url("../img/hd/search-sbmt-bttn-hd.png") no-repeat center center;
 	border: 0 none;
 	display: block;
 	float: left;
-	width: 30px;
-	height: 30px;
-	margin: 8px 0 0 -40px;
+	width: 35px;
+	height: 35px;
+	margin: 14px 0 0 -50px;
 	outline: 0 none;
 	overflow: hidden;
 	text-indent: -9999px;
@@ -125,40 +125,40 @@ li.lever a {
 	position: absolute;
 	z-index: 20;
 	display: block;
-	width: 50px;
-	height: 60px;
-	background: transparent url(../img/sd/machine-levers-sd.png) no-repeat;
+	width: 70px;
+	height: 88px;
+	background: transparent url(../img/hd/machine-levers-hd.png) no-repeat;
 	overflow: hidden;
 	text-indent: -9999px;
 }
 
 li#gravity-inverter a {
-	top: 170px;
-	left: 80px;
+	top: 230px;
+	left: 110px;
 }
 
 li#flow-transposer a {
-	top: 170px;
-	right: 75px;
+	top: 230px;
+	right: 110px;
 }
 
 li#gravity-inverter.up a { background-position: 0 0; }
-li#gravity-inverter.down a { background-position: -50px 0; }
+li#gravity-inverter.down a { background-position: -70px 0; }
 
-li#flow-transposer.up a { background-position: -113px 0; }
-li#flow-transposer.down a { background-position: -163px 0; }
+li#flow-transposer.up a { background-position: -158px 0; }
+li#flow-transposer.down a { background-position: -228px 0; }
 /* levers /*/
 
 /* activity-indicator */
 li#activity-indicator {
 	position: absolute;
 	z-index: 30;
-	top: 18px;
-	right: 25px;
+	top: 20px;
+	right: 35px;
 	display: block;
-	width: 25px;
-	height: 50px;
-	background: transparent url(../img/sd/light-bulb-sd.png) no-repeat;
+	width: 35px;
+	height: 70px;
+	background: transparent url(../img/hd/light-bulb-hd.png) no-repeat;
 	overflow: hidden;
 	text-indent: -9999px;
 }
@@ -168,7 +168,7 @@ li#activity-indicator.off {
 }
 
 li#activity-indicator.on {
-	background-position: -27px 0;
+	background-position: -42px 0;
 }
 /* activity-indicator /*/
 
@@ -176,12 +176,12 @@ li#activity-indicator.on {
 li#pressure-indicator {
 	position: absolute;
 	z-index: 40;
-	top: 180px;
-	left: 155px;
+	top: 250px;
+	left: 217px;
 	display: block;
-	width: 140px;
-	height: 50px;
-	background: transparent url(../img/sd/pressure-display-sd.png) no-repeat bottom center;
+	width: 196px;
+	height: 70px;
+	background: transparent url(../img/hd/pressure-display-hd.png) no-repeat bottom center;
 }
 
 li#pressure-indicator span.value {
@@ -189,11 +189,11 @@ li#pressure-indicator span.value {
 	font-weight: 400;
 	text-shadow: 0 1px #BDF0F4;
 	color: #0D5C66;
-	font-size: 13px;
+	font-size: 18px;
 	vertical-align: bottom;
-	width: 30px;
+	width: 42px;
 	height: 18px;
-	margin: 32px 0 0 0;
+	margin: 50px 0 0 0;
 }
 
 li#pressure-indicator span.value.min {
@@ -210,11 +210,11 @@ li#pressure-indicator span.pointer {
 	position: absolute;
 	z-index: 40;
 	bottom: 0;
-	left: 35px;
+	left: 50px;
 	display: block;
-	width: 70px;
-	height: 30px;
-	/* background: transparent url(../img/sd/pressure-display-pointer-sd.png) no-repeat bottom center; */
+	width: 98px;
+	height: 42px;
+	/* background: transparent url(../img/hd/pressure-display-pointer-hd.png) no-repeat bottom center; */
 	/* overflow: hidden; */
 	/* text-indent: -9999px; */
 }
@@ -225,45 +225,45 @@ dl.dashboard {
 	position: absolute;
 	z-index: 60;
 	bottom: 0;
-	width: 260px;
-	height: 130px;
-	background: transparent url(../img/sd/dashboard-sd.png) no-repeat top center;
+	width: 364px;
+	height: 182px;
+	background: transparent url(../img/hd/dashboard-hd.png) no-repeat top center;
 }
 
 dl#social-tools {
-	left: -180px;
+	left: -252px;
 }
 
 dl#social-tools dt {
 	position: absolute;
 	z-index: 10px;
-	top: 54px;
+	top: 76px;
 }
 
 dl#social-tools dd {
 	position: absolute;
 	z-index: 10px;
-	top: 28px;
+	top: 38px;
 }
 
 dl#social-tools dt.twitter-follow,
 dl#social-tools dd.twitter-follow {
-	left: 30px;
+	left: 42px;
 }
 
 dl#social-tools dt.twitter-retweet,
 dl#social-tools dd.twitter-retweet {
-	left: 94px;
+	left: 132px;
 }
 
 dl#social-tools dt.fb-share,
 dl#social-tools dd.fb-share {
-	left: 158px;
+	left: 222px;
 }
 
 dl#social-tools a {
-	background: transparent url(../img/sd/dashboard-bttns-sd.png) no-repeat;
-	width: 62px;
+	background: transparent url(../img/hd/dashboard-bttns-hd.png) no-repeat;
+	width: 87px;
 	text-align: center;
 	display: block;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
@@ -271,31 +271,32 @@ dl#social-tools a {
 }
 
 dl#social-tools dt a {
-	height: 22px;
-	line-height: 20px;
-	padding: 0 0 0 18px;
-	font-size: 15px;
+	height: 30px;
+	line-height: 28px;
+	padding: 0 0 0 25px;
+	font-size: 20px;
 	color: #FFF;
 	font-weight: 300;
-	width: 44px;
+	width: 62px;
 	text-align: left;
 }
 
 dl#social-tools dd a {
-	height: 20px;
-	font-size: 15px;
-	padding: 0 0 5px 0;
+	height: 28px;
+	line-height: 26px;
+	font-size: 20px;
+	padding: 0 0 7px 0;
 	font-weight: 400;
 }
 
 dl#social-tools dt.twitter-follow a,
 dl#social-tools dt.twitter-follow a:visited {
-	background-position: 0 -25px;
+	background-position: 0 -35px;
 	text-decoration: none;
 }
 
 dl#social-tools dt.twitter-follow a:hover {
-	background-position: 0 -75px;
+	background-position: 0 -105px;
 }
 
 dl#social-tools dd.twitter-follow a,
@@ -311,17 +312,17 @@ dl#social-tools dd.twitter-follow a:hover {
 
 dl#social-tools dt.twitter-retweet a,
 dl#social-tools dt.twitter-retweet a:visited {
-	background-position: -65px -25px;
+	background-position: -91px -35px;
 	text-decoration: none;
 }
 
 dl#social-tools dt.twitter-retweet a:hover {
-	background-position: -65px -75px;
+	background-position: -91px -105px;
 }
 
 dl#social-tools dd.twitter-retweet a,
 dl#social-tools dd.twitter-retweet a:visited {
-	background-position: -65px 0;
+	background-position: -91px 0;
 	color: #374D17;
 	text-decoration: none;
 }
@@ -332,17 +333,17 @@ dl#social-tools dd.twitter-retweet a:hover {
 
 dl#social-tools dt.fb-share a,
 dl#social-tools dt.fb-share a:visited {
-	background-position: -130px -25px;
+	background-position: -182px -35px;
 	text-decoration: none;
 }
 
 dl#social-tools dt.fb-share a:hover {
-	background-position: -130px -75px;
+	background-position: -182px -105px;
 }
 
 dl#social-tools dd.fb-share a,
 dl#social-tools dd.fb-share a:visited {
-	background-position: -130px 0;
+	background-position: -182px 0;
 	text-decoration: none;
 	color: #2B5072;
 }
@@ -352,7 +353,7 @@ dl#social-tools dd.fb-share a:hover {
 }
 
 dl#counter {
-	right: -190px;
+	right: -266px;
 	text-align: center;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 }
@@ -360,13 +361,14 @@ dl#counter {
 dl#counter dt {
 	position: absolute;
 	z-index: 10px;
-	top: 56px;
-	left: 35px;
-	width: 180px;
-	height: 24px;
+	top: 78px;
+	left: 50px;
+	width: 252px;
+	height: 32px;
+	line-height: 32px;
 	color: #805957;
 	font-weight: 300;
-	font-size: 16px;
+	font-size: 22px;
 	letter-spacing: 0.2;
 	overflow: hidden;
 }
@@ -374,19 +376,21 @@ dl#counter dt {
 dl#counter dd {
 	position: absolute;
 	z-index: 10px;
-	top: 28px;
-	left: 35px;
-	width: 180px;
-	height: 26px;
-	padding: 0 0 5px 0;
+	top: 40px;
+	left: 50px;
+	width: 252px;
+	height: 36px;
+	padding: 0 0 7px 0;
 	color: #593F3E;
-	background: transparent url(../img/sd/dashboard-bttns-sd.png) no-repeat -195px -2px;
-	font-size: 20px;
+	background: transparent url(../img/hd/dashboard-bttns-hd.png) no-repeat -273px -2px;
+	font-size: 28px;
+	line-height: 34px;
 	font-weight: 400;
 	letter-spacing: 0.5px;
 	overflow: hidden;
 }
 /* dashboards /*/
+
 
 /* bubbles */
 article.bubble.tweet {
@@ -394,16 +398,13 @@ article.bubble.tweet {
 	z-index: 10;
 	top: 20%;
 	left: 40%;
-	width: 140px;
+	width: 200px;
 	height: auto;
 	background-repeat: no-repeat;
-	background-color: transparent;
+	background-color: transp arent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 30px;
+	padding: 40px;
+	font-size: 18px;
 }
 
 article.bubble.tweet header,
@@ -412,21 +413,16 @@ article.bubble.tweet p {
 }
 
 article.bubble.tweet h1 {
-	line-height: 20px;
+	line-height: 30px;
 }
-
 
 article.bubble.tweet .avatar-wrapper {
 	position: absolute;
 	z-index: 10;
 	top: 50%; /* final: 20px	 */
 	left: 50%; /* final: -22% */
-	width: auto;
-	height: auto;
-	-moz-background-size: 100%;
-	-webkit-background-size: 100%;
-  	-o-background-size: 100%;
-  	background-size: 100%;
+	width: 110px;
+	height: 110px;
   	background-position: center center;
   	background-repeat: no-repeat;
   	margin: 0;
@@ -434,26 +430,33 @@ article.bubble.tweet .avatar-wrapper {
 
 article.bubble.tweet .avatar-wrapper a {
 	display: block;
-	width: 80px;
-	height: 80px;
-	background-image: url(../img/sd/tweet-avatar-wrapper-sd.png);
+	width: 65px;
+	height: 65px;
+	background-image: url(../img/hd/tweet-avatar-wrapper-hd.png);
 	background-position: center center;
 	background-repeat: no-repeat;
+	background-color: transparent;
 	text-align: center;
 	-moz-transform: rotate(-5deg);
 	-webkit-transform: rotate(-5deg);
 	-o-transform: rotate(-5deg);
+	padding: 4px;
+	border: 1px solid transparent;
+	margin: 15px auto 0 auto;
 }
 
 article.bubble.tweet .avatar-wrapper img {
 	background: #FFF;
-	margin: 15px 0 0 0;
+	height: 65px;
+	width: 65px;
 }
 
 article.bubble.tweet p.text {
-	margin: 15px 0 0 0;
+	margin: 20px 0 0 0;
 	width: 100%;
 	overflow: hidden;
+	font-size: 18px;
+	line-height: 25px;
 }
 
 article.bubble.tweet a {
@@ -464,8 +467,9 @@ article.bubble.tweet h1 a,
 article.bubble.tweet h1 a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	font-size: 20px;
+	font-size: 28px;
 	text-decoration: none;
+	letter-spacing: -0.5px;
 }
 
 article.bubble.tweet time a,
@@ -495,11 +499,11 @@ article.bubble.tweet.firefox a:visited {
 }
 
 article.bubble.tweet span.mood {
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
 	background-color: #FFF;
-	padding: 1px 2px;
+	padding: 2px 4px;
 }
 
 article.bubble.tweet span.mood.violet { color: #6B5DC1; }
@@ -534,21 +538,17 @@ article.bubble.tweet nav {
 	z-index: 30;
 	top: 95px;
 	left: -20%;
-	width: 70px;
-	height: auto; 
+	width: 80px;
+	height: 100px;
 	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: center center;
-	-moz-background-size: 70px 100%;
-	-webkit-background-size: 70px 100%;
-  	-o-background-size: 70px 100%;
-  	background-size: 70px 100%;
-  	padding: 10px 0;
+  	padding: 10px;
   	-moz-transform: rotate(-8deg); -webkit-transform:rotate(-8deg); -o-transform:rotate(-8deg);
 }
 
 article.bubble.tweet nav li {
-	margin: 2px 0 2px 0;
+	margin: 10px 0;
 	text-align: center;
 }
 
@@ -562,12 +562,12 @@ article.bubble.tweet.firefox nav a,
 article.bubble.tweet.firefox nav a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	font-size: 15px;
+	font-size: 20px;
 	color: #FFF;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	padding: 2px 4px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	padding: 2px 6px;
 	text-decoration: none;
 	text-align: center;
 	text-transform: lowercase;
@@ -581,115 +581,184 @@ article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
 article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
 article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
 
-/* RT vhigh */
-article.bubble.tweet.vhigh,
-article.bubble.tweet.vhigh .avatar-wrapper,
-article.bubble.tweet.vhigh nav { background-image: url(../img/sd/tweet-normal-bubble-vhigh-sd.png); }
+/* size xl */
+article.bubble.tweet.xl { height: 300px; }
 
-article.bubble.tweet.firefox.vhigh,
-article.bubble.tweet.firefox.vhigh .avatar-wrapper,
-article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/sd/tweet-firefox-bubble-vhigh-sd.png); }
+/* size l */
+article.bubble.tweet.l { height: 250px; }
 
-/* RT high */
-article.bubble.tweet.high,
-article.bubble.tweet.high .avatar-wrapper,
-article.bubble.tweet.high nav { background-image: url(../img/sd/tweet-normal-bubble-high-sd.png); }
+/* size m */
+article.bubble.tweet.m { height: 200px; }
 
-article.bubble.tweet.firefox.high,
-article.bubble.tweet.firefox.high .avatar-wrapper,
-article.bubble.tweet.firefox.high nav { background-image: url(../img/sd/tweet-firefox-bubble-high-sd.png); }
+/* size s */
+article.bubble.tweet.s { height: 150px; }
 
-/* RT med */
-article.bubble.tweet.med,
-article.bubble.tweet.med .avatar-wrapper,
-article.bubble.tweet.med nav { background-image: url(../img/sd/tweet-normal-bubble-med-sd.png); }
+/* opacity very high */
 
-article.bubble.tweet.firefox.med,
-article.bubble.tweet.firefox.med .avatar-wrapper,
-article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/tweet-firefox-bubble-med-sd.png); }
+	/* size xl */
+	article.bubble.tweet.vhigh.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-xl-hd.png); }
+	article.bubble.tweet.firefox.vhigh.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-xl-hd.png); }
+	
+	/* size l */
+	article.bubble.tweet.vhigh.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-l-hd.png); }
+	article.bubble.tweet.firefox.vhigh.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-l-hd.png); }
+	
+	/* size m */
+	article.bubble.tweet.vhigh.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-m-hd.png); }
+	article.bubble.tweet.firefox.vhigh.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-m-hd.png); }
+	
+	/* size s */
+	article.bubble.tweet.vhigh.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-s-hd.png); }
+	article.bubble.tweet.firefox.vhigh.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-s-hd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.vhigh .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-avatar-opa-veryhigh-hd.png); }
+	article.bubble.tweet.vhigh nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-nav-opa-veryhigh-hd.png); }
+	article.bubble.tweet.firefox.vhigh .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-avatar-opa-veryhigh-hd.png); }
+	article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-nav-opa-veryhigh-hd.png); }
 
-/* RT low */
-article.bubble.tweet.low,
-article.bubble.tweet.low .avatar-wrapper,
-article.bubble.tweet.low nav { background-image: url(../img/sd/tweet-normal-bubble-low-sd.png); }
+/* opacity high */
 
-article.bubble.tweet.firefox.low,
-article.bubble.tweet.firefox.low .avatar-wrapper,
-article.bubble.tweet.firefox.low nav { background-image: url(../img/sd/tweet-firefox-bubble-low-sd.png); }
+	/* size xl */
+	article.bubble.tweet.high.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xl-hd.png); }
+	article.bubble.tweet.firefox.high.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-xl-hd.png); }
+	
+	/* size l */
+	article.bubble.tweet.high.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-l-hd.png); }
+	article.bubble.tweet.firefox.high.l med
+	
+	/* size m */
+	article.bubble.tweet.high.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-m-hd.png); }
+	article.bubble.tweet.firefox.high.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-m-hd.png); }
+	
+	/* size s */
+	article.bubble.tweet.high.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-s-hd.png); }
+	article.bubble.tweet.firefox.high.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-s-hd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.high .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-avatar-opa-high-hd.png); }
+	article.bubble.tweet.high nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-nav-opa-high-hd.png); }
+	article.bubble.tweet.firefox.high .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-avatar-opa-high-hd.png); }
+	article.bubble.tweet.firefox.high nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-nav-opa-high-hd.png); }
+	
+/* opacity medium */
+
+	/* size xl */
+	article.bubble.tweet.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xl-hd.png); }
+	article.bubble.tweet.firefox.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xl-hd.png); }
+	
+	/* size l */
+	article.bubble.tweet.med.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-med-size-l-hd.png); }
+	article.bubble.tweet.firefox.med.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-l-hd.png); }
+	
+	/* size m */
+	article.bubble.tweet.med.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-m-hd.png); }
+	article.bubble.tweet.firefox.med.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-m-hd.png); }
+	
+	/* size s */
+	article.bubble.tweet.med.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-s-hd.png); }
+	article.bubble.tweet.firefox.med.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-s-hd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.med .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-avatar-opa-medium-hd.png); }
+	article.bubble.tweet.med nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-nav-opa-medium-hd.png); }
+	article.bubble.tweet.firefox.med .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-avatar-opa-medium-hd.png); }
+	article.bubble.tweet.firefox.med nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-nav-opa-medium-hd.png); }
 
 
+/* opacity low */
+
+	/* size xl */
+	article.bubble.tweet.low.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xl-hd.png); }
+	article.bubble.tweet.firefox.low.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-xl-hd.png); }
+	
+	/* size l */
+	article.bubble.tweet.low.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-l-hd.png); }
+	article.bubble.tweet.firefox.low.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-l-hd.png); }
+	
+	/* size m */
+	article.bubble.tweet.low.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-m-hd.png); }
+	article.bubble.tweet.firefox.low.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-m-hd.png); }
+	
+	/* size s */
+	article.bubble.tweet.low.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-s-hd.png); }
+	article.bubble.tweet.firefox.low.s { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-s-hd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.low .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-avatar-opa-low-hd.png); }
+	article.bubble.tweet.low nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-nav-opa-low-hd.png); }
+	article.bubble.tweet.firefox.low .avatar-wrapper { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-avatar-opa-low-hd.png); }
+	article.bubble.tweet.firefox.low nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-nav-opa-low-hd.png); }
+	
+	
 /* time bubble */
 article.bubble.time {
 	position: absolute;
 	z-index: 10;
-	/* top: 70%; */
-	/* left: 10%; */
-	width: 80px;
-	height: auto;
-	background-image: url(../img/sd/time-bubble-sd.png);
+	/* top: 20%; */
+	/* left: 20%; */
+	width: 160px;
+	height: 200px;
+	background-image: url(../img/hd/bubbles-hd/bubble-time-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	padding: 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
 
 article.bubble.time h1 {
-	padding: 95px 0 0 0;
+	padding: 130px 0 0 0;
 	color: #941403;
-	font-size: 20px;
+	font-size: 30px;
+	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/sd/special-icon-time.png) no-repeat top center;
-	margin: 0 0 5px 0;
+	background: transparent url(../img/hd/special-icon-time.png) no-repeat top center;
 }
 
 article.bubble.time p {
 	margin: 0;
 	color: #660E02;
-	font-size: 36px;
+	font-size: 50px;
 	font-weight: 400;
+	letter-spacing: -0.5px;
+	line-height: 50px;
 }
 
 /* downloads bubble */
 article.bubble.downloads {
 	position: absolute;
 	z-index: 10;
-	top: 70%;
-	left: 10%;
-	width: 130px;
-	height: auto;
-	background-image: url(../img/sd/downloads-bubble-sd.png);
+	/* top: 50%; */
+	/* left: 10%; */
+	width: 200px;
+	height: 200px;
+	background-image: url(../img/hd/bubbles-hd/bubble-downloads-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	padding: 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
 
 article.bubble.downloads h1 {
-	padding: 100px 0 0 0;
+	padding: 130px 0 0 0;
 	color: #5A7330;
-	font-size: 20px;
+	font-size: 30px;
+	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/sd/special-icon-downloads.png) no-repeat top center;
-	margin: 0 0 5px 0;
+	background: transparent url(../img/hd/special-icon-downloads.png) no-repeat top center;
 }
 
 article.bubble.downloads p {
 	margin: 0;
 	color: #3C4D21;
-	font-size: 30px;
+	font-size: 50px;
 	font-weight: 400;
+	letter-spacing: -0.5px;
+	line-height: 50px;
 }
 
 article.bubble.downloads p a,
@@ -705,7 +774,7 @@ article.bubble.followers {
 	left: 10%;
 	width: 120px;
 	height: auto;
-	background-image: url(../img/sd/followers-bubble-sd.png);
+	background-image: url(../img/hd/bubbles-hd/bubble-followers-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
@@ -723,7 +792,7 @@ article.bubble.followers h1 {
 	color: #348E99;
 	font-size: 20px;
 	font-weight: 300;
-	background: transparent url(../img/sd/special-icon-followers.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-followers.png) no-repeat top center;
 	margin: 0 0 5px 0;
 }
 
@@ -747,7 +816,7 @@ article.bubble.error {
 	left: 10%;
 	width: 140px;
 	height: auto;
-	background-image: url(../img/sd/error-bubble-sd.png);
+	background-image: url(../img/hd/bubbles-hd/bubble-error-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
@@ -765,7 +834,7 @@ article.bubble.error h1 {
 	color: #941403;
 	font-size: 20px;
 	font-weight: 300;
-	background: transparent url(../img/sd/special-icon-error.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-error.png) no-repeat top center;
 	margin: 0 0 5px 0;
 }
 
@@ -789,7 +858,7 @@ footer {
 }
 
 footer p {
-	margin: 20px 0 0 0;
+	margin: 30px 0 0 0;
 }
 
 footer a,
@@ -797,23 +866,23 @@ footer a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	letter-spacing: 0.5px;
-	font-size: 15px;
+	font-size: 20px;
 	color: #0C5C66;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	padding: 2px 6px;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	border-radius: 9px;
+	padding: 3px 9px;
 	text-shadow: 0 1px #BFEDEF;
 	text-transform: lowercase;
 	text-decoration: none;
-	background: transparent url(../img/sd/footer-bttn-sd.png) no-repeat top center;
-	margin: 0 2px;
+	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat top center;
+	margin: 0 4px;
 }
 
 footer a:hover {
 	color: #C1E7EA;
 	text-shadow: 0 -1px #3C6868;
-	background: transparent url(../img/sd/footer-bttn-sd.png) no-repeat bottom center;
+	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat bottom center;
 	text-decoration: none;
 }
 /* footer /*/
