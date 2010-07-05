@@ -9,21 +9,14 @@ $(document).ready(function(){
   R = Raphael("pointer", 70 * res.multiplier[res_current], 30 * res.multiplier[res_current]);
   // draw image in the holder
   gauge_indicator_needle = R.image(gauge_indicator_needle_src, 30 * res.multiplier[res_current], -4 * res.multiplier[res_current], 8 * res.multiplier[res_current], 56 * res.multiplier[res_current]);
-  // assign onClick function to rotate img left
-  $('.value.min').click(function () {
-    gauge_indicator_needle_angle -= 90;
-    gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
-  });
-  // assign onClick function to rotate img right
-  $('.value.max').click(function () {
-    gauge_indicator_needle_angle += 90;
-    gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
-  });
   // fix possible webkit/safari rendering bug
   R.safari();
 });
 
 function gaugeIndicatorNeedleMove(gauge_indicator_needle_angle) {
+  // reset the needle, helps when switching from 90 to 100, otherwise the animation woul be too subtle
+  gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
+  // move it to the new position
   gauge_indicator_needle_angle -= 90;
   gauge_indicator_needle.animate({rotation: gauge_indicator_needle_angle}, 500, "elastic");
 };
