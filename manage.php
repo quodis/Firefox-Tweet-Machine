@@ -102,12 +102,12 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>FTM - Admin</title>
+    <title>FTM - Manage</title>
     <link rel="shortcut icon" href="PathToFavIcon" />
     <link rel="apple-touch-icon" href="PathToapple-touch-icon.png" />
     <style type="text/css" media="all">
 			<!--
-
+        p { font-style: italic !important; }
 			-->
     </style>
     <link href="assets/css/blueprint/src/reset.css" media="screen" rel="stylesheet" type="text/css" />
@@ -167,7 +167,7 @@
   <body>
     <div id="wrapper" class="container">
       <div id="header">
-        <h1>Firefox Tweet Machine - Admin</h1>
+        <h1>Firefox Tweet Machine - Manage</h1>
         <p><a href="?action=logout" title="close your session">Logout</a></p>
         <p class="messages <? print(reset(array_keys($flash))) ?>"><? print(reset($flash)); ?></p>
       </div>
@@ -180,95 +180,64 @@
 
             <label for="allowed_admins">Allowed Administrators</label>
             <input id="allowed_admins" name="allowed_admins" type="text" size="100" value="<? print $config['allowed_admins']; ?>"/>
+            <p class="description field">comma separated list of twitter usernames allowed in the administration interface</p>
           </fieldset>
 
           <fieldset>
-            <legend>Twitter:</legend>
+            <legend>Twitter</legend>
             
-          <fieldset>
-            <legend>Whitelisted User Details</legend>
-            
-            <label for="whitelisted_username">Username</label>
-            <input id="whitelisted_username" name="whitelisted_username" type="text" value="<? print $config['whitelisted_username']; ?>"/>
-            <br />
-
-            <label for="whitelisted_password">Password</label>
-            <input id="whitelisted_password" name="whitelisted_password" type="password" value="<? print $config['whitelisted_password']; ?>"/>
-            <br />
-          </fieldset>
+            <fieldset>
+              <legend>Whitelisted User Details</legend>
+              <p>account credentials for the username used to request data to twitter, typically this should be a whitelisted user</p>
+              
+              <label for="whitelisted_username">User</label>
+              <input id="whitelisted_username" name="whitelisted_username" type="text" value="<? print $config['whitelisted_username']; ?>"/>
+              <br />
+  
+              <label for="whitelisted_password">Password</label>
+              <input id="whitelisted_password" name="whitelisted_password" type="password" value="<? print $config['whitelisted_password']; ?>"/>
+              <br />
+            </fieldset>
 
             <fieldset>
               <legend>Timeline</legend>
+              <p>tweets from this user's timeline will be displayed among search results</p>
 
-              <label for="timeline_username">Default Screen Name</label>
+              <label for="timeline_username">User</label>
               <input id="timeline_username" name="timeline_username" type="text" value="<? print $config['timeline_username']; ?>" />
               <br />
 
-              <label for="timeline_count">Timeline Tweet Count</label>
+              <label for="timeline_count">Tweet Count</label>
               <input id="timeline_count" name="timeline_count" type="text" value="<? print $config['timeline_count']; ?>" />
               <br />
 
+<!--
               <label for="timeline_url">Timeline URL</label>
               <input id="timeline_url" name="timeline_url" type="text" size="100" value="<? print $config['timeline_url']; ?>" />
               <br />
+-->
             </fieldset>
 
             <fieldset>
               <legend>Search</legend>
 
-              <label for="search_default_keyword">Default Search Keyword</label>
+              <label for="search_default_keyword">Default Keyword</label>
               <input id="search_default_keyword" name="search_default_keyword" type="text" value="<? print $config['search_default_keyword'] ?>" />
               <br />
 
-              <label for="search_results_per_page">Results per Page</label>
+              <label for="search_results_per_page">Results Count</label>
               <input id="search_results_per_page" name="search_results_per_page" type="text" value="<? print $config['search_results_per_page'] ?>" />
               <br />
+<!--
 
               <label for="search_url">Search URL</label>
               <input id="search_url" name="search_url" type="text" size="100" value="<? print $config['search_url']; ?>" />
               <br />
+-->
             </fieldset>
 
           </fieldset>
-          <fieldset>
-            <legend>Memcache</legend>
-
-            <label for="memcache_host">Memcache Host</label>
-            <input id="memcache_host" name="memcache_host" type="text" value="<? print $config['memcache_host']; ?>" />
-            <br />
-
-            <label for="memcache_port">Memcache Port</label>
-            <input id="memcache_port" name="memcache_port" type="text" value="<? print $config['memcache_port']; ?>" />
-            <br />
-
-            <label for="memcache_port">Memcache TTL</label>
-            <input id="memcache_ttl" name="memcache_ttl" type="text" value="<? print $config['memcache_ttl']; ?>" />
-            <br />
-            
-          </fieldset>
-
-          <fieldset>
-            <legend>Cron</legend>
-
-            <label for="cron_on_demand">On Demand</label>
-            <input id="cron_on_demand" name="cron_on_demand" type="checkbox" value="true" <? if ($config['cron_on_demand']) print 'checked="true"'; ?> />
-            <br/>
-
-            <label for="cron_url">URL</label>
-            <input id="cron_url" name="cron_url" type="text" size="100" value="<? print $config['cron_url']; ?>" />
-            <br/>
-          </fieldset>
-
-          <fieldset>
-            <legend>Downloads</legend>
-
-            <label for="firefox_download_stats_url">Downloads URL</label>
-            <input id="firefox_download_stats_url" name="firefox_download_stats_url" type="text" size="100" value="<? print $config['firefox_download_stats_url']; ?>"/>
-            <br />
-
-          </fieldset>
-
-
+         
           <fieldset>
             <legend>Triggers</legend>
 
@@ -312,7 +281,10 @@
                 <input id="countdown_display_datetime" name="countdown_display_datetime" type="text" size="100" value="<? print $config['countdown_display_datetime']; ?>"/>
                 <br />
                 <label for="countdown_display_datetime_description">Description</label>
-                <input id="countdown_display_datetime_description" name="countdown_display_datetime_description" type="text" size="100" value="<? print $config['countdown_display_datetime_description']; ?>"/><br />
+                <input id="countdown_display_datetime_description" name="countdown_display_datetime_description" type="text" size="100" value="<? print $config['countdown_display_datetime_description']; ?>"/>
+                <br />
+                <label for="countdown_display_datetime_reached">Reached</label>
+                <input id="countdown_display_datetime_reached" name="countdown_display_datetime_reached" type="text" size="100" value="<? print $config['countdown_display_datetime_reached']; ?>"/>
 
               </fieldset>
 
@@ -358,6 +330,49 @@
             <label for="keywords_excluded">Excluded</label>
             <input id="keywords_excluded" name="keywords_excluded" type="text" size="100" value="<? print $config['keywords_excluded']; ?>"/>
             
+          </fieldset>
+
+          <fieldset>
+            <legend>Stats</legend>
+
+            <label for="firefox_tweet_machine_stats_url">Twitter/Facebook Stats URL</label>
+            <input id="firefox_tweet_machine_stats_url" name="firefox_tweet_machine_stats_url" type="text" size="100" value="<? print $config['firefox_tweet_machine_stats_url']; ?>"/>
+            <br />
+
+            <label for="firefox_download_stats_url">Firefox Downloads Source URL</label>
+            <input id="firefox_download_stats_url" name="firefox_download_stats_url" type="text" size="100" value="<? print $config['firefox_download_stats_url']; ?>"/>
+            <br />
+
+          </fieldset>
+ 
+          
+          <fieldset>
+            <legend>Memcache</legend>
+
+            <label for="memcache_host">Memcache Host</label>
+            <input id="memcache_host" name="memcache_host" type="text" value="<? print $config['memcache_host']; ?>" />
+            <br />
+
+            <label for="memcache_port">Memcache Port</label>
+            <input id="memcache_port" name="memcache_port" type="text" value="<? print $config['memcache_port']; ?>" />
+            <br />
+
+            <label for="memcache_port">Memcache TTL</label>
+            <input id="memcache_ttl" name="memcache_ttl" type="text" value="<? print $config['memcache_ttl']; ?>" />
+            <br />
+            
+          </fieldset>
+
+          <fieldset>
+            <legend>Cron</legend>
+
+            <label for="cron_on_demand">On Demand</label>
+            <input id="cron_on_demand" name="cron_on_demand" type="checkbox" value="true" <? if ($config['cron_on_demand']) print 'checked="true"'; ?> />
+            <br/>
+
+            <label for="cron_url">URL</label>
+            <input id="cron_url" name="cron_url" type="text" size="100" value="<? print $config['cron_url']; ?>" />
+            <br/>
           </fieldset>
 
           <button>Save</button>

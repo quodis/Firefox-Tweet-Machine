@@ -162,6 +162,7 @@ $special_bubbles['sb_ffdownloads_step'] = ($config['specialbubble_firefox_downlo
 $display['ds_type'] = ($config['countdown_display_type']) ? $config['countdown_display_type'] : 'followers';
 $display['ds_datetime'] = ($config['countdown_display_datetime']) ? $config['countdown_display_datetime'] : '';
 $display['ds_datetime_description'] = ($config['countdown_display_datetime_description']) ? $config['countdown_display_datetime_description'] : '';
+$display['ds_datetime_reached'] = ($config['countdown_display_datetime_reached']) ? $config['countdown_display_datetime_reached'] : 'We\'re there';
 $display['ds_followers'] = ($config['countdown_display_followers']) ? $config['countdown_display_followers'] : 5000;
 $display['ds_followers_description'] = ($config['countdown_display_followers_description']) ? $config['countdown_display_followers_description'] : 'Firefox download count just increased by 5000!';
 $display['ds_stats_retweets'] = json_decode($firefox_tweet_machine_retweet_stats)->response->all;

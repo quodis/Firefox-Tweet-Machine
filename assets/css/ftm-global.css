@@ -75,7 +75,7 @@ p.last {
 }
 
 /* Tell the browser to render HTML 5 elements as block */
-header, footer, aside, nav, article {
+header, footer, aside, nav, article, section {
 	display: block;
 }
 

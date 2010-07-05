@@ -87,6 +87,12 @@ form#search-box {
 	width: 364px;
 }
 
+form#search-box label {
+	text-indent: -9999px;
+	position: absolute;
+	top: 0;
+}
+
 form#search-box input.text {
 	display: block;
 	background: transparent;
@@ -117,6 +123,10 @@ form#search-box .button {
 	overflow: hidden;
 	text-indent: -9999px;
 	cursor: pointer;
+}
+
+form#search-box .button.loading {
+	background: transparent url("../img/hd/machine-loading-hd.gif") no-repeat center center;
 }
 /* search-box /*/
 
@@ -399,7 +409,6 @@ article.bubble.tweet {
 	top: 20%;
 	left: 40%;
 	width: 200px;
-	height: auto;
 	background-repeat: no-repeat;
 	background-color: transp arent;
 	background-position: center center; 
@@ -419,7 +428,7 @@ article.bubble.tweet h1 {
 article.bubble.tweet .avatar-wrapper {
 	position: absolute;
 	z-index: 10;
-	top: 50%; /* final: 20px	 */
+	top: 50%; /* final: 20px */
 	left: 50%; /* final: -22% */
 	width: 110px;
 	height: 110px;
@@ -513,30 +522,37 @@ article.bubble.tweet span.mood.orange { color: #DF731B; }
 
 article.bubble.tweet dl {
 	padding: 20px 0 0 0;
+	line-height: 25px;
+	font-size: 16px;
 }
 
 article.bubble.tweet dt {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	font-size: 15px;
+	font-size: 19px;
 	color: #1A7B82;
 	float: left;
 	text-align: right;
-	width: 50px;
-	line-height: 20px;
+	width: 30%;
+	line-height: 25px;
 	letter-spacing: 0.2px;
+	clear: both;
+}
+
+article.bubble.tweet.firefox dt {
+	color: #8C7202;
 }
 
 article.bubble.tweet dd {
-	line-height: 20px;
-	padding: 0 0 0 60px;
-	width: 115px;
+	line-height: 25px;
+	padding: 0 0 0 35%;
+	width: 65%;
 }
 
 article.bubble.tweet nav {
 	position: absolute;
 	z-index: 30;
-	top: 95px;
+	top: 125px;
 	left: -20%;
 	width: 80px;
 	height: 100px;
@@ -770,37 +786,35 @@ article.bubble.downloads p a:visited {
 article.bubble.followers {
 	position: absolute;
 	z-index: 10;
-	top: 30%;
-	left: 10%;
-	width: 120px;
-	height: auto;
+	/* top: 50%; */
+	/* left: 10%; */
+	width: 200px;
+	height: 200px;
 	background-image: url(../img/hd/bubbles-hd/bubble-followers-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	padding: 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
 
 article.bubble.followers h1 {
-	padding: 100px 0 0 0;
+	padding: 130px 0 0 0;
 	color: #348E99;
-	font-size: 20px;
+	font-size: 30px;
+	line-height: 30px;
 	font-weight: 300;
 	background: transparent url(../img/hd/special-icon-followers.png) no-repeat top center;
-	margin: 0 0 5px 0;
 }
 
 article.bubble.followers p {
 	margin: 0;
 	color: #235F66;
-	font-size: 30px;
+	font-size: 50px;
 	font-weight: 400;
+	letter-spacing: -0.5px;
+	line-height: 50px;
 }
 
 article.bubble.downloads p a,
@@ -814,41 +828,68 @@ article.bubble.error {
 	z-index: 10;
 	top: 30%;
 	left: 10%;
-	width: 140px;
-	height: auto;
+	width: 200px;
+	height: 250px;
 	background-image: url(../img/hd/bubbles-hd/bubble-error-hd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	padding: 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
 
 article.bubble.error h1 {
-	padding: 100px 0 0 0;
+	padding: 130px 0 0 0;
 	color: #941403;
-	font-size: 20px;
+	font-size: 30px;
+	line-height: 30px;
 	font-weight: 300;
 	background: transparent url(../img/hd/special-icon-error.png) no-repeat top center;
-	margin: 0 0 5px 0;
 }
 
 article.bubble.error p {
 	margin: 0;
 	color: #660E02;
-	font-size: 29px;
+	font-size: 50px;
 	font-weight: 400;
-	line-height: 30px;
+	letter-spacing: -0.5px;
+	line-height: 50px;
 }
 
-article.bubble.error p a,
-article.bubble.error p a:visited {
-	color: #235F66;
+/* search bubble */
+article.bubble.search {
+	position: absolute;
+	z-index: 10;
+	top: 30%;
+	left: 10%;
+	width: 200px;
+	height: 250px;
+	background-image: url(../img/hd/bubbles-hd/bubble-search-hd.png);
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-position: center center; 
+	padding: 40px;
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	text-align: center;
+}
+
+article.bubble.search h1 {
+	padding: 130px 0 0 0;
+	color: #A1716F;
+	font-size: 30px;
+	line-height: 30px;
+	font-weight: 300;
+	background: transparent url(../img/hd/special-icon-search.png) no-repeat top center;
+}
+
+article.bubble.search p {
+	margin: 0;
+	color: #73504F;
+	font-size: 50px;
+	font-weight: 400;
+	letter-spacing: -0.5px;
+	line-height: 50px;
 }
 /* bubbles  /*/
 
@@ -857,12 +898,12 @@ footer {
 	color: #0C5C66;
 }
 
-footer p {
+footer p.links {
 	margin: 30px 0 0 0;
 }
 
-footer a,
-footer a:visited {
+footer p.links a,
+footer p.links a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	letter-spacing: 0.5px;
@@ -879,11 +920,68 @@ footer a:visited {
 	margin: 0 4px;
 }
 
-footer a:hover {
+footer p.links a:hover {
 	color: #C1E7EA;
 	text-shadow: 0 -1px #3C6868;
 	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat bottom center;
 	text-decoration: none;
+}
+
+/* colophon */
+#colophon-wrapper { display: none; }
+
+#colophon {
+	padding: 40px;
+}
+
+#colophon h1 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-size: 34px;
+	line-height: 40px;
+	font-weight: 300;
+	margin: 0 0 20px 0;
+}
+
+#colophon p {
+	line-height: 25px;
+}
+
+#cboxContent {
+	position: relative;
+	background: #2B7480 url(../img/hd/modal-bg-hd.png) top left repeat;
+	box-shadow: 10px 10px 5px #002322;
+	box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25); -moz-box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25); -webkit-box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25);
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;
+	color: #FFF;
+	font-size: 18px;
+	line-height: 30px;
+}
+
+#cboxOverlay {
+	background-color: #03171A;
+}
+
+#cboxClose {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 0;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: transparent url(../img/hd/modal-close-bttn-hd.png) top center no-repeat;
+	height: 30px;
+	width: 30px;
+}
+
+#cboxClose:hover {
+	background: transparent url(../img/hd/modal-close-bttn-hd.png) bottom center no-repeat;
+	cursor: pointer;
+}
+
+#cboxLoadingOverlay {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
 }
 /* footer /*/
 

@@ -87,6 +87,12 @@ form#search-box {
 	width: 260px;
 }
 
+form#search-box label {
+	text-indent: -9999px;
+	position: absolute;
+	top: 0;
+}
+
 form#search-box input.text {
 	display: block;
 	background: transparent;
@@ -117,6 +123,10 @@ form#search-box .button {
 	overflow: hidden;
 	text-indent: -9999px;
 	cursor: pointer;
+}
+
+form#search-box .button.loading {
+	background: transparent url("../img/hd/machine-loading-sd.gif") no-repeat center center;
 }
 /* search-box /*/
 
@@ -523,6 +533,10 @@ article.bubble.tweet dt {
 	letter-spacing: 0.2px;
 }
 
+article.bubble.tweet.firefox dt {
+	color: #8C7202;
+}
+
 article.bubble.tweet dd {
 	line-height: 20px;
 	padding: 0 0 0 60px;
@@ -788,12 +802,12 @@ footer {
 	color: #0C5C66;
 }
 
-footer p {
+footer p.links {
 	margin: 20px 0 0 0;
 }
 
-footer a,
-footer a:visited {
+footer p.links a,
+footer p.links a:visited {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
 	letter-spacing: 0.5px;
@@ -810,11 +824,68 @@ footer a:visited {
 	margin: 0 2px;
 }
 
-footer a:hover {
+footer p.links a:hover {
 	color: #C1E7EA;
 	text-shadow: 0 -1px #3C6868;
 	background: transparent url(../img/sd/footer-bttn-sd.png) no-repeat bottom center;
 	text-decoration: none;
+}
+
+/* colophon */
+#colophon-wrapper { display: none; }
+
+#colophon {
+	padding: 40px;
+}
+
+#colophon h1 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-size: 34px;
+	line-height: 40px;
+	font-weight: 300;
+	margin: 0 0 20px 0;
+}
+
+#colophon p {
+	line-height: 25px;
+}
+
+#cboxContent {
+	position: relative;
+	background: #2B7480 url(../img/hd/modal-bg-hd.png) top left repeat;
+	box-shadow: 10px 10px 5px #002322;
+	box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25); -moz-box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25); -webkit-box-shadow: 6px 6px 0 rgba(0, 35, 34, 0.25);
+	border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px;
+	color: #FFF;
+	font-size: 18px;
+	line-height: 30px;
+}
+
+#cboxOverlay {
+	background-color: #03171A;
+}
+
+#cboxClose {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 0;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: transparent url(../img/hd/modal-close-bttn-hd.png) top center no-repeat;
+	height: 30px;
+	width: 30px;
+}
+
+#cboxClose:hover {
+	background: transparent url(../img/hd/modal-close-bttn-hd.png) bottom center no-repeat;
+	cursor: pointer;
+}
+
+#cboxLoadingOverlay {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
 }
 /* footer /*/
 

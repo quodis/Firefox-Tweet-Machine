@@ -18,6 +18,7 @@
 		<![endif]-->
 		
 		<link rel="stylesheet" href="assets/css/ftm-global.css" type="text/css" media="screen, projection" />
+		<link rel="stylesheet" href="assets/css/colorbox.css" type="text/css" media="screen, projection" />
 		<!--<link href="assets/css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
 		<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold" rel="stylesheet" type="text/css">
 		
@@ -27,64 +28,17 @@
 
 		<!-- scripts -->
 		<script src="assets/js/jquery-1.4.2.min.js"></script>
+		
 		<!-- box2djs -->
 		<script src="assets/js/box2d-min.js"></script>
-<!--
-		<script src="assets/js/protoclass.js"></script>
-		<script src="assets/js/box2d/common/b2Settings.js"></script>
-		<script src="assets/js/box2d/common/math/b2Vec2.js"></script>
-		<script src="assets/js/box2d/common/math/b2Mat22.js"></script>
-		<script src="assets/js/box2d/common/math/b2Math.js"></script>
-		<script src="assets/js/box2d/collision/b2AABB.js"></script>
-		<script src="assets/js/box2d/collision/b2Bound.js"></script>
-		<script src="assets/js/box2d/collision/b2BoundValues.js"></script>
-		<script src="assets/js/box2d/collision/b2Pair.js"></script>
-		<script src="assets/js/box2d/collision/b2PairCallback.js"></script>
-		<script src="assets/js/box2d/collision/b2BufferedPair.js"></script>
-		<script src="assets/js/box2d/collision/b2PairManager.js"></script>
-		<script src="assets/js/box2d/collision/b2BroadPhase.js"></script>
-		<script src="assets/js/box2d/collision/b2Collision.js"></script>
-		<script src="assets/js/box2d/collision/Features.js"></script>
-		<script src="assets/js/box2d/collision/b2ContactID.js"></script>
-		<script src="assets/js/box2d/collision/b2ContactPoint.js"></script>
-		<script src="assets/js/box2d/collision/b2Distance.js"></script>
-		<script src="assets/js/box2d/collision/b2Manifold.js"></script>
-		<script src="assets/js/box2d/collision/b2OBB.js"></script>
-		<script src="assets/js/box2d/collision/b2Proxy.js"></script>
-		<script src="assets/js/box2d/collision/ClipVertex.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2Shape.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2ShapeDef.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2BoxDef.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2CircleDef.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2CircleShape.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2MassData.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2PolyDef.js"></script>
-		<script src="assets/js/box2d/collision/shapes/b2PolyShape.js"></script>
-		<script src="assets/js/box2d/dynamics/b2Body.js"></script>
-		<script src="assets/js/box2d/dynamics/b2BodyDef.js"></script>
-		<script src="assets/js/box2d/dynamics/b2CollisionFilter.js"></script>
-		<script src="assets/js/box2d/dynamics/b2Island.js"></script>
-		<script src="assets/js/box2d/dynamics/b2TimeStep.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2ContactNode.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2Contact.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2ContactConstraint.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2ContactConstraintPoint.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2ContactRegister.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2ContactSolver.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2CircleContact.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2Conservative.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2NullContact.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2PolyAndCircleContact.js"></script>
-		<script src="assets/js/box2d/dynamics/contacts/b2PolyContact.js"></script>
-		<script src="assets/js/box2d/dynamics/b2ContactManager.js"></script>
-		<script src="assets/js/box2d/dynamics/b2World.js"></script>
-		<script src="assets/js/box2d/dynamics/b2WorldListener.js"></script>
--->
+
 		<!-- box2d /-->
 		<script src='assets/js/jquery.timeago.js'></script>
 		<script src="assets/js/raphael-min.js"></script>
+		<script src='assets/js/jquery.colorbox-min.js'></script>
 		<script src='assets/js/global.js'></script>
 		<script src="assets/js/gauge.js"></script>
+		<script src="assets/js/keyboard.js"></script>
 		<!-- scripts /-->
 
 	</head>
@@ -92,27 +46,14 @@
 	<body>
 
 		<header id="brand">
+		
 			<h1>Firefox Tweet Machine</h1>
+			
 		</header>
 
 		<!-- bubbles -->
 		<section id="bubbles">
-			
-			<!-- followers bubble -->
-			<article class="bubble followers">
-				<a href="http://twitter.com/firefox/followers" title="Firefox followers" rel="external">
-					<h1>@firefox followers</h1>
-					<p>223,000</p>
-				</a>
-			</article>
-			<!-- followers bubble /-->
-			
-			<!-- error bubble -->
-			<article class="bubble error">
-				<h1>Malfunction!</h1>
-				<p>Lorem ipsum dolor sit amet...</p>
-			</article>
-			<!-- error bubble /-->
+		
 		</section>
 		<!-- bubbles /-->
 
@@ -120,24 +61,25 @@
 		<section id="machine">
 
 			<form id="search-box">
-				<input type="text" name="search-input" class="text" value="Search" id="search-input">
-				<button name="search-bttn" type="submit" class="button" id="search-submit-bttn" title="Go!" value="Go!">Go!</button>
+				<label for="search-input" accesskey="s">Search</label>
+				<input type="text" name="search-input" class="text" value="Search" id="search-input" tabindex="1">
+				<button name="search-bttn" type="submit" class="button" id="search-submit-bttn" title="Go!" value="Go!" tabindex="2">Go!</button>
 			</form>
 
 			<ul id="machine-tools">
-				<li id="gravity-inverter" class="lever up"><a href="#" title="Invert world gravity">Invert world gravity</a></li>
+				<li id="gravity-inverter" class="lever up"><a href="#" title="Invert world gravity (g)" accesskey="g">Invert world gravity</a></li>
 				<li id="pressure-indicator"><span class="value min">0</span> <span class="pointer">></span> <span class="value max">100</span></li>
 				<li id="activity-indicator" class="off">Activity off</li>
-				<li id="flow-transposer" class="lever up"><a href="#" title="Pause tweet activity">Pause tweet activity</a></li>
+				<li id="flow-transposer" class="lever up"><a href="#" title="Pause tweet activity (p)" accesskey="p">Pause tweet activity</a></li>
 			</ul>
 
 			<dl id="social-tools" class="dashboard">
 				<dt class="twitter-follow"><a href="http://twitter.com/firefox" title="Follow on Twitter" rel="external">Follow</a></dt>
-				<dd class="twitter-follow"><a href="http://twitter.com/firefox/followers" title="View followers" rel="external">000,000</a></dd>
-				<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&title=Firefox Tweet Machine&url=http://www.firefox.com/tweetmachine/" title="Retweet" rel="external">Retweet</a></dt>
-				<dd class="twitter-retweet"><a href="http://topsy.com/www.firefox.com/tweetmachine" title="View retweets" rel="external">000</a></dd>
-				<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://www.firefox.com/tweetmachine/&amp;t=Firefox Tweet Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook" rel="external">Share</a></dt>
-				<dd class="fb-share"><a href="#" onclick="return false;" title="Share on Facebook">000</a></dd>
+				<dd class="twitter-follow"><a href="http://twitter.com/firefox/followers" title="View followers" rel="external"></a></dd>
+				<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&title=Firefox Tweet Machine&url=http://firefoxtweetmachine.com/" title="Retweet" rel="external">Retweet</a></dt>
+				<dd class="twitter-retweet"><a href="http://topsy.com/firefoxtweetmachine.com/" title="View retweets" rel="external"></a></dd>
+				<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://firefoxtweetmachine.com/&amp;t=Firefox Tweet Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook" rel="external">Share</a></dt>
+				<dd class="fb-share"><a href="#" onclick="return false;" title="Share on Facebook"></a></dd>
 			</dl>
 
 			<dl id="counter" class="dashboard">
@@ -149,7 +91,19 @@
 		<!-- machine /-->
 
 		<footer>
-			<p><a href="#" title="About the Machine">About the Machine</a> <a href="http://firefox.com/" title="Visit firefox.com">Visit firefox.com</a></p>
+		
+			<p class="links"><a class="colorbox" href="#colophon" title="About the Machine (a)" accesskey="a">About the Machine</a> <a href="http://firefox.com/" title="Visit firefox.com">Visit firefox.com</a></p>
+			
+			<!-- colophon -->
+			<div id="colophon-wrapper">
+				<section id="colophon">
+					<h1>About the Machine</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget nulla at nulla sollicitudin tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis nunc vel purus auctor et commodo mauris sodales. Aliquam neque sem, viverra dictum commodo in, euismod at dui.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget nulla at nulla sollicitudin tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis nunc vel purus auctor et commodo mauris sodales. Aliquam neque sem, viverra dictum commodo in, euismod at dui.</p>
+				</section>
+			</div>
+			<!-- colophon /-->
+		
 		</footer>
 
 	</body>

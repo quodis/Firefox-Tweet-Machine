@@ -9,9 +9,10 @@ var res = {
   cssFile: ['assets/css/ftm-sd.css', 'assets/css/ftm-hd.css'],
   gaugeIndicatorNeedleSrc: ['assets/img/sd/pressure-display-pointer-sd.png', 'assets/img/hd/pressure-display-pointer-hd.png'],
   spawnY: [-215, -301],
-  bubbleSize: [200, 300],
+  bubbleSizeMax: [200, 350],
+  bubbleSizeMin: [100, 220],
   avatarLeft: ['-22%', '-22%'],
-  avatarTop: ['20px', '30px'],
+  avatarTop: ['20px', '20px'],
   maxBubbles: [7, 7]
 }
 
@@ -27,13 +28,14 @@ var PI2 = Math.PI * 2;
 var gravity_y = -50;
 var gravity_y_inverted = 150;
 
-var gauge_max_minutes = (60);
+// Time difference between 0 and 10th tweet from where gauge will be at 0
+var gauge_max_minutes = 20;
 
 var spawn_y_impulse = -30;
-var spawn_y_impulse_inverted = -200;
+var spawn_y_impulse_inverted = -400;
 var spawn_y_impulse_current = spawn_y_impulse;
 
-var interval_spawn, interval_loop, timeout_data, timeout_data_interval = (60*1000);
+var interval_spawn, interval_loop, timeout_data, timeout_data_interval = (60*1000), timeout_getcustomsearch, fresh_custom_search = true;
 
 var debug = false;
 
@@ -141,6 +143,8 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	// About button lightbox
+	$('a.colorbox').colorbox({width:"40%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false});
   
   // handles the input field focus and blur behaviours
   input_field_values = new Array();
@@ -163,27 +167,33 @@ $(document).ready(function(){
 // Calculate at what the position the Gauge should be
 function calculateGauge() {
 
-  // Fint the most fresh tweet
-  var freshest_tweet_created_at = new Date(search_data[0].created_at);
+  if (search_data.length) {
   
-  // Find the 10thest (or oldest tweet if there's lesse than 10)
-  if (search_data.length < 10) {
-    var older_tweet_created_at = new Date(search_data[search_data.length-1].created_at);
+    // Find the freshest tweet
+    var freshest_tweet_created_at = new Date(search_data[0].created_at);
+    
+    // Find the 10thest (or oldest tweet if there's lesse than 10)
+    if (search_data.length < 10) {
+      var older_tweet_created_at = new Date(search_data[search_data.length-1].created_at);
+    } else {
+      var older_tweet_created_at = new Date(search_data[10].created_at);
+    }
+    
+    // Minutes of difference between first and last tweet
+    var diff_in_minutes = (Math.abs(freshest_tweet_created_at.getTime() - older_tweet_created_at.getTime()) / (1000 * 60));
+    
+    // If bigger then max (max minutes is the number where the gauge will be at 0), set to max
+    if (diff_in_minutes > gauge_max_minutes) {
+      degrees = 2;
+    
+    // Else, get the proportional
+    } else {
+      degrees = 180-((diff_in_minutes*180)/gauge_max_minutes);
+    }
   } else {
-    var older_tweet_created_at = new Date(search_data[10].created_at);
+    // No tweets!
+    degrees = 0;
   }
-  
-  // Minutes of difference between first and last tweet
-  var diff_in_minutes = (Math.abs(freshest_tweet_created_at.getTime() - older_tweet_created_at.getTime()) / (1000 * 60));
- 
-  // If bigger then max (max minutes is the number where the gauge will be at 0), set to max
-  if (diff_in_minutes > gauge_max_minutes) {
-    degrees = gauge_max_minutes;
-  // Else, get the proportional
-  } else {
-    degrees = 180-((6*180)/gauge_max_minutes);
-  }
-  
   // Let's move the needle!
   gaugeIndicatorNeedleMove(degrees);
 
@@ -191,7 +201,8 @@ function calculateGauge() {
 
 // Refresh all information from Proxy
 function getDataFromProxy() {
-  $.getJSON('/proxy.php?q=' + search_query, function(data) {
+
+  $.getJSON('/proxy.php', function(data) {
 
     if (data.status.http_code == 200) {
       
@@ -229,30 +240,19 @@ function getDataFromProxy() {
       
       }
       
-      if (data.contents.search_results.results) {
-      
-        // Process search results
-        search_data = data.contents.search_results.results;
-        calculateGauge();
+      // Process the default search query from proxy
+      if (search_query == '') {
+        if (data.contents.search_results.results) {
         
-        search_data.reverse();
-        
-      	for (var i = 0; i < search_data.length; i++) {
-          var result = search_data[i];
+          // Process search results
+          search_data = data.contents.search_results.results;
+          process_search_result();
+        	
+        } else {
           
-          // See if this is newer than what is already pooled
-          // If yes, add it at current position
-          // If not, do nothing
-          if (result.id > search_data_max_id) {
-            pool.splice(pool_index, 0, {type: 'search', data: result});
-            search_data_max_id = result.id;
-          }
-      	}      	
-      	
-      } else {
+          throwError('Twitter Search API down');
         
-        throwError('Twitter Search API down');
-      
+        }
       }
       
       specialBubbleFFDownloadsCheck();
@@ -272,6 +272,92 @@ function getDataFromProxy() {
 
 }
 
+
+function search() {
+  
+  // Clear the pool
+  clearPool();
+  $('#search-submit-bttn').addClass('loading');
+  
+  // Set the query
+  search_query = $('#search-input').val();
+  
+  fresh_custom_search = true;
+  clearTimeout(timeout_getcustomsearch);
+  getCustomSearch();
+  
+}
+
+function getCustomSearch() {
+  
+  $.getJSON('http://search.twitter.com/search.json?callback=?&rpp=40&q=' + search_query, function(data) {
+    if (data.results) {
+      search_data = data.results;
+      process_search_result();
+      	
+    } else {
+      throwError('Twitter Search API down');
+    
+    }
+    $('#search-submit-bttn').removeClass('loading');
+  });
+  
+  timeout_getcustomsearch = setTimeout(getCustomSearch, 1000 * 60 * 5)
+}
+
+function process_search_result() {
+  
+  calculateGauge();    
+  search_data.reverse();
+  
+  var i;
+	for (i = 0; i < search_data.length; i++) {
+    var result = search_data[i];
+    
+    // See if this is newer than what is already pooled
+    // If yes, add it at current position
+    // If not, do nothing
+    
+    if (result.id > search_data_max_id) {
+      pool.splice(pool_index, 0, {type: 'search', data: result});
+      search_data_max_id = result.id;
+    }
+    
+	}
+	
+  if ((search_query != '') && (fresh_custom_search)) {
+    if (i == 0) {
+      pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1: 'Sorry', p: 'No results found'}});
+    } else {
+      search_query_short = '"' + friendlyTrim(search_query,16) + '"';
+      pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_short}});
+    }
+    fresh_custom_search = false;
+  }
+	
+}
+
+// Remove all Search Results from pool
+function clearPool () {
+  pool_index = 0;
+  pool = [];
+/*
+  for (var i = 0; i < pool.length; i++) {
+    if (pool[i].type = 'search') {
+      pool.splice(i, 1);
+    }
+  }
+  */
+}
+
+
+// Get a string, trim it to maxlength and add "..." if longer
+function friendlyTrim(input, m) {
+  var input_short = input.substr(0, m);
+  if (input.length > m) input_short += '...';
+  return input_short;
+}
+
 // Updates the Countdown Display
 // Can be a countdown to a @firefox followers milestone
 // or a countdown to a datetime
@@ -280,21 +366,19 @@ function updateCountdown() {
   var counter_dt;
   clearInterval(ds_datetime_interval);
   
-  if (ds_type == 'afollowers') {
+  if (ds_type == 'datetime') {
   
-    counter_dt = ds_followers_description;
-    
     if (sb_followers_total > ds_followers) {
     
-      // Milestone surpassed!
-      counter_dd = 0
-    
+      counter_dd = addCommas(sb_followers_total) + ' followers';
+      counter_dt = 'Previous milestone: ' + addCommas(ds_followers);
+      
     } else {
     
-      // Milestone not yet reached
-      counter_dd = addCommas(ds_followers - sb_followers_total)
+      counter_dd = addCommas(sb_followers_total) + ' followers';
+      counter_dt = addCommas(ds_followers - sb_followers_total) + ' to reach ' + addCommas(ds_followers);
       
-    }
+    }  
     
     $('#counter dd').text(counter_dd);
     
@@ -359,24 +443,6 @@ function spawn() {
   
   
 }
-
-function search() {
-  
-  // Clear the pool
-  clearPool();
-  
-  // Set the query
-  search_query = $('#search-input').val();
-  
-  
-  
-}
-
-function clearPool () {
-  pool = [];
-  pool_index = 0;
-}
-
 
 function init() {
 
@@ -456,12 +522,19 @@ function createBubble(type, data) {
   
   	case 'error':
       
-      element.className = 'bubble tweet error';
+      element.className = 'bubble error';
       element.innerHTML = buildBubbleError(data);
       pool.splice(pool_index, 1);
       pool_index --;
       break;
-
+  
+  	case 'search_presenter':
+      element.className = 'bubble search';
+      element.innerHTML = buildBubbleSearch(data);
+      pool.splice(pool_index, 1);
+      pool_index --;
+      break;
+      
 	}
 
 	element.style['position'] = 'absolute';
@@ -485,22 +558,26 @@ function createBubble(type, data) {
 	jquery_element.addClass(height_class);
 	
 	// Calculate size (excluding padding)
-	size = (0.5 * res.bubbleSize[res_current]) + (0.5 * height);
+	size = (0.5 * res.bubbleSizeMax[res_current]) + (0.5 * height);
 	
 	// Avoid size being bigger than the chimney
-	if (size > res.bubbleSize[res_current]) size = res.bubbleSize[res_current]
+	if (size > res.bubbleSizeMax[res_current]) size = res.bubbleSizeMax[res_current]
+	if (size < res.bubbleSizeMin[res_current]) size = res.bubbleSizeMin[res_current]
 	
 	element.width = size;
 	element.height = size;
 	
 	// Hover in and out behaviour
-  jquery_element.hover(function() {
+  jquery_element.hover(function(e) {
   
     // Bring bubble to front and fade in the bubble menu
     $(this).css({'z-index': '999'}).find("nav").fadeIn(20);
     
+    // If the mouse is on the left side of the screen
     // Send the FTM logo behind all the bubbles
-    $('header').css({'z-index': '10'});
+    if (e.pageX < 500) {
+      $('header').css({'z-index': '10'});
+    }
     
     // Find the correspondant Body and set it's userData.hover = true
   	for (var i = 0; i < bodies.length; i++) {
@@ -543,7 +620,7 @@ function createBubble(type, data) {
 	circle.density = 1;
 	circle.friction = 0.3;
   // Restitution is how elastic something is 0 being in elastic and 1 being totally elastic
-  circle.restitution = 0.4;
+  circle.restitution = 0.2;
 	circle.preventRotation = true;
 	
 	b2body.AddShape(circle);
@@ -724,6 +801,25 @@ function loop(){
 		  $(element).remove();
 		  
 		}
+		
+		// When bubbles are reaching the ceiling, right above the chimney,
+		// Make them move left/right instead of just creating a traffic jam
+		
+		if ((Math.abs(body.m_position0.x - (stage[2]/2)) < 200) && (newTop < 20)) {
+		
+		  if (Math.abs(body.m_linearVelocity.x) < 20 ) {
+		    if ((body.m_position0.x - (stage[2]/2)) < 0) {
+		      newx = -50;
+		    } else {
+		      newx = 50;
+		    }
+		    body.m_linearVelocity.Set(newx, body.m_linearVelocity.y);
+		  }
+		} else if (newTop < 20) {
+		
+		
+		}
+		
 
 	}
 
@@ -768,7 +864,7 @@ function createPoly(world, x, y, points, fixed) {
 
 function play() {
 	interval_loop = setInterval( loop, 1000 / 30 );
-	interval_spwan = setInterval(spawn, 3000);
+	interval_spwan = setInterval(spawn, 4000);
 }
 function pause() {
   clearInterval(interval_loop);
@@ -854,7 +950,7 @@ function buildBubbleTweet(data) {
   text = filterKeywords(text);
   
   html = '\
-		<header>\
+		<header class="">\
 			<h1><a href="http://twitter.com/' + username + '" title="' + username + '" rel="author external">' + username + '</a> wrote</h1>\
 			<time datetime="" pubdate><a href="http://twitter.com/' + username + '/status/' + data.id + '" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
 		</header>\
@@ -868,13 +964,13 @@ function buildBubbleTweet(data) {
 				<dt>Location</dt>\
 				<dd>' + user_location + '</dd>\
 				<dt>Web</dt>\
-				<dd><a href="' + user_url + '" rel="author external" title="Web">' + user_url.replace("http://", "").substr(0,15) + '</a></dd>\
+				<dd><a href="' + user_url + '" rel="author external" title="Web">' + friendlyTrim(user_url.replace("http://", ""), 14) + '</a></dd>\
 				<dt>Followers</dt>\
 				<dd>' + addCommas(followers_count) + '</dd>\
 				<dt>Retweets</dt>\
 				<dd>' + retweet_count + '</dd>\
 				<dt>Bio</dt>\
-				<dd>' + description.substr(0,40) + '</dd>\
+				<dd>' + friendlyTrim(description, 60) + '</dd>\
 			</dl>\
 		</section>\
 		<nav class="hide">\
@@ -925,6 +1021,14 @@ function buildBubbleError(data) {
 	return html;
 }
 
+function buildBubbleSearch(data) {
+  html = '\
+  	<h1>' + data.h1 + '</h1>\
+  	<p>' + data.p + '</p>\
+  ';
+	return html;
+}
+
 function throwError(explanation) {
   pool.splice(pool_index, 0, {type: 'error', data: explanation});
 }
@@ -960,22 +1064,34 @@ function create_urls(input) {
 
 function filterKeywords(input) {
   if (keywords) {
+  
+    // Highlight terms
     for (var key in keywords.highlights) {
       if (keywords.highlights.hasOwnProperty(key)) {
       
         // Replace keyword string: , becomes |, so it's the RegExp "or" operator
         fKwords = keywords.highlights[key].replace(/,/gi, '|');
-
-        // Space or : before
-        var reg = new RegExp('(\\s|:|^)(' + fKwords + ')', 'gi');
-        input = input.replace(reg, '$1<span class="mood ' + key + '">$2</span>');
         
-        // Space or : or , or ". " after
-        var reg = new RegExp('(' + fKwords + ')(\\s|:|(\\.\\s)|(\\,\\s)|$)', 'gi');
-        input = input.replace(reg, '<span class="mood ' + key + '">$1</span>$2');
+        if (fKwords != '') {
+          // Only if it has spaces, start of line
+          var reg = new RegExp('(\\s|:|^)(' + fKwords + ')(\\s|:\\s|(\\.\\s)|(\\,\\s)|$)', 'gi');
+          input = input.replace(reg, '$1<span class="mood ' + key + '">$2</span>$3');
+        }
         
       }
     }
+    
+    // Replace profanity
+    fKwords = keywords.excluded.replace(/,/gi, '|');
+    
+    if (fKwords != '') {
+      var reg = new RegExp('(\\s|:|^)(' + fKwords + ')', 'gi');
+      input = input.replace(reg, '$1#@*%');
+      
+      var reg = new RegExp('(' + fKwords + ')(\\s|:\\s|(\\.\\s)|(\\,\\s)|$)', 'gi');
+      input = input.replace(reg, '#@*%$2');
+    }
+    
   }
   return input;
 }
@@ -983,10 +1099,12 @@ function filterKeywords(input) {
 
 function datetimeCountdown(){
 
-  dateFuture = new Date(2010,06,7,9,0,0);
+  dateFuture = new Date('7/7/2010 09:00');
 
   //grab current date
-	dateNow = new Date();
+	localDate = new Date();
+	utc = localDate.getTime() + (localDate.getTimezoneOffset() * 60000);
+	dateNow = new Date(utc + (3600000*-7)); // *x, where x is the offset from UTC
 	
 	//calc milliseconds between dates
 	amount = dateFuture.getTime() - dateNow.getTime();
@@ -995,7 +1113,7 @@ function datetimeCountdown(){
 
 	// time is already past
 	if(amount < 0){
-		$('#counter dd').text('Countdown reached!');
+		$('#counter dd').text('We\'re there!');
 	}
 	// date is still good
 	else{
