@@ -633,11 +633,11 @@ article.bubble.tweet.firefox.high nav { background-image: url(../img/sd/bubbles-
 /* RT med */
 article.bubble.tweet.med,
 article.bubble.tweet.med .avatar-wrapper,
-article.bubble.tweet.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-med-sd.png); }
+article.bubble.tweet.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-sd.png); }
 
 article.bubble.tweet.firefox.med,
 article.bubble.tweet.firefox.med .avatar-wrapper,
-article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-med-sd.png); }
+article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-sd.png); }
 
 /* RT low */
 article.bubble.tweet.low,
