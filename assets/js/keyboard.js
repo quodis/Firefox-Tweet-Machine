@@ -41,6 +41,17 @@ $(document).ready(function(){
         return false;
       }
 
+    } else {
+    
+     if (e.keyCode == 27) {
+      // remove focus from search box when Esc is pressed
+        if ("console" in window) {
+        	console.log('pressed Esc - removing focus (blurring) search box');
+        }
+        $('input#search-input').blur();
+        return false;
+      };
+    
     };
   });
 

@@ -8,11 +8,8 @@ body {
 	color: #333;
 	font-family: Georgia, serif;
 	font-size: 13px;
-	line-height: 20px; /* baseline grid of 20px */
-	background-color: #ECF8FA;
-	background-image: url("../img/hd/machine-tubes-hd.png"), url("../img/hd/main-bg-hd.jpg");
-	background-position: bottom center;
-	background-repeat: no-repeat;
+	line-height: 25px; /* baseline grid of 20px */
+	background: #16A2B3 url("../img/global/main-loading.gif") center center no-repeat;
 	overflow: hidden;
 }
 /* ----------------------------------------- */
@@ -21,6 +18,17 @@ body {
 
 /* BEGIN Page Structure */
 /* ----------------------------------------- */
+div#page {
+	width: 100%;
+	height: 100%;
+	background-color: #ECF8FA;
+	background-image: url("../img/hd/machine-tubes-hd.png"), url("../img/hd/main-bg-hd.jpg");
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: relative;
+}
+
 header#brand {
 	position: absolute;
 	z-index: 40;
@@ -69,6 +77,12 @@ footer {
 
 /* brand */
 header#brand h1 {
+	display: block;
+}
+
+header#brand h1 a,
+header#brand h1 a:visited {
+	display: block;
 	width: 290px;
 	height: 156px;
 	background: transparent url(../img/hd/ftm-brand-logo-hd.png) no-repeat center center;
@@ -930,6 +944,16 @@ footer p.links a:hover {
 
 #colophon {
 	padding: 40px;
+}
+
+#colophon a,
+#colophon a:visited {
+	color: #FCB50D;
+	text-decoration: none;
+}
+
+#colophon a:hover {
+	color: #FDDA86;
 }
 
 #colophon h1 {
