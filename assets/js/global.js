@@ -9,8 +9,8 @@ var res = {
   cssFile: ['assets/css/ftm-sd.css', 'assets/css/ftm-hd.css'],
   gaugeIndicatorNeedleSrc: ['assets/img/sd/pressure-display-pointer-sd.png', 'assets/img/hd/pressure-display-pointer-hd.png'],
   spawnY: [-215, -280],
-  bubbleSizeMax: [180, 320],
-  bubbleSizeMin: [120, 210],
+  bubbleSizeMax: [200, 300],
+  bubbleSizeMin: [130, 190],
   avatarLeft: ['-22%', '-22%'],
   avatarTop: ['20px', '20px'],
   maxBubbles: [7, 7]
@@ -18,11 +18,11 @@ var res = {
 
 getBrowserDimensions();
 
-var worldAABB, world, iterations = 1, time_step = 1 / 40;
+var worldAABB, world, iterations = 1, time_step = 1 / 30;
 var walls = [];
 var wall_thickness = 200; // Seems to have no effect
 var wallsSetted = false;
-var bodies, elements, text, bubble_wrapper, search_query = '';
+var bodies = [], elements = [], text, bubble_wrapper, search_query = '';
 var PI2 = Math.PI * 2;
 
 var gravity_y = -50;
@@ -35,7 +35,7 @@ var spawn_y_impulse = -15;
 var spawn_y_impulse_inverted = -400;
 var spawn_y_impulse_current = spawn_y_impulse;
 
-var interval_spawn, interval_loop, timeout_data_interval, timeout_data_interval_time = (30*1000), timeout_getcustomsearch, fresh_custom_search = true;
+var interval_spawn, interval_loop, timeout_data_interval, timeout_data_interval_time = (60*1000), timeout_getcustomsearch, fresh_custom_search = true;
 
 var debug = false;
 
@@ -177,6 +177,37 @@ $(document).ready(function(){
   
 });
 
+
+
+function play() {
+	interval_loop = setInterval( loop, 1000 / 40 );
+	interval_spwan = setInterval(spawn, 4000);
+}
+
+function pause() {
+  clearInterval(interval_loop);
+  clearInterval(interval_spwan);
+}
+
+
+function init() {
+
+	bubble_wrapper = document.getElementById('bubbles');
+
+	// create and configure new world
+	worldAABB = new b2AABB();
+	worldAABB.minVertex.Set( -200, 0 );
+	worldAABB.maxVertex.Set( screen.width + 200, screen.height + 1000);
+
+  // allow objects to sleep, 
+  var doSleep = false;
+	world = new b2World( worldAABB, new b2Vec2( 0, 0 ), doSleep );
+  world.m_gravity.y = gravity_y;
+  
+  // set walls around the world
+	setWalls();
+
+}
 
 // Calculate at what the position the Gauge should be
 function calculateGauge() {
@@ -458,25 +489,6 @@ function spawn() {
   
 }
 
-function init() {
-
-	bubble_wrapper = document.getElementById('bubbles');
-
-	// create and configure new world
-	worldAABB = new b2AABB();
-	worldAABB.minVertex.Set( 0, 0 );
-	worldAABB.maxVertex.Set( screen.width, screen.height + 200 );
-
-  // allow objects to sleep, 
-  var doSleep = false;
-	world = new b2World( worldAABB, new b2Vec2( 0, 0 ), doSleep );
-  world.m_gravity.y = gravity_y;
-  
-  // set walls around the world
-	setWalls();
-	reset();
-}
-
 
 function createBubble(type, data) {
 
@@ -639,7 +651,7 @@ function createBubble(type, data) {
 	
 	b2body.AddShape(circle);
 	
-	// add the body to userData, so that all the elements can be addressed and manipulated later on, reset(); clears them all for eg.
+	// add the body to userData, so that all the elements can be addressed and manipulated later on
 	b2body.userData = {element: element, id: bubble_count, hover: false};
 
   // define position where the body will be spawned
@@ -806,8 +818,9 @@ function loop(){
     }
 
 		// Destroy bubble if it's out of the screen
-		if (((newLeft + Math.floor(element.width)) <= 1) ||
-		  (newLeft > stage[2])){
+		
+		if (((newLeft + Math.floor(element.width)) <= -100) ||
+		  (newLeft > (stage[2] + 100))){
 		  
 		  world.DestroyBody(body);
 		  bodies.splice(i, 1);
@@ -876,37 +889,9 @@ function createPoly(world, x, y, points, fixed) {
 	return world.CreateBody(polyBd);
 }
 
-function play() {
-	interval_loop = setInterval( loop, 1000 / 30 );
-	interval_spwan = setInterval(spawn, 4000);
-}
-function pause() {
-  clearInterval(interval_loop);
-  clearInterval(interval_spwan);
-}
 
-function reset() {
-
-	var i;
-
-	if ( bodies ) {
-
-		for ( i = 0; i < bodies.length; i++ ) {
-
-			var body = bodies[ i ]
-      $(bubble_wrapper).children().remove();
-			world.DestroyBody( body );
-			body = null;
-		}
-	}
-	
-	bodies = [];
-	elements = [];
-	
-}
 
 // BROWSER DIMENSIONS
-
 function getBrowserDimensions() {
 
 	stage[0] = window.screenX;
@@ -915,6 +900,7 @@ function getBrowserDimensions() {
 	stage[3] = window.innerHeight;
 	
   if ((stage[2] >= 1400) && (stage[3] >= 820)) {
+/*   if ((stage[2] >= 1000) && (stage[3] >= 600)) { */
     res_new = 1;
   } else {
     res_new = 0;

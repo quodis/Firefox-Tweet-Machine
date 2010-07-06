@@ -8,3 +8,13 @@ php_value docref_ext 0
   order allow,deny
   deny from all
 </Files>
+
+
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  
+  RewriteCond %{REQUEST_URI} !/unsupported.*
+  RewriteCond %{REQUEST_URI} !/assets/img/global/favicon.ico
+  RewriteCond %{HTTP_USER_AGENT} MSIE [NC]
+  RewriteRule ^(.*)$ /unsupported/ [L,R=301]
+</IfModule>

@@ -676,7 +676,7 @@ article.bubble.tweet.s { height: 150px; }
 	article.bubble.tweet.firefox.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xl-hd.png); }
 	
 	/* size l */
-	article.bubble.tweet.med.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-med-size-l-hd.png); }
+	article.bubble.tweet.med.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-l-hd.png); }
 	article.bubble.tweet.firefox.med.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-l-hd.png); }
 	
 	/* size m */
