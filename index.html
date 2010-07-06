@@ -19,7 +19,6 @@
 		
 		<link rel="stylesheet" href="assets/css/ftm-global.css" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="assets/css/colorbox.css" type="text/css" media="screen, projection" />
-		<!--<link href="assets/css/ftm-sd.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
 		<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold" rel="stylesheet" type="text/css">
 		
 		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
@@ -36,6 +35,7 @@
 		<script src='assets/js/jquery.timeago.js'></script>
 		<script src="assets/js/raphael-min.js"></script>
 		<script src='assets/js/jquery.colorbox-min.js'></script>
+		<script src='assets/js/jquery.history.js'></script>
 		<script src='assets/js/global.js'></script>
 		<script src="assets/js/gauge.js"></script>
 		<script src="assets/js/keyboard.js"></script>
@@ -47,7 +47,7 @@
 
 		<header id="brand">
 		
-			<h1>Firefox Tweet Machine</h1>
+			<h1><a href="/" title="Restart Firefox Tweet Machine">Firefox Tweet Machine</a></h1>
 			
 		</header>
 
@@ -98,8 +98,19 @@
 			<div id="colophon-wrapper">
 				<section id="colophon">
 					<h1>About the Machine</h1>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget nulla at nulla sollicitudin tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis nunc vel purus auctor et commodo mauris sodales. Aliquam neque sem, viverra dictum commodo in, euismod at dui.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eget nulla at nulla sollicitudin tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lobortis nunc vel purus auctor et commodo mauris sodales. Aliquam neque sem, viverra dictum commodo in, euismod at dui.</p>
+
+            <p>Firefox Tweet Machine is a visualization of Firefox activity on Twitter designed and put together for Mozilla by <a href="http://quodis.com/en/" rel="external">Quodis</a>.</p>
+            <p>It is an experiment with exclusively open web tools and technologies, and works on all modern browsers that support HTML5 and CSS3.</p>
+            
+            <p>Technologies used: <a href="http://dev.twitter.com/" rel="external">Twitter API's</a> (Search & REST);
+            <a href="http://box2d-js.sourceforge.net/" rel="external">Box2DJS</a> (<a href="http://kjam.org/post/105/" rel="external">ported to jQuery</a>) for the physics;
+            <a href="http://php.net/" rel="external">PHP</a>, <a href="http://benalman.com/projects/php-simple-proxy/" rel="external">Simple PHP Proxy</a>, <a href="http://memcached.org/" rel="external">Memcached</a>, <a href="http://code.google.com/p/spyc/" rel="external">YAML loader</a> and <a href="http://github.com/abraham/twitteroauth" rel="external">PHP Twitter OAuth</a> for the backend;
+            <a href="http://raphaeljs.com/" rel="external">Raphäel JS</a> for the gauge SVG animation;
+            <a href="http://jquery.com/" rel="external">jQuery</a> for easier javascript coding;
+            <a href="http://colorpowered.com/colorbox/" rel="external">ColorBox</a>, <a href="http://www.mikage.to/jquery/jquery_history.html" rel="external">history</a> and <a href="http://timeago.yarp.com/" rel="external">timeago</a> plugins and
+            <a href="http://topsy.com/" rel="external">Topsy</a> for the RT functions.</p>
+
+
 				</section>
 			</div>
 			<!-- colophon /-->

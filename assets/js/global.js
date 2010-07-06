@@ -9,8 +9,8 @@ var res = {
   cssFile: ['assets/css/ftm-sd.css', 'assets/css/ftm-hd.css'],
   gaugeIndicatorNeedleSrc: ['assets/img/sd/pressure-display-pointer-sd.png', 'assets/img/hd/pressure-display-pointer-hd.png'],
   spawnY: [-215, -301],
-  bubbleSizeMax: [200, 350],
-  bubbleSizeMin: [100, 220],
+  bubbleSizeMax: [180, 320],
+  bubbleSizeMin: [100, 210],
   avatarLeft: ['-22%', '-22%'],
   avatarTop: ['20px', '20px'],
   maxBubbles: [7, 7]
@@ -18,7 +18,7 @@ var res = {
 
 getBrowserDimensions();
 
-var worldAABB, world, iterations = 1, time_step = 1 / 24;
+var worldAABB, world, iterations = 1, time_step = 1 / 40;
 var walls = [];
 var wall_thickness = 200; // Seems to have no effect
 var wallsSetted = false;
@@ -31,7 +31,7 @@ var gravity_y_inverted = 150;
 // Time difference between 0 and 10th tweet from where gauge will be at 0
 var gauge_max_minutes = 20;
 
-var spawn_y_impulse = -30;
+var spawn_y_impulse = -15;
 var spawn_y_impulse_inverted = -400;
 var spawn_y_impulse_current = spawn_y_impulse;
 
@@ -75,6 +75,7 @@ var keywords;
   var ds_type;
   var ds_datetime;
   var ds_datetime_description;
+  var ds_datetime_reached;
   var ds_datetime_interval;
   
   var ds_followers;
@@ -109,8 +110,18 @@ $(document).ready(function(){
   
   getDataFromProxy();
   timeout_data = setTimeout(getDataFromProxy, timeout_data_interval);
-  
   play();
+
+
+	// History
+	function pageload(hash) {
+		if(hash) {
+		  $('#search-input').val(decodeURIComponent(hash.replace(/\+/g,  " ")));
+			search();
+		}
+	}
+	$.historyInit(pageload);
+
 
   $('#flow-transposer a').click(function(){
     var parent = $(this).parent();
@@ -139,6 +150,7 @@ $(document).ready(function(){
   })
   
   $("form#search-box").submit(function(){
+    $.historyLoad($('#search-input').val());
 		search();
 		return false;
 	});
@@ -220,6 +232,7 @@ function getDataFromProxy() {
       ds_type = data.contents.display.ds_type;
       ds_datetime = data.contents.display.ds_datetime;
       ds_datetime_description = data.contents.display.ds_datetime_description;
+      ds_datetime_reached = data.contents.display.ds_datetime_reached;
       ds_followers = data.contents.display.ds_followers;
       ds_followers_description = data.contents.display.ds_followers_description;
       ds_stats_facebook_shares = data.contents.display.ds_stats_facebook_shares;
@@ -366,7 +379,7 @@ function updateCountdown() {
   var counter_dt;
   clearInterval(ds_datetime_interval);
   
-  if (ds_type == 'datetime') {
+  if (ds_type == 'followers') {
   
     if (sb_followers_total > ds_followers) {
     
@@ -380,9 +393,9 @@ function updateCountdown() {
       
     }  
     
-    $('#counter dd').text(counter_dd);
+    $('#counter dd').text(counter_dd).attr('title', counter_dd);
     
-  } else if (ds_type == 'followers') {
+  } else if (ds_type == 'datetime') {
   
     //if (ds_datetime_description)
     counter_dt = ds_datetime_description;
@@ -397,7 +410,7 @@ function updateCountdown() {
     
   }
   
-  $('#counter dt').text(counter_dt);
+  $('#counter dt').text(counter_dt).attr('title', counter_dt);
 
 }
 
@@ -618,9 +631,9 @@ function createBubble(type, data) {
 	var circle = new b2CircleDef();
 	circle.radius = size >> 1;
 	circle.density = 1;
-	circle.friction = 0.3;
+	circle.friction = 0.6;
   // Restitution is how elastic something is 0 being in elastic and 1 being totally elastic
-  circle.restitution = 0.2;
+  circle.restitution = 0.3;
 	circle.preventRotation = true;
 	
 	b2body.AddShape(circle);
@@ -805,7 +818,7 @@ function loop(){
 		// When bubbles are reaching the ceiling, right above the chimney,
 		// Make them move left/right instead of just creating a traffic jam
 		
-		if ((Math.abs(body.m_position0.x - (stage[2]/2)) < 200) && (newTop < 20)) {
+		if ((Math.abs(body.m_position0.x - (stage[2]/2)) < 150) && (newTop < 20)) {
 		
 		  if (Math.abs(body.m_linearVelocity.x) < 20 ) {
 		    if ((body.m_position0.x - (stage[2]/2)) < 0) {
@@ -815,9 +828,9 @@ function loop(){
 		    }
 		    body.m_linearVelocity.Set(newx, body.m_linearVelocity.y);
 		  }
-		} else if (newTop < 20) {
+		} else if ((newTop < 2) && (body.m_linearVelocity.y < 0)) {
 		
-		
+		    body.m_linearVelocity.Set(body.m_linearVelocity.x, 40);
 		}
 		
 
@@ -900,7 +913,7 @@ function getBrowserDimensions() {
 	stage[2] = window.innerWidth;
 	stage[3] = window.innerHeight;
 	
-  if ((stage[2] > 1200) && (stage[3] > 600)) {
+  if ((stage[2] > 1400) && (stage[3] > 850)) {
     res_new = 1;
   } else {
     res_new = 0;
@@ -946,13 +959,30 @@ function buildBubbleTweet(data) {
     profile_image_size = 48;
   }
   
+  if (!real_name) real_name = "N/A";
+  if (!user_location) user_location = "N/A";
+  if (!followers_count) followers_count = "N/A";
+  if (!retweet_count) retweet_count = "N/A";
+  if (!description) description = "N/A";
+  if (!user_url) {
+    user_url = "N/A";
+  } else {
+    user_url = '<a href="' + user_url + '" rel="author external" title="Web">' + friendlyTrim(user_url.replace("http://", ""), 14) + '</a>';
+  }
+
   text = create_urls(data.text);
   text = filterKeywords(text);
+  created_at = new Date(data.created_at.substring(4));
+  
+  /*
+    <dt>Retweets</dt>\
+    <dd>' + retweet_count + '</dd>\
+  */
   
   html = '\
 		<header class="">\
 			<h1><a href="http://twitter.com/' + username + '" title="' + username + '" rel="author external">' + username + '</a> wrote</h1>\
-			<time datetime="" pubdate><a href="http://twitter.com/' + username + '/status/' + data.id + '" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
+			<time datetime="' + created_at + '" pubdate><a href="http://twitter.com/' + username + '/status/' + data.id + '" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
 		</header>\
 		<p class="avatar-wrapper"><a href="http://twitter.com/' + username + '" title="' + username + '" rel="author external"><img alt="' + username + ' avatar" src="\
 		' + profile_image_url + '" height="' + profile_image_size + '" width="' + profile_image_size + '" /></a></p>\
@@ -964,13 +994,11 @@ function buildBubbleTweet(data) {
 				<dt>Location</dt>\
 				<dd>' + user_location + '</dd>\
 				<dt>Web</dt>\
-				<dd><a href="' + user_url + '" rel="author external" title="Web">' + friendlyTrim(user_url.replace("http://", ""), 14) + '</a></dd>\
+				<dd>' + user_url + '</dd>\
 				<dt>Followers</dt>\
 				<dd>' + addCommas(followers_count) + '</dd>\
-				<dt>Retweets</dt>\
-				<dd>' + retweet_count + '</dd>\
 				<dt>Bio</dt>\
-				<dd>' + friendlyTrim(description, 60) + '</dd>\
+				<dd>' + friendlyTrim(description, 44) + '</dd>\
 			</dl>\
 		</section>\
 		<nav class="hide">\
@@ -1113,7 +1141,7 @@ function datetimeCountdown(){
 
 	// time is already past
 	if(amount < 0){
-		$('#counter dd').text('We\'re there!');
+		$('#counter dd').text(ds_datetime_reached).attr('title', ds_datetime_reached);
 	}
 	// date is still good
 	else{
@@ -1137,7 +1165,7 @@ function datetimeCountdown(){
 		if(days != 0 || hours != 0){out += hours +"h : ";}
 		if(days != 0 || hours != 0 || mins != 0){out += mins +"m : ";}
 		out += secs +"s";
-		$('#counter dd').text(out);
+		$('#counter dd').text(out).attr('title', out);;
 
 	}
 }

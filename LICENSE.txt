@@ -2,7 +2,7 @@
 
 The zlib/libpng License
 
-Copyright (c) 2008 ANDO Yasushi
+Box2D Copyright (c) 2008 ANDO Yasushi
 
 This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
 
@@ -16,29 +16,43 @@ Permission is granted to anyone to use this software for any purpose, including 
 
 ###############################################################
 
-// Script: Simple PHP Proxy: Get external HTML, JSON and more!
-//
-// *Version: 1.6, Last updated: 1/24/2009*
-// 
-// Project Home - http://benalman.com/projects/php-simple-proxy/
-// GitHub       - http://github.com/cowboy/php-simple-proxy/
-// Source       - http://github.com/cowboy/php-simple-proxy/raw/master/ba-simple-proxy.php
-// 
-// About: License
-// 
-// Copyright (c) 2010 "Cowboy" Ben Alman,
-// Dual licensed under the MIT and GPL licenses.
-// http://benalman.com/about/license/
-// 
-// About: Examples
-// 
-// This working example, complete with fully commented code, illustrates one way
-// in which this PHP script can be used.
-// 
-// Simple - http://benalman.com/code/projects/php-simple-proxy/examples/simple/
+Script: Simple PHP Proxy: Get external HTML, JSON and more!
+
+*Version: 1.6, Last updated: 1/24/2009*
+
+Project Home - http://benalman.com/projects/php-simple-proxy/
+GitHub       - http://github.com/cowboy/php-simple-proxy/
+Source       - http://github.com/cowboy/php-simple-proxy/raw/master/ba-simple-proxy.php
+
+About: License
+
+Copyright (c) 2010 "Cowboy" Ben Alman,
+Dual licensed under the MIT and GPL licenses.
+http://benalman.com/about/license/
+
+About: Examples
+
+This working example, complete with fully commented code, illustrates one way
+in which this PHP script can be used.
+
+Simple - http://benalman.com/code/projects/php-simple-proxy/examples/simple/
 
 ###############################################################
 
 abraham / twitteroauth
   http://twitteroauth.labs.poseurtech.com - http://github.com/abraham/twitteroauth
-  The first PHP Library to support OAuth for Twitter's REST API. — Read more
+  The first PHP Library to support OAuth for Twitter's REST API. — Read more  
+
+
+###############################################################
+
+/**
+   * Spyc -- A Simple PHP YAML Class
+   * @version 0.4.5
+   * @author Vlad Andersen <vlad.andersen@gmail.com>
+   * @author Chris Wanstrath <chris@ozmm.org>
+   * @link http://code.google.com/p/spyc/
+   * @copyright Copyright 2005-2006 Chris Wanstrath, 2006-2009 Vlad Andersen
+   * @license http://www.opensource.org/licenses/mit-license.php MIT License
+   * @package Spyc
+   */

@@ -446,9 +446,7 @@ article.bubble.tweet .avatar-wrapper a {
 	background-repeat: no-repeat;
 	background-color: transparent;
 	text-align: center;
-	-moz-transform: rotate(-5deg);
-	-webkit-transform: rotate(-5deg);
-	-o-transform: rotate(-5deg);
+	-moz-transform: rotate(-5deg); -webkit-transform: rotate(-5deg); -o-transform: rotate(-5deg);
 	padding: 4px;
 	border: 1px solid transparent;
 	margin: 15px auto 0 auto;
@@ -529,7 +527,7 @@ article.bubble.tweet dl {
 article.bubble.tweet dt {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 300;
-	font-size: 19px;
+	font-size: 18px;
 	color: #1A7B82;
 	float: left;
 	text-align: right;
@@ -730,7 +728,7 @@ article.bubble.time h1 {
 	font-size: 30px;
 	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/hd/special-icon-time.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-time-hd.png) no-repeat top center;
 }
 
 article.bubble.time p {
@@ -765,7 +763,7 @@ article.bubble.downloads h1 {
 	font-size: 30px;
 	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/hd/special-icon-downloads.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-downloads-hd.png) no-repeat top center;
 }
 
 article.bubble.downloads p {
@@ -805,7 +803,7 @@ article.bubble.followers h1 {
 	font-size: 30px;
 	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/hd/special-icon-followers.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-followers-hd.png) no-repeat top center;
 }
 
 article.bubble.followers p {
@@ -845,7 +843,7 @@ article.bubble.error h1 {
 	font-size: 30px;
 	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/hd/special-icon-error.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-error-hd.png) no-repeat top center;
 }
 
 article.bubble.error p {
@@ -880,7 +878,7 @@ article.bubble.search h1 {
 	font-size: 30px;
 	line-height: 30px;
 	font-weight: 300;
-	background: transparent url(../img/hd/special-icon-search.png) no-repeat top center;
+	background: transparent url(../img/hd/special-icon-search-hd.png) no-repeat top center;
 }
 
 article.bubble.search p {

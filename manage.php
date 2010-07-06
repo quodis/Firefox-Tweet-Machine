@@ -108,6 +108,8 @@
     <style type="text/css" media="all">
 			<!--
         p { font-style: italic !important; }
+        p.description { margin-top: 0 }
+        p.field.description { margin: 0; }
 			-->
     </style>
     <link href="assets/css/blueprint/src/reset.css" media="screen" rel="stylesheet" type="text/css" />
@@ -180,7 +182,7 @@
 
             <label for="allowed_admins">Allowed Administrators</label>
             <input id="allowed_admins" name="allowed_admins" type="text" size="100" value="<? print $config['allowed_admins']; ?>"/>
-            <p class="description field">comma separated list of twitter usernames allowed in the administration interface</p>
+            <p class="field description">comma separated list of twitter usernames allowed in the administration interface</p>
           </fieldset>
 
           <fieldset>
@@ -188,7 +190,7 @@
             
             <fieldset>
               <legend>Whitelisted User Details</legend>
-              <p>account credentials for the username used to request data to twitter, typically this should be a whitelisted user</p>
+              <p class="description">account credentials for the username used to request data to twitter, typically this should be a whitelisted user</p>
               
               <label for="whitelisted_username">User</label>
               <input id="whitelisted_username" name="whitelisted_username" type="text" value="<? print $config['whitelisted_username']; ?>"/>
@@ -201,7 +203,7 @@
 
             <fieldset>
               <legend>Timeline</legend>
-              <p>tweets from this user's timeline will be displayed among search results</p>
+              <p class="description">tweets from the specified user's timeline will be displayed along with search results, tweet count will limit the amount of twets to fetch</p>
 
               <label for="timeline_username">User</label>
               <input id="timeline_username" name="timeline_username" type="text" value="<? print $config['timeline_username']; ?>" />
@@ -220,8 +222,9 @@
 
             <fieldset>
               <legend>Search</legend>
+              <p class="description">configure the search results that will be presented to the user by default</p>
 
-              <label for="search_default_keyword">Default Keyword</label>
+              <label for="search_default_keyword">Keyword</label>
               <input id="search_default_keyword" name="search_default_keyword" type="text" value="<? print $config['search_default_keyword'] ?>" />
               <br />
 
@@ -240,24 +243,30 @@
          
           <fieldset>
             <legend>Triggers</legend>
+            <p class="description">conditions to spawn the special bubbles and configure downtown display</p>
 
             <fieldset>
               <legend>Special Bubbles</legend>
+              <p class="description">bubbles are spawned according to the following rules</p>
 
                 <label for="specialbubble_timeline_step">Timeline Step</label>
                 <input id="specialbubble_timeline_step" name="specialbubble_timeline_step" type="text" size="100" value="<? print $config['specialbubble_timeline_step']; ?>"/>
+                <p class="field description">spawn a timeline bubble after X search results</p>
                 <br />
 
                 <label for="specialbubble_followers_step">Followers Step</label>
                 <input id="specialbubble_followers_step" name="specialbubble_followers_step" type="text" size="100" value="<? print $config['specialbubble_followers_step']; ?>"/>
+                <p class="field description">announce followers bubble at each X new followers</p>
                 <br />
 
                 <label for="specialbubble_clock_step">Clock Step</label>
                 <input id="specialbubble_clock_step" name="specialbubble_clock_step" type="text" size="100" value="<? print $config['specialbubble_clock_step']; ?>"/>
+                <p class="field description">announce time each X minutes</p>
                 <br />
 
                 <label for="specialbubble_firefox_downloads_step">Downloads Step</label>
                 <input id="specialbubble_firefox_downloads_step" name="specialbubble_firefox_downloads_step" type="text" size="100" value="<? print $config['specialbubble_firefox_downloads_step']; ?>"/>
+                <p class="field description">spawn a downloads bubble after X new downloads</p>
                 <br />
 
 
@@ -272,13 +281,15 @@
                 <option value="datetime" <? if ($config['countdown_display_type'] == 'datetime') { print 'selected'; } ?>>Date</option>
                 <option value="followers" <? if ($config['countdown_display_type'] == 'followers') { print 'selected'; } ?>>Followers</option>
               </select>
+              <p class="field description">select either Date or Followers countdown type</p>
               <br />
 
               <fieldset id="datetime">
                 <legend>Date</legend>
 
-                <label for="countdown_display_datetime">Trigger</label>
+                <label for="countdown_display_datetime">Trigger Date</label>
                 <input id="countdown_display_datetime" name="countdown_display_datetime" type="text" size="100" value="<? print $config['countdown_display_datetime']; ?>"/>
+                <p class="field description"></p>
                 <br />
                 <label for="countdown_display_datetime_description">Description</label>
                 <input id="countdown_display_datetime_description" name="countdown_display_datetime_description" type="text" size="100" value="<? print $config['countdown_display_datetime_description']; ?>"/>
