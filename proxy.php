@@ -28,26 +28,22 @@ $cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://' . $_SERVER['
 // search
 $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
 // search keyword
-$search['keyword'] = ($_GET['q']) ? urlencode($_GET['q']) : (($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox');
+$search['keyword'] = (isset($_GET['q'])) ? urlencode($_GET['q']) : (($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox');
 // set search url from config file values
-$search['url'] = (($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent')  . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
+$search['url'] = ((isset($config['search_url'])) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent')  . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
 
 // ############################### set $url ##################################
 
 
 // if a URL is given, set it as $url and will proxy it
-if ($_GET['url']) {
-  $url = $_GET['url'];
-
 // if a keyword is given build the search url with it
-} else if ($_GET['q']) {
-  $url = $search['url'];
-}
+$url = ( isset($_GET['url']) ) ? $_GET['url'] : $search['url'];
+$header = '';
 
 // ############################### fetch the response data ##################################
 
 // get results from memcache if no url or keyword is given
-if ( !$_GET['url'] && !$_GET['q'] ) {
+if ( !isset($_GET['url']) && !isset($_GET['q']) ) {
 
   // connect to memcache
   $memcache = new Memcache;
@@ -115,7 +111,7 @@ if ( !$_GET['url'] && !$_GET['q'] ) {
 $header_text = preg_split( '/[\r\n]+/', $header );
 
 // if native mode is specified return the raw contents
-if ( $_GET['mode'] == 'native' ) {
+if ( isset($_GET['mode']) && ($_GET['mode'] == 'native') ) {
 
   // only return raw contents if allowed
   if ( !$enable_native ) {
@@ -139,7 +135,7 @@ if ( $_GET['mode'] == 'native' ) {
   $data['contents'] = $decoded_json ? $decoded_json : $contents;
   
   // Generate appropriate content-type header.
-  $is_xhr = strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+  $is_xhr = (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) ? strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' : '';
   header( 'Content-type: application/' . ( $is_xhr ? 'json' : 'x-javascript' ) );
   
   // Generate JSON/JSONP string

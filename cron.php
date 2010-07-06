@@ -19,19 +19,17 @@
     // whitelisted user
     $whitelisted['user'] = $config['whitelisted_username'];
     $whitelisted['password'] = $config['whitelisted_password'];
-    // retweeted_by
-    // !!! not in config file !!!
     // search
     $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
     $search['keyword'] = ($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox';
-    $search_url = ($config['search_url']) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent';
+    $search_url = (isset($config['search_url'])) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent';
     $search['url'] = $search_url . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
     // username timeline to cache
     $timeline['username'] = ($config['timeline_username']) ? $config['timeline_username'] : 'firefox';
     $timeline['count'] = ($config['timeline_count']) ? $config['timeline_count'] : 20 ;
     $timeline['url'] = ($config['timeline_url']) ? $config['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=';
     // firefox downloads
-    $stats['firefox_download_stats_url'] = ($config['firefox_download_stats_url']) ? $config['firefox_download_stats_url'] : 'http://www.mozilla.com/en-US/firefox/stats/total.php' ;
+    $stats['firefox_download_stats_url'] = (isset($config['firefox_download_stats_url'])) ? $config['firefox_download_stats_url'] : 'http://www.mozilla.com/en-US/firefox/stats/total.php' ;
       // this url isn't in the manage.php
     $stats['firefox_tweet_machine_stats_url'] = ($config['firefox_tweet_machine_stats_url']) ? $config['firefox_tweet_machine_stats_url'] : 'http://www.firefox.com/';
     $stats['firefox_tweet_machine_retweet_stats_url'] = 'http://otter.topsy.com/stats.json?url=' . $stats['firefox_tweet_machine_stats_url'];
