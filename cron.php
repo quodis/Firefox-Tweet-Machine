@@ -110,6 +110,7 @@ list( $header, $timeline_statuses ) = preg_split( '/([\r\n][\r\n])\\1/', curl_ex
 $status['timeline'] = curl_getinfo( $ch );
 echo('HTTP_CODE for TIMELINE: ' . $status['timeline']['http_code'] . "<br>\n");
 
+/*
 // check for 200 http code before fetching retweet counts
 if ( $status['timeline']['http_code'] == 200 ) {
 
@@ -146,6 +147,7 @@ if ( $status['timeline']['http_code'] == 200 ) {
   // clear the results on request error
   $timeline_statuses_decoded = '';
 };
+*/
 
 // close the curl session
 curl_close( $ch );
@@ -171,7 +173,7 @@ $display['ds_stats_facebook_shares'] = intval(reset($firefox_tweet_machine_faceb
 // store the search results
 $search_data = (!$search_results) ? '' : json_decode($search_results);
 // store the firefox timeline
-$timeline_data = (!$timeline_statuses_decoded) ? '' : $timeline_statuses_decoded;
+$timeline_data = (!$timeline_statuses) ? '' : json_decode($timeline_statuses);
 // store the triggers
 $default_data->special_bubbles = $special_bubbles;
 // store the display values

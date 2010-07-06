@@ -5,21 +5,14 @@
 		
 		<title>Firefox Tweet Machine</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=980" />
-		<meta http-equiv="x-ua-compatible" content="chrome=1">
 		<meta name="keywords" content="Mozilla,Firefox,Twitter,Tweet" />
-		<meta name="description" content="A Twitter Visualization" />
+		<meta name="description" content="Firefox Tweet Machine is a visualization of Firefox activity on Twitter." />
 		<meta name="author" content="Quodis, Mozilla" />
 		<meta name="copyright" content="© 2010" />
 		<meta name="distribution" content="global" />
 		
-		<!--[if lt IE 9]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		
 		<link rel="stylesheet" href="assets/css/ftm-global.css" type="text/css" media="screen, projection" />
 		<link rel="stylesheet" href="assets/css/colorbox.css" type="text/css" media="screen, projection" />
-		<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold" rel="stylesheet" type="text/css">
 		
 		<link rel="shortcut icon" href="assets/img/global/favicon.ico" />
 		<link rel="apple-touch-icon" type="image/png" href="assets/img/global/ftm-apple-touch-icon.png">
@@ -27,11 +20,7 @@
 
 		<!-- scripts -->
 		<script src="assets/js/jquery-1.4.2.min.js"></script>
-		
-		<!-- box2djs -->
-		<script src="assets/js/box2d-min.js"></script>
-		<!-- box2d /-->
-		
+		<script src="assets/js/box2d-min.js"></script>		
 		<script src="assets/js/preloadCssImages.jQuery_v5.js"></script>
 		<script src='assets/js/jquery.timeago.js'></script>
 		<script src="assets/js/raphael-min.js"></script>
@@ -41,6 +30,21 @@
 		<script src="assets/js/gauge.js"></script>
 		<script src="assets/js/keyboard.js"></script>
 		<script src="assets/js/preload.js"></script>
+		
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-133608-62']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+
 		<!-- scripts /-->
 
 	</head>
@@ -51,9 +55,7 @@
 		<div id="page">
 
 			<header id="brand">
-			
 				<h1><a href="/" title="Restart Firefox Tweet Machine">Firefox Tweet Machine</a></h1>
-				
 			</header>
 	
 			<!-- bubbles -->
@@ -65,7 +67,7 @@
 			<!-- machine -->
 			<section id="machine">
 	
-				<form id="search-box">
+				<form id="search-box" role="search">
 					<label for="search-input" accesskey="s">Search</label>
 					<input type="text" name="search-input" class="text" value="Search" id="search-input" tabindex="1">
 					<button name="search-bttn" type="submit" class="button" id="search-submit-bttn" title="Go!" value="Go!" tabindex="2">Go!</button>
@@ -73,7 +75,7 @@
 	
 				<ul id="machine-tools">
 					<li id="gravity-inverter" class="lever up"><a href="#" title="Invert world gravity (g)" accesskey="g">Invert world gravity</a></li>
-					<li id="pressure-indicator"><span class="value min">0</span> <span class="pointer">></span> <span class="value max">100</span></li>
+					<li id="pressure-indicator"><span class="value min">0</span> <span class="pointer" title="High activity">High activity</spanr> <span class="value max">100</span></li>
 					<li id="activity-indicator" class="off">Activity off</li>
 					<li id="flow-transposer" class="lever up"><a href="#" title="Pause tweet activity (p)" accesskey="p">Pause tweet activity</a></li>
 				</ul>
@@ -81,9 +83,9 @@
 				<dl id="social-tools" class="dashboard">
 					<dt class="twitter-follow"><a href="http://twitter.com/firefox" title="Follow on Twitter" rel="external">Follow</a></dt>
 					<dd class="twitter-follow"><a href="http://twitter.com/firefox/followers" title="View followers" rel="external"></a></dd>
-					<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&title=Firefox Tweet Machine&url=http://firefoxtweetmachine.com/" title="Retweet" rel="external">Retweet</a></dt>
+					<dt class="twitter-retweet"><a href="http://button.topsy.com/retweet?nick=firefox&amp;title=Firefox%20Tweet%20Machine&amp;url=http://firefoxtweetmachine.com/" title="Retweet" rel="external">Retweet</a></dt>
 					<dd class="twitter-retweet"><a href="http://topsy.com/firefoxtweetmachine.com/" title="View retweets" rel="external"></a></dd>
-					<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://firefoxtweetmachine.com/&amp;t=Firefox Tweet Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook" rel="external">Share</a></dt>
+					<dt class="fb-share"><a href="http://www.facebook.com/sharer.php?u=http://firefoxtweetmachine.com/&amp;t=Firefox%20Tweet%20Machine" onClick="window.open(this.href, 'facebook', 'toolbar=no, width=550, height=450'); return false;" title="Share on Facebook" rel="external">Share</a></dt>
 					<dd class="fb-share"><a href="#" onclick="return false;" title="Share on Facebook"></a></dd>
 				</dl>
 	
@@ -94,28 +96,30 @@
 	
 			</section>
 			<!-- machine /-->
-	
-			<footer>
 			
-				<p class="links"><a class="colorbox" href="#colophon" title="About the Machine (a)" accesskey="a">About the Machine</a> <a href="http://firefox.com/" title="Visit firefox.com">Visit firefox.com</a></p>
-				
-				<!-- colophon -->
-				<div id="colophon-wrapper">
-					<section id="colophon">
+			<!-- colophon -->
+			<div id="colophon-wrapper">
+				<section id="colophon">
+					<header>
 						<h1>About the Machine</h1>
-						<p>Firefox Tweet Machine is a visualization of Firefox activity on Twitter designed and put together for <a href="http://mozilla.com/" title="Mozilla" rel="external">Mozilla by <a href="http://quodis.com/en/" rel="external" title="Quodis">Quodis</a>.</p>
-						<p>It is an experiment with exclusively open web tools and technologies, and works on all modern browsers that support HTML5 and CSS3.</p>
-						<p>Technologies used: <a href="http://dev.twitter.com/" rel="external" title="Twitter API's">Twitter API's</a> (Search & REST);
-						<a href="http://box2d-js.sourceforge.net/" rel="external">Box2DJS</a> (<a href="http://kjam.org/post/105/" rel="external">ported to jQuery</a>) for the physics;
-						<a href="http://php.net/" rel="external">PHP</a>, <a href="http://benalman.com/projects/php-simple-proxy/" rel="external">Simple PHP Proxy</a>, <a href="http://memcached.org/" rel="external">Memcached</a>, <a href="http://code.google.com/p/spyc/" rel="external">YAML loader</a> and <a href="http://github.com/abraham/twitteroauth" rel="external">PHP Twitter OAuth</a> for the backend;
-						<a href="http://raphaeljs.com/" rel="external">Raphäel JS</a> for the gauge SVG animation;
-						<a href="http://jquery.com/" rel="external">jQuery</a> for easier javascript coding;
-						<a href="http://colorpowered.com/colorbox/" rel="external">ColorBox</a>, <a href="http://www.mikage.to/jquery/jquery_history.html" rel="external">history</a>, <a href="http://www.filamentgroup.com/lab/update_automatically_preload_images_from_css_with_jquery/" rel="external" title="Preload CSS Images">Preload CSS Images</a> and <a href="http://timeago.yarp.com/" rel="external">timeago</a> plugins and
-						<a href="http://topsy.com/" rel="external">Topsy</a> for the RT functions.</p>
-					</section>
-				</div>
-				<!-- colophon /-->
-			
+					</header>
+					<p>Firefox Tweet Machine is a visualization of Firefox activity on Twitter designed and put together by <a href="http://quodis.com/en/" rel="external" title="Quodis">Quodis</a> for <a href="http://mozilla.com/" title="Mozilla" rel="external">Mozilla</a>.</p>
+					<p>It is an experiment with exclusively open web tools and technologies, and works on all modern browsers that support HTML5 and CSS3.</p>
+					<p>Technologies used: <a href="http://dev.twitter.com/" rel="external" title="Twitter API's">Twitter API's</a> (Search & REST);
+					<a href="http://box2d-js.sourceforge.net/" rel="external">Box2DJS</a> (<a href="http://kjam.org/post/105/" rel="external">ported to jQuery</a>) for the physics;
+					<a href="http://php.net/" rel="external">PHP</a>, <a href="http://benalman.com/projects/php-simple-proxy/" rel="external">Simple PHP Proxy</a>, <a href="http://memcached.org/" rel="external">Memcached</a>, <a href="http://code.google.com/p/spyc/" rel="external">YAML loader</a> and <a href="http://github.com/abraham/twitteroauth" rel="external">PHP Twitter OAuth</a> for the backend;
+					<a href="http://raphaeljs.com/" rel="external">Raphäel JS</a> for the gauge SVG animation;
+					<a href="http://jquery.com/" rel="external">jQuery</a> for easier javascript coding;
+					<a href="http://colorpowered.com/colorbox/" rel="external">ColorBox</a>, <a href="http://www.mikage.to/jquery/jquery_history.html" rel="external">history</a>, <a href="http://www.filamentgroup.com/lab/update_automatically_preload_images_from_css_with_jquery/" rel="external" title="Preload CSS Images">Preload CSS Images</a> and <a href="http://timeago.yarp.com/" rel="external">timeago</a> plugins;
+					<a href="http://topsy.com/" rel="external">Topsy</a> for the RT functions;
+					<a href="http://www.yanone.de/" rel="external">Yanone Kaffeesatz</a> loaded through <a href="http://code.google.com/apis/webfonts/" rel="external">Google Font API</a> for the interface type and
+					<a href="" rel="external">The Lobster Font</a> for the logo.</p>
+				</section>
+			</div>
+			<!-- colophon /-->
+				
+			<footer role="contentinfo">
+				<p class="links"><a class="colorbox" href="#colophon" title="About the Machine (a)" accesskey="a">About the Machine</a> <a href="http://firefox.com/" title="Visit firefox.com">Visit firefox.com</a></p>		
 			</footer>
 		
 		</div>

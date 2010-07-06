@@ -289,7 +289,6 @@
 
                 <label for="countdown_display_datetime">Trigger Date</label>
                 <input id="countdown_display_datetime" name="countdown_display_datetime" type="text" size="100" value="<? print $config['countdown_display_datetime']; ?>"/>
-                <p class="field description"></p>
                 <br />
                 <label for="countdown_display_datetime_description">Description</label>
                 <input id="countdown_display_datetime_description" name="countdown_display_datetime_description" type="text" size="100" value="<? print $config['countdown_display_datetime_description']; ?>"/>
@@ -302,7 +301,7 @@
               <fieldset id="followers">
                 <legend>Followers</legend>
 
-                <label for="countdown_display_followers">Trigger</label>
+                <label for="countdown_display_followers">Milestone</label>
                 <input id="countdown_display_followers" name="countdown_display_followers" type="text" size="100" value="<? print $config['countdown_display_followers']; ?>"/>
                 <br />
                 <label for="countdown_display_followers_description">Description</label>
@@ -340,6 +339,7 @@
 
             <label for="keywords_excluded">Excluded</label>
             <input id="keywords_excluded" name="keywords_excluded" type="text" size="100" value="<? print $config['keywords_excluded']; ?>"/>
+            <p class="field description">excluded keywords will be replaced by random characters</p>
             
           </fieldset>
 
@@ -348,10 +348,12 @@
 
             <label for="firefox_tweet_machine_stats_url">Twitter/Facebook Stats URL</label>
             <input id="firefox_tweet_machine_stats_url" name="firefox_tweet_machine_stats_url" type="text" size="100" value="<? print $config['firefox_tweet_machine_stats_url']; ?>"/>
+            <p class="field description">URL for which to fetch stats</p>
             <br />
 
             <label for="firefox_download_stats_url">Firefox Downloads Source URL</label>
             <input id="firefox_download_stats_url" name="firefox_download_stats_url" type="text" size="100" value="<? print $config['firefox_download_stats_url']; ?>"/>
+            <p class="field description">URL for the firefox download stats json</p>
             <br />
 
           </fieldset>
@@ -379,10 +381,12 @@
 
             <label for="cron_on_demand">On Demand</label>
             <input id="cron_on_demand" name="cron_on_demand" type="checkbox" value="true" <? if ($config['cron_on_demand']) print 'checked="true"'; ?> />
+            <p class="field description">if enabled, the FTM client will attempt to fetch new data from twitter if there's none cached</p>
             <br/>
 
             <label for="cron_url">URL</label>
             <input id="cron_url" name="cron_url" type="text" size="100" value="<? print $config['cron_url']; ?>" />
+            <p class="field description">url of the cron.php script</p>
             <br/>
           </fieldset>
 

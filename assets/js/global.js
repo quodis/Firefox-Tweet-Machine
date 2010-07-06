@@ -8,9 +8,9 @@ var res = {
   name: ['sd', 'hd'],
   cssFile: ['assets/css/ftm-sd.css', 'assets/css/ftm-hd.css'],
   gaugeIndicatorNeedleSrc: ['assets/img/sd/pressure-display-pointer-sd.png', 'assets/img/hd/pressure-display-pointer-hd.png'],
-  spawnY: [-215, -301],
+  spawnY: [-215, -280],
   bubbleSizeMax: [180, 320],
-  bubbleSizeMin: [100, 210],
+  bubbleSizeMin: [120, 210],
   avatarLeft: ['-22%', '-22%'],
   avatarTop: ['20px', '20px'],
   maxBubbles: [7, 7]
@@ -35,7 +35,7 @@ var spawn_y_impulse = -15;
 var spawn_y_impulse_inverted = -400;
 var spawn_y_impulse_current = spawn_y_impulse;
 
-var interval_spawn, interval_loop, timeout_data, timeout_data_interval = (60*1000), timeout_getcustomsearch, fresh_custom_search = true;
+var interval_spawn, interval_loop, timeout_data_interval, timeout_data_interval_time = (30*1000), timeout_getcustomsearch, fresh_custom_search = true;
 
 var debug = false;
 
@@ -98,20 +98,20 @@ function loadCSS(file) {
 
 $(document).ready(function(){
   
-  
+  // On resize check dimensins and redraw walls
   $(window).resize(function() {
     getBrowserDimensions();
     setWalls();
   });
 
+  // Load SD or HD css file
   loadCSS(res.cssFile[res_current]);
   
   init();
-  
-  getDataFromProxy();
-  timeout_data = setTimeout(getDataFromProxy, timeout_data_interval);
   play();
 
+  // Set periodic refresh of data
+  timeout_data_interval = setInterval(getDataFromProxy, timeout_data_interval_time);
 
 	// History
 	function pageload(hash) {
@@ -122,7 +122,7 @@ $(document).ready(function(){
 	}
 	$.historyInit(pageload);
 
-
+  // Pause the world
   $('#flow-transposer a').click(function(){
     var parent = $(this).parent();
     if (parent.hasClass('up')) {
@@ -135,6 +135,7 @@ $(document).ready(function(){
     return false;
   })
   
+  // Invert the gravity
   $('#gravity-inverter a').click(function(){
     var parent = $(this).parent();
     if (world.m_gravity.y == gravity_y) {
@@ -149,6 +150,7 @@ $(document).ready(function(){
     return false;
   })
   
+  // Search form submit
   $("form#search-box").submit(function(){
     $.historyLoad($('#search-input').val());
 		search();
@@ -225,7 +227,6 @@ function getDataFromProxy() {
       
       sb_ffdownloads_step = data.contents.special_bubbles.sb_ffdownloads_step;
       sb_ffdownloads_total = data.contents.special_bubbles.sb_ffdownloads_total;
-      
       sb_followers_step = data.contents.special_bubbles.sb_followers_step;
       sb_timeline_step = data.contents.special_bubbles.sb_timeline_step;
       
@@ -246,7 +247,7 @@ function getDataFromProxy() {
         sb_followers_total = data.contents.timeline[0].user.followers_count;
         timeline_data = data.contents.timeline;
         timeline_data.reverse();
-      
+
       } else {
       
         throwError('Twitter REST API down');
@@ -721,14 +722,14 @@ function specialBubbleClockCheck() {
 
 function specialBubbleFFDownloadsCheck() {
   if (sb_ffdownloads_step > 0) {
-  
+
     if (sb_ffdownloads_last == 0) sb_ffdownloads_last = sb_ffdownloads_total;
     
     if ((sb_ffdownloads_total > sb_ffdownloads_last) &&
       (Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) > Math.floor(sb_ffdownloads_last / sb_ffdownloads_step))) {
       
       sb_ffdownloads_last = sb_ffdownloads_total;
-      pool.splice(pool_index, 0, {type: 'ffdownloads', data: Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) * sb_ffdownloads_step});
+      pool.splice(pool_index, 0, {type: 'ffdownloads', data: addCommas(Math.floor(sb_ffdownloads_total / sb_ffdownloads_step) * sb_ffdownloads_step)});
       
     }
   }
@@ -743,7 +744,7 @@ function specialBubbleFollowersCheck() {
       (Math.floor(sb_followers_total / sb_followers_step) > Math.floor(sb_followers_last / sb_followers_step))) {
       
       sb_followers_last = sb_followers_total;
-      pool.splice(pool_index, 0, {type: 'followers', data: Math.floor(sb_followers_total / sb_followers_step) * sb_followers_step});
+      pool.splice(pool_index, 0, {type: 'followers', data: addCommas(Math.floor(sb_followers_total / sb_followers_step) * sb_followers_step)});
       
     }
   }
@@ -913,7 +914,7 @@ function getBrowserDimensions() {
 	stage[2] = window.innerWidth;
 	stage[3] = window.innerHeight;
 	
-  if ((stage[2] > 1400) && (stage[3] > 850)) {
+  if ((stage[2] >= 1400) && (stage[3] >= 820)) {
     res_new = 1;
   } else {
     res_new = 0;

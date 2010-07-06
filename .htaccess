@@ -1,4 +1,8 @@
+php_flag display_errors on
+
 <Files ftm_config.yml>
   order allow,deny
   deny from all
 </Files>
+
+

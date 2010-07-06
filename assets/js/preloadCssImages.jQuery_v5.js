@@ -97,8 +97,11 @@
 							cssPile += text; // thisSheetRules[ruleIndex].style.cssText instead of thisSheetRules[ruleIndex].cssText is a huge speed improvement
 						}
 					} else if(thisSheetRules[ruleIndex].styleSheet) {
+            // fixes parsing of google font api @import, either comment this, create a conditional a skip google font api or all external css files
+/*
 						imported.push(thisSheetRules[ruleIndex].styleSheet);
 						w3cImport = true;
+*/
 					}
 					
 				}

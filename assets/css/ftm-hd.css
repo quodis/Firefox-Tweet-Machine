@@ -208,7 +208,7 @@ li#pressure-indicator {
 	background: transparent url(../img/hd/pressure-display-hd.png) no-repeat bottom center;
 }
 
-li#pressure-indicator span.value {
+li#pressure-indicator .value {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-weight: 400;
 	text-shadow: 0 1px #BDF0F4;
@@ -220,17 +220,17 @@ li#pressure-indicator span.value {
 	margin: 50px 0 0 0;
 }
 
-li#pressure-indicator span.value.min {
+li#pressure-indicator .value.min {
 	text-align: right;
 	float: left;
 }
 
-li#pressure-indicator span.value.max {
+li#pressure-indicator .value.max {
 	text-align: left;
 	float: right;
 }
 
-li#pressure-indicator span.pointer {
+li#pressure-indicator .pointer {
 	position: absolute;
 	z-index: 40;
 	bottom: 0;
@@ -905,40 +905,6 @@ article.bubble.search p {
 }
 /* bubbles  /*/
 
-/* footer */
-footer {
-	color: #0C5C66;
-}
-
-footer p.links {
-	margin: 30px 0 0 0;
-}
-
-footer p.links a,
-footer p.links a:visited {
-	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
-	font-weight: 300;
-	letter-spacing: 0.5px;
-	font-size: 20px;
-	color: #0C5C66;
-	-moz-border-radius: 9px;
-	-webkit-border-radius: 9px;
-	border-radius: 9px;
-	padding: 3px 9px;
-	text-shadow: 0 1px #BFEDEF;
-	text-transform: lowercase;
-	text-decoration: none;
-	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat top center;
-	margin: 0 4px;
-}
-
-footer p.links a:hover {
-	color: #C1E7EA;
-	text-shadow: 0 -1px #3C6868;
-	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat bottom center;
-	text-decoration: none;
-}
-
 /* colophon */
 #colophon-wrapper { display: none; }
 
@@ -1004,6 +970,41 @@ footer p.links a:hover {
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+}
+/* colophon /*/
+
+/* footer */
+footer {
+	color: #0C5C66;
+}
+
+footer p.links {
+	margin: 30px 0 0 0;
+}
+
+footer p.links a,
+footer p.links a:visited {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	letter-spacing: 0.5px;
+	font-size: 20px;
+	color: #0C5C66;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	border-radius: 9px;
+	padding: 3px 9px;
+	text-shadow: 0 1px #BFEDEF;
+	text-transform: lowercase;
+	text-decoration: none;
+	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat top center;
+	margin: 0 4px;
+}
+
+footer p.links a:hover {
+	color: #C1E7EA;
+	text-shadow: 0 -1px #3C6868;
+	background: transparent url(../img/hd/footer-bttn-hd.png) no-repeat bottom center;
+	text-decoration: none;
 }
 /* footer /*/
 
