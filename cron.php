@@ -32,7 +32,7 @@
     $stats['firefox_download_stats_url'] = (isset($config['firefox_download_stats_url'])) ? $config['firefox_download_stats_url'] : 'http://www.mozilla.com/en-US/firefox/stats/total.php' ;
       // this url isn't in the manage.php
     $stats['firefox_tweet_machine_stats_url'] = ($config['firefox_tweet_machine_stats_url']) ? $config['firefox_tweet_machine_stats_url'] : 'http://www.firefox.com/';
-    $stats['firefox_tweet_machine_retweet_stats_url'] = 'http://otter.topsy.com/stats.json?url=' . $stats['firefox_tweet_machine_stats_url'];
+    $stats['firefox_tweet_machine_retweet_stats_url'] = 'http://otter.topsy.com/trackbacks.json?url=' . $stats['firefox_tweet_machine_stats_url'];
     $stats['firefox_tweet_machine_facebook_stats_url'] = 'http://api.facebook.com/restserver.php?method=links.getStats&urls=' . $stats['firefox_tweet_machine_stats_url'];
     // Firefox Tweet Machine Version, if the client detects an upgrade the browser will refresh
     $fftm['version'] = (isset($config['fftm_version'])) ? $config['fftm_version'] : 1;
@@ -167,7 +167,7 @@ $display['ds_datetime_description'] = ($config['countdown_display_datetime_descr
 $display['ds_datetime_reached'] = ($config['countdown_display_datetime_reached']) ? $config['countdown_display_datetime_reached'] : 'We\'re there';
 $display['ds_followers'] = ($config['countdown_display_followers']) ? $config['countdown_display_followers'] : 5000;
 $display['ds_followers_description'] = ($config['countdown_display_followers_description']) ? $config['countdown_display_followers_description'] : 'Firefox download count just increased by 5000!';
-$display['ds_stats_retweets'] = json_decode($firefox_tweet_machine_retweet_stats)->response->all;
+$display['ds_stats_retweets'] = json_decode($firefox_tweet_machine_retweet_stats)->response->total;
 $display['ds_stats_facebook_shares'] = intval(reset($firefox_tweet_machine_facebook_stats->link_stat->share_count));
 
 // store the search results

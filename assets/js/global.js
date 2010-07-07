@@ -11,7 +11,7 @@ var res = {
   bubbleSizeMin: [130, 190],
   avatarLeft: ['-22%', '-22%'],
   avatarTop: ['20px', '20px'],
-  maxBubbles: [7, 7],
+  maxBubbles: [8, 10],
   logoWidth: [220, 310]
 }
 
@@ -85,6 +85,8 @@ var keywords;
   var ds_stats_retweets = 0;
   var ds_stats_facebook_shares = 0;
 
+var idleTimeout;
+var isIdle = true;
 
 function loadCSS(file) {
 	var link = document.createElement('link');
@@ -160,6 +162,15 @@ $(document).ready(function(){
 	// About button lightbox
 	$('a.colorbox').colorbox({ width:"40%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false, onComplete: function() { $.colorbox.resize(); } });
   
+  // Zero the idle timer on mouse movement.
+  // Limit is three seconds
+  $(this).mousemove(function(){
+    isIdle = false;
+    if (!idleTimeout) {
+      idleTimeout = setTimeout("setIdle()", 1000 * 3);
+    }
+  });
+   
   // handles the input field focus and blur behaviours
   input_field_values = new Array();
   // store all the input fields value in an array
@@ -177,7 +188,11 @@ $(document).ready(function(){
   
 });
 
-
+function setIdle() {
+  clearTimeout(idleTimeout);
+  idleTimeout = null;
+  isIdle = true;
+}
 
 function play() {
 	interval_loop = setInterval( loop, 1000 / 40 );
@@ -607,28 +622,34 @@ function createBubble(type, data) {
 	// Hover in and out behaviour
   jquery_element.hover(function() {
   
-    // Bring bubble to front and fade in the bubble menu
-    $(this).css({'z-index': '999'}).find("nav").fadeIn(20);
+    // Only if mouse isn't idle.
+    // Otherwise leaving the mouse on a spot
+    // Will create unwanted traffic jam
     
-    // If the bubble is covered by the logo
-    // Send the FTM logo behind all the bubbles
-//console.log($(this).left);
-
-    bubble_left = Math.floor($(this).css('left').replace('px', ''));
-    bubble_top = Math.floor($(this).css('top').replace('px', ''));
-
-    if (((bubble_left - res.logoWidth[res_current]) < 0) && ((bubble_top - 150) < 0)) {
-      $('header').css({'z-index': '10'});
-    }
-    
-    // Find the correspondant Body and set it's userData.hover = true
-  	for (var i = 0; i < bodies.length; i++) {
-  		if (bodies[i].m_userData.id == $(this).attr('id')) {
-  		  bodies[i].m_userData.hover = true;
-  		}
+    if (!isIdle) {
+      // Bring bubble to front and fade in the bubble menu
+      $(this).css({'z-index': '999'}).find("nav").fadeIn(20);
+      
+      // If the bubble is covered by the logo
+      // Send the FTM logo behind all the bubbles
+  //console.log($(this).left);
+  
+      bubble_left = Math.floor($(this).css('left').replace('px', ''));
+      bubble_top = Math.floor($(this).css('top').replace('px', ''));
+  
+      if (((bubble_left - res.logoWidth[res_current]) < 0) && ((bubble_top - 150) < 0)) {
+        $('header').css({'z-index': '10'});
+      }
+      
+      // Find the correspondant Body and set it's userData.hover = true
+    	for (var i = 0; i < bodies.length; i++) {
+    		if (bodies[i].m_userData.id == $(this).attr('id')) {
+    		  bodies[i].m_userData.hover = true;
+    		}
+    	}
   	}
     	
-  }, function() {
+  }, function() {  
   
     // Send the bubble back to it's original z-index and fade out the bubble menu
     $(this).css({'z-index': '10'}).find("nav").fadeOut(100);
