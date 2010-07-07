@@ -217,10 +217,10 @@ function calculateGauge() {
     var freshest_tweet_created_at = new Date(search_data[0].created_at);
     
     // Find the 10thest (or oldest tweet if there's lesse than 10)
-    if (search_data.length < 10) {
+    if (search_data.length <= 10) {
       var older_tweet_created_at = new Date(search_data[search_data.length-1].created_at);
     } else {
-      var older_tweet_created_at = new Date(search_data[10].created_at);
+      var older_tweet_created_at = new Date(search_data[10-1].created_at);
     }
     
     // Minutes of difference between first and last tweet

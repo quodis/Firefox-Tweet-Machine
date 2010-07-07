@@ -626,7 +626,7 @@ article.bubble.tweet.s { height: 150px; }
 
 /* opacity very high */
 
-	/* size xl */
+	/* size xxl */
 	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-xxl-hd.png); }
 	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-xxl-hd.png); }
 	
@@ -654,9 +654,9 @@ article.bubble.tweet.s { height: 150px; }
 
 /* opacity high */
 	
-	/* size xl */
-	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xxl-hd.png); }
-	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-xxl-hd.png); }
+	/* size xxl */
+	article.bubble.tweet.high.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.high.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-xxl-hd.png); }
 
 	/* size xl */
 	article.bubble.tweet.high.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xl-hd.png); }
@@ -682,9 +682,9 @@ article.bubble.tweet.s { height: 150px; }
 	
 /* opacity medium */
 
-	/* size xl */
-	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xxl-hd.png); }
-	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xxl-hd.png); }
+	/* size xxl */
+	article.bubble.tweet.med.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.med.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xxl-hd.png); }
 	
 	/* size xl */
 	article.bubble.tweet.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xl-hd.png); }
@@ -711,9 +711,9 @@ article.bubble.tweet.s { height: 150px; }
 
 /* opacity low */
 	
-	/* size xl */
-	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xxl-hd.png); }
-	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-xxl-hd.png); }
+	/* size xxl */
+	article.bubble.tweet.low.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.low.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-xxl-hd.png); }
 
 	/* size xl */
 	article.bubble.tweet.low.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xl-hd.png); }
