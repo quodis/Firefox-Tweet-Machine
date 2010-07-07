@@ -605,10 +605,10 @@ function createBubble(type, data) {
     // Send the FTM logo behind all the bubbles
 //console.log($(this).left);
 
-    left = Math.floor($(this).css('left').replace('px', ''));
-    top = Math.floor($(this).css('top').replace('px', ''));
-    
-    if ((left < res.logoWidth[res_current]) && (top < 150)) {
+    bubble_left = Math.floor($(this).css('left').replace('px', ''));
+    bubble_top = Math.floor($(this).css('top').replace('px', ''));
+
+    if (((bubble_left - res.logoWidth[res_current]) < 0) && ((bubble_top - 150) < 0)) {
       $('header').css({'z-index': '10'});
     }
     
