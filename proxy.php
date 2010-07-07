@@ -55,7 +55,12 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) ) {
   $default_data = array($memcache->get('default_data'));
   
   // build the contents json
-  $contents = json_encode(array_merge( array('search_results' => reset($search_data)), array('timeline' => reset($timeline_data)), array('special_bubbles' => reset($default_data)->special_bubbles), array('display' => reset($default_data)->display), array('keywords' => reset($default_data)->keywords))  );
+  $contents = json_encode(array_merge( 
+    array('search_results' => reset($search_data)), 
+    array('timeline' => reset($timeline_data)), 
+    array('special_bubbles' => reset($default_data)->special_bubbles), 
+    array('display' => reset($default_data)->display), array('keywords' => reset($default_data)->keywords), 
+    array('version' => reset($default_data)->fftm_version))  );
   
   // set status to ERROR if there are no contents, 200 OK otherwise
   $status = array( 'http_code' => ($contents == "false") ? 'ERROR' : 200 );

@@ -389,6 +389,13 @@
             <p class="field description">url of the cron.php script</p>
             <br/>
           </fieldset>
+          
+          <fieldset>
+            <legend>Other</legend>
+            
+            <label for="fftm_version">FTM Version</label>
+            <input id="fftm_version" name="fftm_version" type="text" value="<? print $config['fftm_version']; ?>"/>
+          </fieldset>
 
           <button>Save</button>
         </form>

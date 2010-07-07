@@ -34,6 +34,8 @@
     $stats['firefox_tweet_machine_stats_url'] = ($config['firefox_tweet_machine_stats_url']) ? $config['firefox_tweet_machine_stats_url'] : 'http://www.firefox.com/';
     $stats['firefox_tweet_machine_retweet_stats_url'] = 'http://otter.topsy.com/stats.json?url=' . $stats['firefox_tweet_machine_stats_url'];
     $stats['firefox_tweet_machine_facebook_stats_url'] = 'http://api.facebook.com/restserver.php?method=links.getStats&urls=' . $stats['firefox_tweet_machine_stats_url'];
+    // Firefox Tweet Machine Version, if the client detects an upgrade the browser will refresh
+    $fftm['version'] = (isset($config['fftm_version'])) ? $config['fftm_version'] : 1;
     
 // ############################################################################
 
@@ -178,6 +180,8 @@ $default_data->special_bubbles = $special_bubbles;
 $default_data->display = $display;
 // keywords
 $default_data->keywords = array('highlights' => array('green' => $config['keywords_highlights_green'], 'orange' => $config['keywords_highlights_orange'], 'pink' => $config['keywords_highlights_pink'], 'violet' => $config['keywords_highlights_violet']), 'excluded' => $config['keywords_excluded']);
+// firefox tweet machine version
+$default_data->fftm_version = $fftm['version'];
 
 // connect to memcache
 $memcache = new Memcache;

@@ -17,6 +17,7 @@ var res = {
 
 getBrowserDimensions();
 
+var version = '';
 var worldAABB, world, iterations = 1, time_step = 1 / 30;
 var walls = [];
 var wall_thickness = 200; // Seems to have no effect
@@ -270,6 +271,7 @@ function getDataFromProxy() {
       ds_stats_retweets = data.contents.display.ds_stats_retweets;
 
       keywords = data.contents.keywords;
+      checkVersion(data.contents.version);
       
       if (data.contents.timeline.length) {
         
@@ -316,6 +318,13 @@ function getDataFromProxy() {
 
 }
 
+// Force page refresh if server says so
+function checkVersion(newVersion) {
+  if ((newVersion != version) && (version != '')) {
+    window.location = window.location;
+  }
+  version = newVersion;
+}
 
 function search() {
   
