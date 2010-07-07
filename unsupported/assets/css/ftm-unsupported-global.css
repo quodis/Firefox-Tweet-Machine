@@ -1,0 +1,138 @@
+/* by Quodis © 2010 */
+
+/* Call to the Google Font API */
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:extralight,light,regular,bold);
+
+/* BEGIN General Styles */
+/* ----------------------------------------- */
+
+/* Global reset */
+/* Based upon 'reset.css' in the Yahoo! User Interface Library: http://developer.yahoo.com/yui */
+*, html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, label, fieldset, input, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+fieldset, img {
+	border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+
+ol, ul, li {
+	list-style: none;
+}
+
+caption, th {
+	text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+q:before,
+q:after {
+	content: '';
+}
+
+abbr, acronym {
+	border: 0;
+}
+
+/* Global reset-RESET */
+/* The below restores some sensible defaults */
+strong, b {
+	font-weight: bold;
+}
+
+em, i {
+	font-style: italic;
+}
+
+strike, s { text-decoration: line-through; }
+
+u { text-decoration: underline; }
+
+a img {
+	border: none; /* gets rid of IE's blue borders */
+} 
+
+p {
+	line-height: 20px;
+	margin-bottom: 20px;
+}
+
+body {
+	background: #16a2b3 url(../img/body-bg.png) repeat center center;
+	color: #FFF;
+	font-family: Georgia, serif;
+	font-size: 16px;
+	line-height: 20px; /* baseline grid of 20px */
+}
+
+a,
+a:visited {
+	color: #FFDA00;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h1 {
+  	display: block;
+	width: 210px;
+	height: 112px;
+	background: transparent url(../img/ftm-brand-logo.png) no-repeat center center;
+	overflow: hidden;
+	text-indent: -9999px;
+	margin: 0 auto 20px auto;
+}
+
+h2 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 30px;
+	line-height: 30px;
+	margin: 0 0 20px 0;
+}
+
+h3 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 24px;
+	line-height: 30px;
+	margin: 0 0 10px 0;
+	letter-spacing: 0.5px;
+}
+
+div#page {
+	overflow: visible;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	height: 1px;
+	width: 100%;
+	text-align: center;
+}
+
+div#container {
+	position: absolute;
+	top: -200px;
+	left: 50%;
+	width: 360px;
+	height: 400px;
+	margin-left: -180px;
+}

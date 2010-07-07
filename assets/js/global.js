@@ -1,5 +1,3 @@
-
-
 var stage = [ window.screenX, window.screenY, window.innerWidth, window.innerHeight ];
 
 var res_current = -1;
@@ -13,7 +11,8 @@ var res = {
   bubbleSizeMin: [130, 190],
   avatarLeft: ['-22%', '-22%'],
   avatarTop: ['20px', '20px'],
-  maxBubbles: [7, 7]
+  maxBubbles: [7, 7],
+  logoWidth: [220, 310]
 }
 
 getBrowserDimensions();
@@ -158,7 +157,7 @@ $(document).ready(function(){
 	});
 	
 	// About button lightbox
-	$('a.colorbox').colorbox({width:"40%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false});
+	$('a.colorbox').colorbox({ width:"40%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false, onComplete: function() { $.colorbox.resize(); } });
   
   // handles the input field focus and blur behaviours
   input_field_values = new Array();
@@ -384,6 +383,7 @@ function process_search_result() {
 
 // Remove all Search Results from pool
 function clearPool () {
+  search_data_max_id = 0;
   pool_index = 0;
   pool = [];
 /*
@@ -578,8 +578,10 @@ function createBubble(type, data) {
     height_class = "m";
 	} else if (height <= 250) {
     height_class = "l";
-	} else {
+	} else if (height <= 300) {
     height_class = "xl";
+	} else {
+    height_class = "xxl";
 	}
 	jquery_element.addClass(height_class);
 	
@@ -594,14 +596,19 @@ function createBubble(type, data) {
 	element.height = size;
 	
 	// Hover in and out behaviour
-  jquery_element.hover(function(e) {
+  jquery_element.hover(function() {
   
     // Bring bubble to front and fade in the bubble menu
     $(this).css({'z-index': '999'}).find("nav").fadeIn(20);
     
-    // If the mouse is on the left side of the screen
+    // If the bubble is covered by the logo
     // Send the FTM logo behind all the bubbles
-    if (e.pageX < 500) {
+//console.log($(this).left);
+
+    left = Math.floor($(this).css('left').replace('px', ''));
+    top = Math.floor($(this).css('top').replace('px', ''));
+    
+    if ((left < res.logoWidth[res_current]) && (top < 150)) {
       $('header').css({'z-index': '10'});
     }
     
@@ -899,8 +906,8 @@ function getBrowserDimensions() {
 	stage[2] = window.innerWidth;
 	stage[3] = window.innerHeight;
 	
-  if ((stage[2] >= 1400) && (stage[3] >= 820)) {
-/*   if ((stage[2] >= 1000) && (stage[3] >= 600)) { */
+	// If screen is as good as HD...
+  if ((stage[2] >= 1400) && (stage[3] >= 840)) {
     res_new = 1;
   } else {
     res_new = 0;
@@ -1114,7 +1121,7 @@ function filterKeywords(input) {
 
 function datetimeCountdown(){
 
-  dateFuture = new Date('7/7/2010 09:00');
+  dateFuture = new Date(ds_datetime);
 
   //grab current date
 	localDate = new Date();

@@ -851,7 +851,7 @@ article.bubble.search p {
 #colophon-wrapper { display: none; }
 
 #colophon {
-	padding: 40px;
+	padding: 40px 40px 10px 40px;
 }
 
 #colophon a,
@@ -868,6 +868,14 @@ article.bubble.search p {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-size: 24px;
 	line-height: 30px;
+	font-weight: 300;
+	margin: 0 0 20px 0;
+}
+
+#colophon h2 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-size: 20px;
+	line-height: 20px;
 	font-weight: 300;
 	margin: 0 0 20px 0;
 }
@@ -912,6 +920,10 @@ article.bubble.search p {
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+}
+
+#cboxLoadedContent {
+	margin: 0;
 }
 /* colophon /*/
 

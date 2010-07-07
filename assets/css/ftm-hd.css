@@ -609,6 +609,9 @@ article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
 article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
 article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
 
+/* size xxl */
+article.bubble.tweet.xxl { height: 350px; }
+
 /* size xl */
 article.bubble.tweet.xl { height: 300px; }
 
@@ -623,6 +626,10 @@ article.bubble.tweet.s { height: 150px; }
 
 /* opacity very high */
 
+	/* size xl */
+	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-xxl-hd.png); }
+	
 	/* size xl */
 	article.bubble.tweet.vhigh.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-veryhigh-size-xl-hd.png); }
 	article.bubble.tweet.firefox.vhigh.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-veryhigh-size-xl-hd.png); }
@@ -646,6 +653,10 @@ article.bubble.tweet.s { height: 150px; }
 	article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-nav-opa-veryhigh-hd.png); }
 
 /* opacity high */
+	
+	/* size xl */
+	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-xxl-hd.png); }
 
 	/* size xl */
 	article.bubble.tweet.high.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-xl-hd.png); }
@@ -672,6 +683,10 @@ article.bubble.tweet.s { height: 150px; }
 /* opacity medium */
 
 	/* size xl */
+	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xxl-hd.png); }
+	
+	/* size xl */
 	article.bubble.tweet.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-medium-size-xl-hd.png); }
 	article.bubble.tweet.firefox.med.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-medium-size-xl-hd.png); }
 	
@@ -695,6 +710,10 @@ article.bubble.tweet.s { height: 150px; }
 
 
 /* opacity low */
+	
+	/* size xl */
+	article.bubble.tweet.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xxl-hd.png); }
+	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-low-size-xxl-hd.png); }
 
 	/* size xl */
 	article.bubble.tweet.low.xl { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-low-size-xl-hd.png); }
@@ -909,7 +928,7 @@ article.bubble.search p {
 #colophon-wrapper { display: none; }
 
 #colophon {
-	padding: 40px;
+	padding: 40px 40px 10px 40px;
 }
 
 #colophon a,
@@ -926,6 +945,14 @@ article.bubble.search p {
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	font-size: 34px;
 	line-height: 40px;
+	font-weight: 300;
+	margin: 0 0 20px 0;
+}
+
+#colophon h2 {
+	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
+	font-size: 28px;
+	line-height: 30px;
 	font-weight: 300;
 	margin: 0 0 20px 0;
 }
@@ -970,6 +997,10 @@ article.bubble.search p {
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+}
+
+#cboxLoadedContent {
+	margin: 0;
 }
 /* colophon /*/
 
