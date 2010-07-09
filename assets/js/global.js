@@ -154,8 +154,8 @@ $(document).ready(function(){
   
   // Search form submit
   $("form#search-box").submit(function(){
-    $.historyLoad($('#search-input').val());
-		search();
+    search();
+    $.historyLoad(encodeURIComponent(search_query));
 		return false;
 	});
 	
@@ -358,7 +358,9 @@ function search() {
 
 function getCustomSearch() {
   
-  $.getJSON('http://search.twitter.com/search.json?callback=?&rpp=40&q=' + search_query, function(data) {
+  //if ($.browser.safari == 'false') { search_query_encoded = encodeURIComponent(search_query);	}
+  search_query_encoded = encodeURIComponent(search_query);
+  $.getJSON('http://search.twitter.com/search.json?callback=?&rpp=40&q=' + search_query_encoded, function(data) {
     if (data.results) {
       search_data = data.results;
       process_search_result();
