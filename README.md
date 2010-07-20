@@ -22,3 +22,21 @@ Upon first login a config file (ftm_config.yml) will be created in the root dire
 Every configuration field, except allowed admins and whitelisted username, has a hard coded default value,
 so the app should be up and running right after deployment unless the default values aren't appropriate
 ex: memcache host/port (localhost:11211), cron url(htp://[SERVER_NAME]/cron.php)
+
+**minimize javascript**
+
+cd assets/js
+java -jar ../misc/compiler.jar 
+--js=jquery-1.4.2.min.js 
+--js=box2d-min.js 
+--js=preloadCssImages.jQuery_v5.js 
+--js=jquery.timeago.js 
+--js=raphael-min.js 
+--js=jquery.colorbox-min.js 
+--js=jquery.history.js 
+--js=global.js 
+--js=gauge.js 
+--js=keyboard.js 
+--js=preload.js 
+--js=webtrends.js 
+--js_output_file=minimized.js
