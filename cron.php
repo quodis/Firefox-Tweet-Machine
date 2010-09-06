@@ -9,6 +9,13 @@
 // settings
   // include config file loader
   require_once "lib/yaml_loader.php";
+  // load Epi
+  include_once('lib/twitteroauth/EpiCurl.php');
+  include_once('lib/twitteroauth/EpiOAuth.php');
+  include_once('lib/twitteroauth/EpiTwitter.php');
+  include_once('lib/twitteroauth/secret.php');
+  // instantiate twitter object
+  $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $user_token, $user_secret_token);
 
   // memcache
   $ttl = ($config['memcache_ttl']) ? $config['memcache_ttl'] : '60';
@@ -27,7 +34,7 @@
     // username timeline to cache
     $timeline['username'] = ($config['timeline_username']) ? $config['timeline_username'] : 'firefox';
     $timeline['count'] = ($config['timeline_count']) ? $config['timeline_count'] : 20 ;
-    $timeline['url'] = ($config['timeline_url']) ? $config['timeline_url'] : 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=';
+    $timeline['url'] = '/statuses/user_timeline.xml';
     // firefox downloads
     $stats['firefox_download_stats_url'] = (isset($config['firefox_download_stats_url'])) ? $config['firefox_download_stats_url'] : 'http://www.mozilla.com/en-US/firefox/stats/total.php' ;
       // this url isn't in the manage.php
@@ -50,19 +57,12 @@ $ch = curl_init();
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
   // set curl timeout in seconds
   curl_setopt( $ch, CURLOPT_TIMEOUT, 15 );
-  
-  // init curl with http auth resource
-  $ch_auth = $ch;
-  if ($whitelisted['user'] && $whitelisted['password']) {
-    curl_setopt($ch_auth, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-    curl_setopt($ch_auth, CURLOPT_USERPWD, $whitelisted['user'] . ':' . $whitelisted['password']);  
-  }
 
 // query and store FTM retweet stats
 curl_setopt($ch, CURLOPT_URL, $stats['firefox_tweet_machine_retweet_stats_url']);
 list( $header, $firefox_tweet_machine_retweet_stats ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
 $status['firefox_tweet_machine_retweet_stats'] = curl_getinfo( $ch );
-echo('HTTP_CODE for RETWEET COUNT: ' . $status['firefox_tweet_machine_retweet_stats']['http_code'] . "<br>\n");
+/* echo('HTTP_CODE for RETWEET COUNT: ' . $status['firefox_tweet_machine_retweet_stats']['http_code'] . "<br>\n"); */
 
 // query and store Facebook share stats
 curl_setopt($ch, CURLOPT_URL, $stats['firefox_tweet_machine_facebook_stats_url']);
@@ -85,69 +85,17 @@ list( $header, $search_results ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec(
 $status['search'] = curl_getinfo( $ch );
 echo('HTTP_CODE for SEARCH: ' . $status['search']['http_code'] . "<br>\n");
 
-// DISABLED
-/*
-// we have to convert the json to an array beforehand, same issue as below when traversing through timeline statuses
-$search_results_decoded = json_decode($search_results)->results;
-
-// for each search result fetch the number of retweets
-foreach ($search_results_decoded as $id => $search_result) {
-
-  // fetch the user page
-  curl_setopt($ch, CURLOPT_URL, 'http://api.twitter.com/1/users/show.json?screen_name=' . $search_result->from_user);
-  // make 'the call'
-  list( $header, $user_profile ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-
-  // alter the original search result to include the user_profile_vcard array
-  $search_results_decoded[$id]->user = json_decode($user_profile);
-  
-}
-*/
-
 // query and store user timeline
-curl_setopt($ch_auth, CURLOPT_URL, $timeline['url'] . $timeline['username'] . '&count=' . $timeline['count']);
-list( $header, $timeline_statuses ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch_auth ), 2 );
-$status['timeline'] = curl_getinfo( $ch );
-echo('HTTP_CODE for TIMELINE: ' . $status['timeline']['http_code'] . "<br>\n");
+// make the request
+$request = $twitterObj->get($timeline['url'], array('screen_name' => $timeline['username'], 'count' => $timeline['count']));
+// set the contents, create SimpleXMLElement object
+$timeline_statuses_xml = new SimpleXMLElement($request->responseText);
+// convert to array
+$timeline_statuses_object_vars = get_object_vars($timeline_statuses_xml);
+// convert to json
+$timeline_statuses = json_encode($timeline_statuses_object_vars['status']);
 
-/*
-// check for 200 http code before fetching retweet counts
-if ( $status['timeline']['http_code'] == 200 ) {
-
-  // add retweet count to retweets from FF timeline
-  echo('<br />retweets: <br /><pre>');
-  
-  // debug
-  echo 'fetching retweet counts for ' . count(json_decode($timeline_statuses)) . ' statuses <br /><br />';
-  
-  // we have to convert the json to an array beforehand, json_decode($timeline_statuses)[$id] doesn't work =| oh PHP..
-  $timeline_statuses_decoded = json_decode($timeline_statuses);
-  
-  // for each timeline status fetch the number of retweets
-  foreach (json_decode($timeline_statuses) as $id => $timeline_status) {
-  
-    // configure the curl object
-    curl_setopt($ch_auth, CURLOPT_URL, 'http://api.twitter.com/1/statuses/' . $timeline_status->id . '/retweeted_by/ids.json?count=100');
-    // make 'the call'
-    list( $header, $timeline_status_retweets ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-  
-    // debug, show how many retweets for a given tweet
-    print($timeline_statuses_decoded[$id]->id . ' was retweeted: ' . count(json_decode($timeline_status_retweets)) . ' times.<br />');
-  
-    // add the retweet count to the tweet
-    $timeline_statuses_decoded[$id]->retweet_count = count(json_decode($timeline_status_retweets));
-    //echo('timeline_status retweets: ');
-    //print_r($timeline_statuses_decoded[$id]);
-    //exit();
-    
-  }
-  echo('</pre>');
-
-} else {
-  // clear the results on request error
-  $timeline_statuses_decoded = '';
-};
-*/
+echo('HTTP_CODE for TIMELINE: ' . $request->code . "<br>\n");
 
 // close the curl session
 curl_close( $ch );

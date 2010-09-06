@@ -15,8 +15,6 @@ var res = {
   logoWidth: [220, 310]
 }
 
-getBrowserDimensions();
-
 var version = '';
 var worldAABB, world, iterations = 1, time_step = 1 / 30;
 var walls = [];
@@ -24,7 +22,6 @@ var wall_thickness = 200; // Seems to have no effect
 var wallsSetted = false;
 var bodies = [], elements = [], text, bubble_wrapper, search_query = '';
 var PI2 = Math.PI * 2;
-
 var gravity_y = -50;
 var gravity_y_inverted = 150;
 
@@ -87,6 +84,8 @@ var keywords;
 
 var idleTimeout;
 var isIdle = true;
+
+getBrowserDimensions();
 
 function loadCSS(file) {
 	var link = document.createElement('link');
@@ -375,10 +374,14 @@ function getCustomSearch() {
   timeout_getcustomsearch = setTimeout(getCustomSearch, 1000 * 60 * 5)
 }
 
+
 function process_search_result() {
   
-  calculateGauge();    
+  calculateGauge();
   search_data.reverse();
+  
+  // Clean user information to lookup
+  var twitter_profiles_to_lookup = [];
   
   var i;
 	for (i = 0; i < search_data.length; i++) {
@@ -390,17 +393,47 @@ function process_search_result() {
     
     if (result.id > search_data_max_id) {
       pool.splice(pool_index, 0, {type: 'search', data: result});
+
+      // Add to pool of user information to lookup
+      twitter_profiles_to_lookup.push(result.from_user)
+
       search_data_max_id = result.id;
     }
     
 	}
 	
-  if ((search_query != '') && (fresh_custom_search)) {
+  // Get user information and apply them to the data
+  if (twitter_profiles_to_lookup.length > 0) {
+    $.getJSON('proxy.php?screen_names=' + twitter_profiles_to_lookup.toString(), function(data) {
+      if (data) {
+        // Loop through retrieved user information
+        for (i = 0; i < data.contents.length; i++) {
+          // Find all tweets by this user and complete the information
+          for (j = 0; j < pool.length; j++) {
+            if (pool[j].type == 'search') {
+              if (pool[j].data.from_user.toLowerCase() == data.contents[i].screen_name.toLowerCase()) {
+                pool[j].data.user = data.contents[i];
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+	
+	// If this is the first time results are processed
+  if (fresh_custom_search) {
     if (i == 0) {
-      pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1: 'Sorry', p: 'No results found'}});
+      pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1: 'Sorry', p: 'Zero tweets found'}});
     } else {
-      search_query_short = '"' + friendlyTrim(search_query,16) + '"';
-      pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_short}});
+      // If this is a custom search
+      if (search_query != '') {
+        search_query_short = '"' + friendlyTrim(search_query,16) + '"';
+        pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_short}});
+      // Standard initial search
+      } else {
+        pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing Firefox activity on twitter', p: ''}});
+      }
     }
     fresh_custom_search = false;
   }
@@ -533,7 +566,7 @@ function createBubble(type, data) {
 	var element = document.createElement("article");
 	
 	switch (type) {
-	
+	 
     case 'search':
   	
       element.className = 'bubble tweet vhigh';
@@ -955,27 +988,30 @@ function getBrowserDimensions() {
 
 function buildBubbleTweet(data) {
 
-  var real_name = '', username = '', profile_image_url = '', user_location, user_url = '', followers_count = '', retweet_count = '', description = '', text = '';
-      
-  if (data.user) {
+  var real_name = 'N/A', username = 'N/A', profile_image_url = 'N/A', user_location, user_url = 'N/A', followers_count = 'N/A', retweet_count = 'N/A', description = 'N/A', text = 'N/A';
   
-    // Timeline tweet
+  if (data.user) {
     real_name = data.user.name;
     username = data.user.screen_name;
     profile_image_url = data.user.profile_image_url;
     user_location = data.user.location;
-    user_url = data.user.url;
-    followers_count = data.user.followers_count;
-    retweet_count = data.retweet_count;
-    description = data.user.description;
     
-  } else {
-
-    // Search result
-    username = data.from_user;
-    profile_image_url = data.profile_image_url;
-
+    if (data.user.url) {
+      user_url = user_url = '<a href="' + data.user.url + '" rel="author external" title="Web">' + friendlyTrim(data.user.url.replace("http://", ""), 12) + '</a>';
+    }
+    
+    followers_count = data.user.followers_count;
+    description = data.user.description;
   }
+  
+  // Fallback for timeline results
+  if (data.from_user) {
+    username = data.from_user;
+  }
+  if (data.profile_image_url) {
+    profile_image_url = data.profile_image_url;
+  }
+  
   
   // If HD version, replace profile image with bigger version
   if (res_current == 1) {
@@ -984,26 +1020,10 @@ function buildBubbleTweet(data) {
   } else {
     profile_image_size = 48;
   }
-  
-  if (!real_name) real_name = "N/A";
-  if (!user_location) user_location = "N/A";
-  if (!followers_count) followers_count = "N/A";
-  if (!retweet_count) retweet_count = "N/A";
-  if (!description) description = "N/A";
-  if (!user_url) {
-    user_url = "N/A";
-  } else {
-    user_url = '<a href="' + user_url + '" rel="author external" title="Web">' + friendlyTrim(user_url.replace("http://", ""), 14) + '</a>';
-  }
 
   text = create_urls(data.text);
   text = filterKeywords(text);
   created_at = new Date(data.created_at.substring(4));
-  
-  /*
-    <dt>Retweets</dt>\
-    <dd>' + retweet_count + '</dd>\
-  */
   
   html = '\
 		<header class="">\
@@ -1018,14 +1038,22 @@ function buildBubbleTweet(data) {
 				<dt>Name</dt>\
 				<dd>' + real_name + '</dd>\
 				<dt>Location</dt>\
-				<dd>' + user_location + '</dd>\
-				<dt>Web</dt>\
-				<dd>' + user_url + '</dd>\
-				<dt>Followers</dt>\
-				<dd>' + addCommas(followers_count) + '</dd>\
-				<dt>Bio</dt>\
-				<dd>' + friendlyTrim(description, 44) + '</dd>\
-			</dl>\
+				<dd>' + user_location + '</dd>';
+				
+				if (user_url) {
+				  html = html + '\
+				  <dt>Web</dt>\
+				  <dd>' + user_url + '</dd>';
+				}
+				
+				if (description) {
+				  html = html + '\
+				  <dt>Bio</dt>\
+				  <dd>' + friendlyTrim(description, 44) + '</dd>';
+				}
+				
+		    html = html + '\
+		    </dl>\
 		</section>\
 		<nav class="hide">\
 			<ul>\

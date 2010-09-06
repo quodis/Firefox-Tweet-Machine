@@ -22,7 +22,7 @@ $valid_url_regex = '/.*/';
 $memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
 $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 // if true, this script will run the cron.php when there are no results in cache and client requests data as in: this script is executed ~comment by: Captain Obvious
-$cron_on_demand = ($config['cron_on_demand']) ? $config['cron_on_demand'] : false;
+$cron_on_demand = (isset($config['cron_on_demand'])) ? $config['cron_on_demand'] : false;
 // cron_url is actually cron php filename
 $cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://' . $_SERVER['SERVER_NAME'] . '/cron.php';
 // search
@@ -43,7 +43,7 @@ $header = '';
 // ############################### fetch the response data ##################################
 
 // get results from memcache if no url or keyword is given
-if ( !isset($_GET['url']) && !isset($_GET['q']) ) {
+if ( !isset($_GET['url']) && !isset($_GET['q']) && !isset($_GET['screen_names']) ) {
 
   // connect to memcache
   $memcache = new Memcache;
@@ -94,9 +94,30 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) ) {
   $status = array( 'http_code' => 'ERROR' );
 
 // proxy the contents of the parameter url
+} else if ( isset($_GET['screen_names']) ) {
+
+  // load Epi
+  include_once('lib/twitteroauth/EpiCurl.php');
+  include_once('lib/twitteroauth/EpiOAuth.php');
+  include_once('lib/twitteroauth/EpiTwitter.php');
+  include_once('lib/twitteroauth/secret.php');
+
+  // instantiate twitter object
+  $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $user_token, $user_secret_token);
+  // make the request
+  $request = $twitterObj->get('/users/lookup.json', array('screen_name' => $_GET['screen_names']));
+  // set the contents
+  $contents = json_encode($request->response);
+  // set the HTTP Auth 
+  $status['http_code'] = $request->code;
+
 } else {
   $ch = curl_init( $url );
-  
+
+  // setup twitter http auth
+  curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
+  curl_setopt( $ch, CURLOPT_USERPWD, 'fftweetmachine' . ':' . 'fftm2010!');  
+
   curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
   curl_setopt( $ch, CURLOPT_HEADER, true );
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );

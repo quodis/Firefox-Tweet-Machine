@@ -580,7 +580,7 @@ article.bubble.tweet nav li {
 	text-align: center;
 }
 
-article.bubble.tweet nav li.flip { display: none; -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
+article.bubble.tweet nav li.flip { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
 article.bubble.tweet nav li.retweet { -moz-transform: rotate(-3deg); -webkit-transform:rotate(-3deg); -o-transform:rotate(-3deg); }
 article.bubble.tweet nav li.follow { -moz-transform: rotate(3deg); -webkit-transform:rotate(3deg); -o-transform:rotate(3deg); }
 
