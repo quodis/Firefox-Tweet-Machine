@@ -424,7 +424,7 @@ article.bubble.tweet {
 	left: 40%;
 	width: 200px;
 	background-repeat: no-repeat;
-	background-color: transp arent;
+	background-color: transparent;
 	background-position: center center; 
 	padding: 40px;
 	font-size: 18px;
@@ -446,6 +446,7 @@ article.bubble.tweet .avatar-wrapper {
 	left: 50%; /* final: -22% */
 	width: 110px;
 	height: 110px;
+	background-color: transparent;
   	background-position: center center;
   	background-repeat: no-repeat;
   	margin: 0;
@@ -664,7 +665,7 @@ article.bubble.tweet.s { height: 150px; }
 	
 	/* size l */
 	article.bubble.tweet.high.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-l-hd.png); }
-	article.bubble.tweet.firefox.high.l med
+	article.bubble.tweet.firefox.high.l { background-image: url(../img/hd/bubbles-hd/bubble-tweet-firefox-opa-high-size-l-hd.png); }
 	
 	/* size m */
 	article.bubble.tweet.high.m { background-image: url(../img/hd/bubbles-hd/bubble-tweet-regular-opa-high-size-m-hd.png); }

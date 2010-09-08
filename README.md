@@ -25,18 +25,19 @@ ex: memcache host/port (localhost:11211), cron url(htp://[SERVER_NAME]/cron.php)
 
 **minimize javascript**
 
-cd assets/js
-java -jar ../misc/compiler.jar 
---js=jquery-1.4.2.min.js 
---js=box2d-min.js 
---js=preloadCssImages.jQuery_v5.js 
---js=jquery.timeago.js 
---js=raphael-min.js 
---js=jquery.colorbox-min.js 
---js=jquery.history.js 
---js=global.js 
---js=gauge.js 
---js=keyboard.js 
---js=preload.js 
---js=webtrends.js 
+cd assets/js ; \
+rm minimized.js ; \
+java -jar ../misc/compiler.jar \
+--js=jquery-1.4.2.min.js \
+--js=box2d-min.js \
+--js=preloadCssImages.jQuery_v5.js \
+--js=jquery.timeago.js \
+--js=raphael-min.js \
+--js=jquery.colorbox-min.js \
+--js=jquery.history.js \
+--js=global.js \
+--js=gauge.js \
+--js=keyboard.js \
+--js=preload.js \
+--js=webtrends.js \
 --js_output_file=minimized.js

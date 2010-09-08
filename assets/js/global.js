@@ -159,7 +159,7 @@ $(document).ready(function(){
 	});
 	
 	// About button lightbox
-	$('a.colorbox').colorbox({ width:"40%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false, onComplete: function() { $.colorbox.resize(); } });
+	$('a.colorbox').colorbox({ width:"50%", opacity:0.8, inline:true, href:"#colophon", title:' ', scrolling:false, onComplete: function() { $.colorbox.resize(); } });
   
   // Zero the idle timer on mouse movement.
   // Limit is three seconds
@@ -548,7 +548,41 @@ function spawn() {
   
 }
 
+function getHeightClass(height) {
+  var height_class = '';
+	if (res_current == 0) {
+    // SD
+      
+  	if (height <= 100) {
+      height_class = "s";
+  	} else if (height <= 140) {
+      height_class = "m";
+  	} else if (height <= 180) {
+      height_class = "l";
+  	} else if (height <= 220) {
+      height_class = "xl";
+  	} else {
+      height_class = "xxl";
+  	}
+  	
+	} else {
+    // HD
 
+  	if (height <= 150) {
+      height_class = "s";
+  	} else if (height <= 200) {
+      height_class = "m";
+  	} else if (height <= 250) {
+      height_class = "l";
+  	} else if (height <= 300) {
+      height_class = "xl";
+  	} else {
+      height_class = "xxl";
+  	}
+	}
+	return height_class;
+}
+	
 function createBubble(type, data) {
 
   // calculate the position, will be used to place the element once created
@@ -558,6 +592,7 @@ function createBubble(type, data) {
   bubble_count ++;
   var bubbleClass;
   var size;
+  var opacity;
   
   turnLampOn();
 	setTimeout(turnLampOff, lamp_time_on);
@@ -568,8 +603,30 @@ function createBubble(type, data) {
 	switch (type) {
 	 
     case 'search':
-  	
-      element.className = 'bubble tweet vhigh';
+      
+      // Variate the opacity of the bubble depending on the nr. of followers
+      // The higher the follower count, the whiter the bubble
+      
+      // default opacity
+      opacity = 'high';
+      
+      // Only calculate if there's info about the user
+    	if (data.user) {
+
+        followers_count = parseInt(data.user.followers_count);
+ 
+      	if (followers_count <= 100) {
+          opacity = 'low';
+      	} else if (followers_count <= 300) {
+          opacity = 'med';
+      	} else if (followers_count <= 600) {
+          opacity = 'high';
+      	} else {
+          opacity = 'vhigh';
+      	}
+    	}
+    	    	
+      element.className = 'bubble tweet ' + opacity;
       element.innerHTML = buildBubbleTweet(data);
       break;
       
@@ -631,18 +688,11 @@ function createBubble(type, data) {
 	$(bubble_wrapper).append(element);
 	
 	height = jquery_element.height();
-	if (height <= 150) {
-    height_class = "s";
-	} else if (height <= 200) {
-    height_class = "m";
-	} else if (height <= 250) {
-    height_class = "l";
-	} else if (height <= 300) {
-    height_class = "xl";
-	} else {
-    height_class = "xxl";
-	}
+	
+	height_class = getHeightClass(height);
+	
 	jquery_element.addClass(height_class);
+	$.data(jquery_element, 'height_class', height_class);
 	
 	// Calculate size (excluding padding)
 	size = (0.5 * res.bubbleSizeMax[res_current]) + (0.5 * height);
@@ -677,8 +727,10 @@ function createBubble(type, data) {
       }
       
       // Find the correspondant Body and set it's userData.hover = true
-    	for (var i = 0; i < bodies.length; i++) {
-    		if (bodies[i].m_userData.id == $(this).attr('id')) {
+      var max_i = bodies.length;
+      var this_id = $(this).attr('id');
+    	for (var i = 0; i < max_i; i++) {
+    		if (bodies[i].m_userData.id == this_id) {
     		  bodies[i].m_userData.hover = true;
     		}
     	}
@@ -701,8 +753,44 @@ function createBubble(type, data) {
     	
   });
   
+  // Flip button actions
   jquery_element.find('li.flip a').click(function(){
-    $(this).parents('.bubble').find('p.text, header, section').toggleClass('hide');
+    
+    // Find the correspondant Body
+    var max_i = bodies.length;
+    var this_id = $(this).parents('.bubble').attr('id');
+    var original_height_class = '';
+    for (var i = 0; i < max_i; i++) {
+    	if (bodies[i].m_userData.id == this_id) {
+    	  original_height_class = bodies[i].m_userData.height_class;
+    	}
+    }
+    
+    if ($(this).parents('.bubble').find('section').hasClass('hide')) {
+    
+      // Currently showing bubble front
+      $(this).parents('.bubble').find('p.text, header, section').toggleClass('hide');
+      
+      // Remove original height class
+      $(this).parents('.bubble').removeClass(original_height_class);
+      
+      // Calculate new height class
+      height = $(this).parents('.bubble').height();
+      new_height_class = getHeightClass(height);
+            
+      // Switch to maximum height
+      $(this).parents('.bubble').addClass(new_height_class);
+      
+    } else {
+  
+      // Switch to original height
+      $(this).parents('.bubble').removeClass('s m l xl xxl');
+      $(this).parents('.bubble').addClass(original_height_class);
+        
+      // Currently showing bubble back
+      $(this).parents('.bubble').find('p.text, header, section').toggleClass('hide');
+      
+    }
     return false;
   });
   
@@ -724,7 +812,7 @@ function createBubble(type, data) {
 	b2body.AddShape(circle);
 	
 	// add the body to userData, so that all the elements can be addressed and manipulated later on
-	b2body.userData = {element: element, id: bubble_count, hover: false};
+	b2body.userData = {element: element, id: bubble_count, hover: false, height_class: height_class};
 
   // define position where the body will be spawned
 	b2body.position.Set( x, y );
@@ -988,18 +1076,14 @@ function getBrowserDimensions() {
 
 function buildBubbleTweet(data) {
 
-  var real_name = 'N/A', username = 'N/A', profile_image_url = 'N/A', user_location, user_url = 'N/A', followers_count = 'N/A', retweet_count = 'N/A', description = 'N/A', text = 'N/A';
+  var real_name = '', username = '', profile_image_url = '', user_location = '', user_url = '', followers_count = '', retweet_count = '', description = '', text = '';
   
   if (data.user) {
     real_name = data.user.name;
     username = data.user.screen_name;
     profile_image_url = data.user.profile_image_url;
     user_location = data.user.location;
-    
-    if (data.user.url) {
-      user_url = user_url = '<a href="' + data.user.url + '" rel="author external" title="Web">' + friendlyTrim(data.user.url.replace("http://", ""), 12) + '</a>';
-    }
-    
+    user_url = data.user.url;
     followers_count = data.user.followers_count;
     description = data.user.description;
   }
@@ -1034,16 +1118,28 @@ function buildBubbleTweet(data) {
 		' + profile_image_url + '" height="' + profile_image_size + '" width="' + profile_image_size + '" /></a></p>\
 		<p class="text">' + text + '</p>\
 		<section class="hide">\
-			<dl>\
-				<dt>Name</dt>\
-				<dd>' + real_name + '</dd>\
-				<dt>Location</dt>\
-				<dd>' + user_location + '</dd>';
+			<dl>';
+			
+				if (real_name) {
+				  html = html + '\
+				  <dt>Name</dt>\
+				  <dd>' + real_name + '</dd>';
+				} else {
+				  html = html + '\
+				  <dt>Profile</dt>\
+				  <dd>N/A</dd>';
+				}
+				
+				if (user_location) {
+				  html = html + '\
+				  <dt>Location</dt>\
+				  <dd>' + user_location + '</dd>';
+				}
 				
 				if (user_url) {
 				  html = html + '\
 				  <dt>Web</dt>\
-				  <dd>' + user_url + '</dd>';
+				  <dd><a href="' + user_url + '" rel="author external" title="Web">' + friendlyTrim(user_url.replace("http://", ""), 12) + '</a></dd>';
 				}
 				
 				if (description) {

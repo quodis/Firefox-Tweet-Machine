@@ -420,14 +420,9 @@ article.bubble.tweet {
 	top: 20%;
 	left: 40%;
 	width: 140px;
-	height: auto;
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
+	background-position: center center;
 	padding: 30px;
 }
 
@@ -440,18 +435,13 @@ article.bubble.tweet h1 {
 	line-height: 20px;
 }
 
-
 article.bubble.tweet .avatar-wrapper {
 	position: absolute;
 	z-index: 10;
 	top: 50%; /* final: 20px	 */
 	left: 50%; /* final: -22% */
 	width: 80px;
-	width: 80px;
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
+	background-color: transparent;
   	background-position: center center;
   	background-repeat: no-repeat;
   	margin: 0;
@@ -473,6 +463,8 @@ article.bubble.tweet .avatar-wrapper a {
 
 article.bubble.tweet .avatar-wrapper img {
 	background: #FFF;
+	width: 50px;
+	height: 50px;
 }
 
 article.bubble.tweet p.text {
@@ -566,15 +558,11 @@ article.bubble.tweet nav {
 	top: 95px;
 	left: -20%;
 	width: 70px;
-	height: auto; 
+	height: 70px; 
 	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: center center;
-	-moz-background-size: 70px 100%;
-	-webkit-background-size: 70px 100%;
-  	-o-background-size: 70px 100%;
-  	background-size: 70px 100%;
-  	padding: 10px 0;
+  	padding: 10px 0 10px 0;
   	-moz-transform: rotate(-8deg); -webkit-transform:rotate(-8deg); -o-transform:rotate(-8deg);
 }
 
@@ -612,60 +600,146 @@ article.bubble.tweet nav li.retweet a:hover { background: #68902A; }
 article.bubble.tweet nav li.follow a, article.bubble.tweet nav li.follow a:visited { background: #17ABBD; }
 article.bubble.tweet nav li.follow a:hover { background: #117D8A; }
 
-/* RT vhigh */
-article.bubble.tweet.vhigh,
-article.bubble.tweet.vhigh .avatar-wrapper,
-article.bubble.tweet.vhigh nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-sd.png); }
+/* size xxl */
+article.bubble.tweet.xxl { height: 260px; }
 
-article.bubble.tweet.firefox.vhigh,
-article.bubble.tweet.firefox.vhigh .avatar-wrapper,
-article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-sd.png); }
+/* size xl */
+article.bubble.tweet.xl { height: 220px; }
 
-/* RT high */
-article.bubble.tweet.high,
-article.bubble.tweet.high .avatar-wrapper,
-article.bubble.tweet.high nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-sd.png); }
+/* size l */
+article.bubble.tweet.l { height: 180px; }
 
-article.bubble.tweet.firefox.high,
-article.bubble.tweet.firefox.high .avatar-wrapper,
-article.bubble.tweet.firefox.high nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-sd.png); }
+/* size m */
+article.bubble.tweet.m { height: 140px; }
 
-/* RT med */
-article.bubble.tweet.med,
-article.bubble.tweet.med .avatar-wrapper,
-article.bubble.tweet.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-sd.png); }
+/* size s */
+article.bubble.tweet.s { height: 100px; }
 
-article.bubble.tweet.firefox.med,
-article.bubble.tweet.firefox.med .avatar-wrapper,
-article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-sd.png); }
+/* opacity very high */
 
-/* RT low */
-article.bubble.tweet.low,
-article.bubble.tweet.low .avatar-wrapper,
-article.bubble.tweet.low nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-sd.png); }
+	/* size xxl */
+	article.bubble.tweet.vhigh.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-size-xxl-sd.png); }
+	article.bubble.tweet.firefox.vhigh.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-size-xxl-sd.png); }
+	
+	/* size xl */
+	article.bubble.tweet.vhigh.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-size-xl-sd.png); }
+	article.bubble.tweet.firefox.vhigh.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-size-xl-sd.png); }
+	
+	/* size l */
+	article.bubble.tweet.vhigh.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-size-l-sd.png); }
+	article.bubble.tweet.firefox.vhigh.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-size-l-sd.png); }
+	
+	/* size m */
+	article.bubble.tweet.vhigh.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-size-m-sd.png); }
+	article.bubble.tweet.firefox.vhigh.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-size-m-sd.png); }
+	
+	/* size s */
+	article.bubble.tweet.vhigh.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-veryhigh-size-s-sd.png); }
+	article.bubble.tweet.firefox.vhigh.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-veryhigh-size-s-sd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.vhigh .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-avatar-opa-veryhigh-sd.png); }
+	article.bubble.tweet.vhigh nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-nav-opa-veryhigh-sd.png); }
+	article.bubble.tweet.firefox.vhigh .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-avatar-opa-veryhigh-sd.png); }
+	article.bubble.tweet.firefox.vhigh nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-nav-opa-veryhigh-sd.png); }
 
-article.bubble.tweet.firefox.low,
-article.bubble.tweet.firefox.low .avatar-wrapper,
-article.bubble.tweet.firefox.low nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-sd.png); }
+/* opacity high */
+	
+	/* size xxl */
+	article.bubble.tweet.high.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-size-xxl-sd.png); }
+	article.bubble.tweet.firefox.high.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-size-xxl-sd.png); }
+
+	/* size xl */
+	article.bubble.tweet.high.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-size-xl-sd.png); }
+	article.bubble.tweet.firefox.high.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-size-xl-sd.png); }
+	
+	/* size l */
+	article.bubble.tweet.high.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-size-l-sd.png); }
+	article.bubble.tweet.firefox.high.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-size-l-sd.png); }
+	
+	/* size m */
+	article.bubble.tweet.high.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-size-m-sd.png); }
+	article.bubble.tweet.firefox.high.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-size-m-sd.png); }
+	
+	/* size s */
+	article.bubble.tweet.high.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-high-size-s-sd.png); }
+	article.bubble.tweet.firefox.high.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-high-size-s-sd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.high .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-avatar-opa-high-sd.png); }
+	article.bubble.tweet.high nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-nav-opa-high-sd.png); }
+	article.bubble.tweet.firefox.high .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-avatar-opa-high-sd.png); }
+	article.bubble.tweet.firefox.high nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-nav-opa-high-sd.png); }
+	
+/* opacity medium */
+
+	/* size xxl */
+	article.bubble.tweet.med.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-size-xxl-sd.png); }
+	article.bubble.tweet.firefox.med.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-size-xxl-sd.png); }
+	
+	/* size xl */
+	article.bubble.tweet.med.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-size-xl-sd.png); }
+	article.bubble.tweet.firefox.med.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-size-xl-sd.png); }
+	
+	/* size l */
+	article.bubble.tweet.med.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-size-l-sd.png); }
+	article.bubble.tweet.firefox.med.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-size-l-sd.png); }
+	
+	/* size m */
+	article.bubble.tweet.med.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-size-m-sd.png); }
+	article.bubble.tweet.firefox.med.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-size-m-sd.png); }
+	
+	/* size s */
+	article.bubble.tweet.med.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-medium-size-s-sd.png); }
+	article.bubble.tweet.firefox.med.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-medium-size-s-sd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.med .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-avatar-opa-medium-sd.png); }
+	article.bubble.tweet.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-nav-opa-medium-sd.png); }
+	article.bubble.tweet.firefox.med .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-avatar-opa-medium-sd.png); }
+	article.bubble.tweet.firefox.med nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-nav-opa-medium-sd.png); }
+
+
+/* opacity low */
+	
+	/* size xxl */
+	article.bubble.tweet.low.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-size-xxl-sd.png); }
+	article.bubble.tweet.firefox.low.xxl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-size-xxl-sd.png); }
+
+	/* size xl */
+	article.bubble.tweet.low.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-size-xl-sd.png); }
+	article.bubble.tweet.firefox.low.xl { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-size-xl-sd.png); }
+	
+	/* size l */
+	article.bubble.tweet.low.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-size-l-sd.png); }
+	article.bubble.tweet.firefox.low.l { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-size-l-sd.png); }
+	
+	/* size m */
+	article.bubble.tweet.low.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-size-m-sd.png); }
+	article.bubble.tweet.firefox.low.m { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-size-m-sd.png); }
+	
+	/* size s */
+	article.bubble.tweet.low.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-opa-low-size-s-sd.png); }
+	article.bubble.tweet.firefox.low.s { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-opa-low-size-s-sd.png); }
+	
+	/* avatar & nav */
+	article.bubble.tweet.low .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-avatar-opa-low-sd.png); }
+	article.bubble.tweet.low nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-regular-nav-opa-low-sd.png); }
+	article.bubble.tweet.firefox.low .avatar-wrapper { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-avatar-opa-low-sd.png); }
+	article.bubble.tweet.firefox.low nav { background-image: url(../img/sd/bubbles-sd/bubble-tweet-firefox-nav-opa-low-sd.png); }
 
 
 /* time bubble */
 article.bubble.time {
 	position: absolute;
 	z-index: 10;
-	/* top: 70%; */
-	/* left: 10%; */
 	width: 80px;
-	height: auto;
+	height: 120px;
 	background-image: url(../img/sd/bubbles-sd/bubble-time-sd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	background-position: center center;
+	padding: 30px 40px 50px 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
@@ -692,17 +766,13 @@ article.bubble.downloads {
 	z-index: 10;
 	top: 70%;
 	left: 10%;
-	width: 130px;
-	height: auto;
+	width: 120px;
+	height: 160px;
+	padding: 30px 40px 30px 40px;
 	background-image: url(../img/sd/bubbles-sd/bubble-downloads-sd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	background-position: center center;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
@@ -735,16 +805,12 @@ article.bubble.followers {
 	top: 30%;
 	left: 10%;
 	width: 120px;
-	height: auto;
+	height: 160px;
+	padding: 30px 40px 30px 40px;
 	background-image: url(../img/sd/bubbles-sd/bubble-downloads-sd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	background-position: center center;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
@@ -776,17 +842,13 @@ article.bubble.error {
 	z-index: 10;
 	top: 30%;
 	left: 10%;
-	width: 140px;
-	height: auto;
+	width: 120px;
+	height: 160px;
+	padding: 30px 40px 30px 40px;
 	background-image: url(../img/sd/bubbles-sd/bubble-error-sd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
@@ -814,17 +876,13 @@ article.bubble.search {
 	z-index: 10;
 	top: 30%;
 	left: 10%;
-	width: 140px;
-	height: auto;
+	width: 120px;
+	height: 160px;
+	padding: 30px 40px 30px 40px;
 	background-image: url(../img/sd/bubbles-sd/bubble-search-sd.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
-	background-position: center center; 
-	-moz-background-size: 100% 100%;
-	-webkit-background-size: 100% 100%;
-  	-o-background-size: 100% 100%;
-  	background-size: 100% 100%;
-	padding: 20px 40px 30px 40px;
+	background-position: center center;
 	font-family: "Yanone Kaffeesatz","Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", helvetica, sans-serif;
 	text-align: center;
 }
