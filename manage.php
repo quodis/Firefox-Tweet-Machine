@@ -31,13 +31,14 @@
     // save token and secret using cookies
     setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
     setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
-  }
 
-  // set token either from GET or stored COOKIE values
-  $twitterObj->setToken(($token->oauth_token) ? $token->oauth_token : $_COOKIE['fftm_tok'] , ($token->oauth_token_secret) ? $token->oauth_token_secret : $_COOKIE['fftm_sec']);
-  // authenticate with twitter
-  $twitterInfo= $twitterObj->get_accountVerify_credentials();
-  $twitterInfo->response;
+    // set token either from GET or stored COOKIE values
+    $twitterObj->setToken(($token->oauth_token) ? $token->oauth_token : $_COOKIE['fftm_tok'] , ($token->oauth_token_secret) ? $token->oauth_token_secret : $_COOKIE['fftm_sec']);
+    // authenticate with twitter
+    $twitterInfo= $twitterObj->get_accountVerify_credentials();
+    $twitterInfo->response;
+
+  }
 
   // if there are no allowed admins, and we're returning from twitter oauth (callback)
   if ( empty($config['allowed_admins']) && $_GET['oauth_token'] ) {
