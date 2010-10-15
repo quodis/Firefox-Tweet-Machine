@@ -214,11 +214,6 @@
               <input id="timeline_count" name="timeline_count" type="text" value="<? print $config['timeline_count']; ?>" />
               <br />
 
-<!--
-              <label for="timeline_url">Timeline URL</label>
-              <input id="timeline_url" name="timeline_url" type="text" size="100" value="<? print $config['timeline_url']; ?>" />
-              <br />
--->
             </fieldset>
 
             <fieldset>
@@ -232,12 +227,7 @@
               <label for="search_results_per_page">Results Count</label>
               <input id="search_results_per_page" name="search_results_per_page" type="text" value="<? print $config['search_results_per_page'] ?>" />
               <br />
-<!--
 
-              <label for="search_url">Search URL</label>
-              <input id="search_url" name="search_url" type="text" size="100" value="<? print $config['search_url']; ?>" />
-              <br />
--->
             </fieldset>
 
           </fieldset>

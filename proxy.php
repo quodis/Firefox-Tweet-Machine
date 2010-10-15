@@ -29,16 +29,6 @@ $cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://' . $_SERVER['
 $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
 // search keyword
 $search['keyword'] = (isset($_GET['q'])) ? urlencode($_GET['q']) : (($config['search_default_keyword']) ? urlencode($config['search_default_keyword']) : 'firefox');
-// set search url from config file values
-$search['url'] = ((isset($config['search_url'])) ? $config['search_url'] : 'http://search.twitter.com/search.json?result_type=recent')  . '&q=' . $search['keyword'] . '&rpp=' . $search['results_per_page'];
-
-// ############################### set $url ##################################
-
-
-// if a URL is given, set it as $url and will proxy it
-// if a keyword is given build the search url with it
-$url = ( isset($_GET['url']) ) ? $_GET['url'] : $search['url'];
-$header = '';
 
 // ############################### fetch the response data ##################################
 
@@ -86,13 +76,6 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) && !isset($_GET['screen_names'])
 
   }
 
-// if the url is invalid
-} else if ( !preg_match( $valid_url_regex, $url ) ) {
-  
-  // Passed url doesn't match $valid_url_regex.
-  $contents = 'ERROR: invalid url';
-  $status = array( 'http_code' => 'ERROR' );
-
 // proxy the contents of the parameter url
 } else if ( isset($_GET['screen_names']) ) {
 
@@ -111,24 +94,6 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) && !isset($_GET['screen_names'])
   // set the HTTP Auth 
   $status['http_code'] = $request->code;
 
-} else {
-  $ch = curl_init( $url );
-
-  // setup twitter http auth
-  curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-  curl_setopt( $ch, CURLOPT_USERPWD, 'fftweetmachine' . ':' . 'fftm2010!');  
-
-  curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-  curl_setopt( $ch, CURLOPT_HEADER, true );
-  curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-  
-  curl_setopt( $ch, CURLOPT_USERAGENT, $_GET['user_agent'] ? $_GET['user_agent'] : $_SERVER['HTTP_USER_AGENT'] );
-  
-  list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-  
-  $status = curl_getinfo( $ch );
-  
-  curl_close( $ch );
 }
 
 // ############################### build the response data ##################################
@@ -136,37 +101,21 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) && !isset($_GET['screen_names'])
 // Split header text into an array.
 $header_text = preg_split( '/[\r\n]+/', $header );
 
-// if native mode is specified return the raw contents
-if ( isset($_GET['mode']) && ($_GET['mode'] == 'native') ) {
+// $data will be serialized into JSON data.
+$data = array();
 
-  // only return raw contents if allowed
-  if ( !$enable_native ) {
-    $contents = 'ERROR: invalid mode';
-    $status = array( 'http_code' => 'ERROR' );
-  }
-  
-  print $contents;
+// Propagate all cURL request / response info to the JSON data object.
+$data['status']['http_code'] = $status['http_code'];
 
-// if native mode isn't specified return JSON data  
-} else {
-  
-  // $data will be serialized into JSON data.
-  $data = array();
-  
-  // Propagate all cURL request / response info to the JSON data object.
-  $data['status']['http_code'] = $status['http_code'];
-  
-  // Set the JSON data object contents, decoding it from JSON if possible.
-  $decoded_json = json_decode( $contents );
-  $data['contents'] = $decoded_json ? $decoded_json : $contents;
-  
-  // Generate appropriate content-type header.
-  $is_xhr = (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) ? strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' : '';
-  header( 'Content-type: application/' . ( $is_xhr ? 'json' : 'x-javascript' ) );
-  
-  // Generate JSON/JSONP string
-  print json_encode( $data );
-  
-}
+// Set the JSON data object contents, decoding it from JSON if possible.
+$decoded_json = json_decode( $contents );
+$data['contents'] = $decoded_json ? $decoded_json : $contents;
+
+// Generate appropriate content-type header.
+$is_xhr = (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) ? strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' : '';
+header( 'Content-type: application/' . ( $is_xhr ? 'json' : 'x-javascript' ) );
+
+// Generate JSON/JSONP string
+print json_encode( $data );
 
 ?>

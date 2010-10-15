@@ -346,8 +346,8 @@ function search() {
   clearPool();
   $('#search-submit-bttn').addClass('loading');
   
-  // Set the query
-  search_query = $('#search-input').val();
+  // Set the query and escape it to prevent xss
+  search_query = escape($('#search-input').val());
   
   fresh_custom_search = true;
   clearTimeout(timeout_getcustomsearch);
