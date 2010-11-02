@@ -3,7 +3,6 @@
 /**
  * @file proxy.php
  * fetches data from memcache if no params are specified
- *  if there's no data in memcache and cron_on_demand is true forces cron.php to fetch new data
  *
  * $_GET['q'] and $_GET['url'] take precedence over default values (although url will probably be dropped 'cos it's really unused and allows this script to be used for other purposes)
  *
@@ -21,10 +20,6 @@ $valid_url_regex = '/.*/';
 // memcache
 $memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
 $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
-// if true, this script will run the cron.php when there are no results in cache and client requests data as in: this script is executed ~comment by: Captain Obvious
-$cron_on_demand = (isset($config['cron_on_demand'])) ? $config['cron_on_demand'] : false;
-// cron_url is actually cron php filename
-$cron_url = ($config['cron_url']) ? $config['cron_url'] : 'http://' . $_SERVER['SERVER_NAME'] . '/cron.php';
 // search
 $search['results_per_page'] = ($config['search_results_per_page']) ? $config['search_results_per_page'] : 100;
 // search keyword
@@ -55,27 +50,6 @@ if ( !isset($_GET['url']) && !isset($_GET['q']) && !isset($_GET['screen_names'])
   // set status to ERROR if there are no contents, 200 OK otherwise
   $status = array( 'http_code' => ($contents == "false") ? 'ERROR' : 200 );
   
-  // force cache refresh when it expires
-  if ($contents == "false" && $cron_on_demand) {
-    // nothing in cache, forcing refresh
-    // init curl resource
-    $ch = curl_init();
-    // configure curl session
-      // return curl output instead of boolean
-      curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-      // set the url
-      curl_setopt($ch, CURLOPT_URL, $cron_url);
-      list( $header, $curl_result ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-      curl_close( $ch );
-      
-    // fetch the default_data
-    $contents = json_encode($memcache->get('default_data'));
-    
-    // Passed url not specified.
-    $status = array( 'http_code' => ($contents === "false") ? 'ERROR' : 200 );
-
-  }
-
 // proxy the contents of the parameter url
 } else if ( isset($_GET['screen_names']) ) {
 

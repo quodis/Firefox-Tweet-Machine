@@ -368,20 +368,6 @@
           </fieldset>
 
           <fieldset>
-            <legend>Cron</legend>
-
-            <label for="cron_on_demand">On Demand</label>
-            <input id="cron_on_demand" name="cron_on_demand" type="checkbox" value="true" <? if ($config['cron_on_demand']) print 'checked="true"'; ?> />
-            <p class="field description">if enabled, the FTM client will attempt to fetch new data from twitter if there's none cached</p>
-            <br/>
-
-            <label for="cron_url">URL</label>
-            <input id="cron_url" name="cron_url" type="text" size="100" value="<? print $config['cron_url']; ?>" />
-            <p class="field description">url of the cron.php script</p>
-            <br/>
-          </fieldset>
-          
-          <fieldset>
             <legend>Other</legend>
             
             <label for="fftm_version">FTM Version</label>

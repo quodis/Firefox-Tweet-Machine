@@ -15,6 +15,11 @@ php_value docref_ext 0
   
   RewriteCond %{REQUEST_URI} !/unsupported.*
   RewriteCond %{REQUEST_URI} !/assets/img/global/favicon.ico
-  RewriteCond %{HTTP_USER_AGENT} MSIE [NC]
+  RewriteCond %{HTTP_USER_AGENT} MSIE\ ([5678])\. [NC]
   RewriteRule ^(.*)$ /unsupported/ [L,R=301]
 </IfModule>
+
+<Files "cron.php">
+  Order Deny,Allow
+  Deny from all
+</Files>

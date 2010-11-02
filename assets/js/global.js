@@ -114,14 +114,17 @@ $(document).ready(function(){
   // Set periodic refresh of data
   timeout_data_interval = setInterval(getDataFromProxy, timeout_data_interval_time);
 
-	// History
-	function pageload(hash) {
-		if(hash) {
-		  $('#search-input').val(decodeURIComponent(hash.replace(/\+/g,  " ")));
-			search();
-		}
-	}
-	$.historyInit(pageload);
+  $.history.init(
+    function(hash){
+      if(hash == "") {
+        // initialize your app
+      } else {
+        $('#search-input').val(decodeURIComponent(hash));
+		    search();
+      }
+    },
+    { unescape: "" }
+  );
 
   // Pause the world
   $('#flow-transposer a').click(function(){
@@ -154,7 +157,7 @@ $(document).ready(function(){
   // Search form submit
   $("form#search-box").submit(function(){
     search();
-    $.historyLoad(encodeURIComponent(search_query));
+    $.history.load(search_query);
 		return false;
 	});
 	
@@ -347,7 +350,7 @@ function search() {
   $('#search-submit-bttn').addClass('loading');
   
   // Set the query and escape it to prevent xss
-  search_query = escape($('#search-input').val());
+  search_query = encodeURIComponent($('#search-input').val());
   
   fresh_custom_search = true;
   clearTimeout(timeout_getcustomsearch);
@@ -357,9 +360,7 @@ function search() {
 
 function getCustomSearch() {
   
-  //if ($.browser.safari == 'false') { search_query_encoded = encodeURIComponent(search_query);	}
-  search_query_encoded = encodeURIComponent(search_query);
-  $.getJSON('http://search.twitter.com/search.json?callback=?&rpp=40&q=' + search_query_encoded, function(data) {
+  $.getJSON('http://search.twitter.com/search.json?callback=?&rpp=40&q=' + search_query, function(data) {
     if (data.results) {
       search_data = data.results;
       process_search_result();
@@ -428,7 +429,7 @@ function process_search_result() {
     } else {
       // If this is a custom search
       if (search_query != '') {
-        search_query_short = '"' + friendlyTrim(search_query,16) + '"';
+        search_query_short = '"' + friendlyTrim(decodeURIComponent(search_query),16) + '"';
         pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_short}});
       // Standard initial search
       } else {
