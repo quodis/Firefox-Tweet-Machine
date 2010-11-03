@@ -19,7 +19,7 @@ php_value docref_ext 0
   RewriteRule ^(.*)$ /unsupported/ [L,R=301]
 </IfModule>
 
-<Files "cron.php">
-  Order Deny,Allow
-  Deny from all
-</Files>
+#<Files "cron.php">
+#  Order Deny,Allow
+#  Deny from all
+#</Files>
