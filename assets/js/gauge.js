@@ -4,15 +4,15 @@ $(document).ready(function(){
   if (!isAndroid()) {
   
     // define img source
-    gauge_indicator_needle_src = res.gaugeIndicatorNeedleSrc[res_current];
+    gauge_indicator_needle_src = res[res_current].gaugeIndicatorNeedleSrc;
     // define default angle
     gauge_indicator_needle_angle = -90;
     // get holder dom element and clear its contents
     $('.pointer').attr('id', 'pointer').text('');
     // place the raphael object inside the holder
-    R = Raphael("pointer", 70 * res.multiplier[res_current], 30 * res.multiplier[res_current]);
+    R = Raphael("pointer", 70 * res[res_current].multiplier, 30 * res[res_current].multiplier);
     // draw image in the holder
-    gauge_indicator_needle = R.image(gauge_indicator_needle_src, 30 * res.multiplier[res_current], -4 * res.multiplier[res_current], 8 * res.multiplier[res_current], 56 * res.multiplier[res_current]);
+    gauge_indicator_needle = R.image(gauge_indicator_needle_src, 30 * res[res_current].multiplier, -4 * res[res_current].multiplier, 8 * res[res_current].multiplier, 56 * res[res_current].multiplier);
     // fix possible webkit/safari rendering bug
     R.safari();
 
