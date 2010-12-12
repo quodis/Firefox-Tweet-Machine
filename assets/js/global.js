@@ -1,24 +1,38 @@
-var stage = [ window.screenX, window.screenY, window.innerWidth, window.innerHeight ];
 
+var stage = [ window.screenX, window.screenY, window.innerWidth, window.innerHeight ];
 var res_current = -1;
-var res = {
-  multiplier: [1, 1.4],
-  name: ['sd', 'hd'],
-  cssFile: ['assets/css/ftm-sd.css', 'assets/css/ftm-hd.css'],
-  gaugeIndicatorNeedleSrc: ['assets/img/sd/pressure-display-pointer-sd.png', 'assets/img/hd/pressure-display-pointer-hd.png'],
-  spawnY: [-215, -280],
-  bubbleSizeMax: [200, 300],
-  bubbleSizeMin: [130, 190],
-  avatarLeft: ['-22%', '-22%'],
-  avatarTop: ['20px', '20px'],
-  maxBubbles: [8, 10],
-  logoWidth: [220, 310]
-}
+
+// Standard RES and HD Res settings
+var res = [{
+    multiplier: 1,
+    name: 'sd',
+    cssFile: 'assets/css/ftm-sd.css',
+    gaugeIndicatorNeedleSrc: 'assets/img/sd/pressure-display-pointer-sd.png',
+    spawnY: -215,
+    bubbleSizeMax: 200,
+    bubbleSizeMin: 130,
+    avatarLeft: '-22%',
+    avatarTop: '20px',
+    maxBubbles: 8,
+    logoWidth: 220
+  }, {
+    multiplier: 1.4,
+    name: 'hd',
+    cssFile: 'assets/css/ftm-hd.css',
+    gaugeIndicatorNeedleSrc: 'assets/img/hd/pressure-display-pointer-hd.png',
+    spawnY: -280,
+    bubbleSizeMax: 300,
+    bubbleSizeMin: 190,
+    avatarLeft: '-22%',
+    avatarTop: '20px',
+    maxBubbles: 10,
+    logoWidth: 310
+}]
 
 var version = '';
 var worldAABB, world, iterations = 1, time_step = 1 / 30;
 var walls = [];
-var wall_thickness = 200; // Seems to have no effect
+var wall_thickness = 200;
 var wallsSetted = false;
 var bodies = [], elements = [], text, bubble_wrapper, search_query = '';
 var PI2 = Math.PI * 2;
@@ -106,7 +120,7 @@ $(document).ready(function(){
   });
 
   // Load SD or HD css file
-  loadCSS(res.cssFile[res_current]);
+  loadCSS(res[res_current].cssFile);
   
   init();
   play();
@@ -429,8 +443,11 @@ function process_search_result() {
     } else {
       // If this is a custom search
       if (search_query != '') {
-        search_query_short = '"' + friendlyTrim(decodeURIComponent(search_query),16) + '"';
-        pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_short}});
+        search_query_clean = decodeURIComponent(search_query);
+        search_query_clean = search_query_clean.replace("<", "&lt;");
+        search_query_clean = search_query_clean.replace(">", "&gt;");
+        search_query_clean = '"' + friendlyTrim(search_query_clean,16) + '"';
+        pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing results for', p: search_query_clean}});
       // Standard initial search
       } else {
         pool.splice(pool_index, 0, {type: 'search_presenter', data: {h1:'Showing Firefox activity on twitter', p: ''}});
@@ -446,13 +463,6 @@ function clearPool () {
   search_data_max_id = 0;
   pool_index = 0;
   pool = [];
-/*
-  for (var i = 0; i < pool.length; i++) {
-    if (pool[i].type = 'search') {
-      pool.splice(i, 1);
-    }
-  }
-  */
 }
 
 
@@ -528,7 +538,7 @@ function spawn() {
   if (pool.length == 0) return;
   
   // Check if there are too many bubbles on display
-  if (bodies.length >= res.maxBubbles[res_current]) return;
+  if (bodies.length >= res[res_current].maxBubbles) return;
   
   // Check if at end of pool
   // If so, resort it by id and delete whatever is over 40 results
@@ -589,7 +599,7 @@ function createBubble(type, data) {
   // calculate the position, will be used to place the element once created
   // could be changed to a fixed spawn point that'd match the machine chimney
 	var x = stage[2]/2;
-	var y = stage[3] + res.spawnY[res_current];
+	var y = stage[3] + res[res_current].spawnY;
   bubble_count ++;
   var bubbleClass;
   var size;
@@ -696,11 +706,11 @@ function createBubble(type, data) {
 	$.data(jquery_element, 'height_class', height_class);
 	
 	// Calculate size (excluding padding)
-	size = (0.5 * res.bubbleSizeMax[res_current]) + (0.5 * height);
+	size = (0.5 * res[res_current].bubbleSizeMax) + (0.5 * height);
 	
 	// Avoid size being bigger than the chimney
-	if (size > res.bubbleSizeMax[res_current]) size = res.bubbleSizeMax[res_current]
-	if (size < res.bubbleSizeMin[res_current]) size = res.bubbleSizeMin[res_current]
+	if (size > res[res_current].bubbleSizeMax) size = res[res_current].bubbleSizeMax
+	if (size < res[res_current].bubbleSizeMin) size = res[res_current].bubbleSizeMin
 	
 	element.width = size;
 	element.height = size;
@@ -723,7 +733,7 @@ function createBubble(type, data) {
       bubble_left = Math.floor($(this).css('left').replace('px', ''));
       bubble_top = Math.floor($(this).css('top').replace('px', ''));
   
-      if (((bubble_left - res.logoWidth[res_current]) < 0) && ((bubble_top - 150) < 0)) {
+      if (((bubble_left - res[res_current].logoWidth) < 0) && ((bubble_top - 150) < 0)) {
         $('header').css({'z-index': '10'});
       }
       
@@ -795,7 +805,7 @@ function createBubble(type, data) {
     return false;
   });
   
-  $(bubble_wrapper).find('.avatar-wrapper').delay(500).animate({left: res.avatarLeft[res_current], top: res.avatarTop[res_current]}, 1000);
+  $(bubble_wrapper).find('.avatar-wrapper').delay(500).animate({left: res[res_current].avatarLeft, top: res[res_current].avatarTop}, 1000);
 	elements.push( element );
 
   // create a new box2d body
@@ -845,27 +855,27 @@ function setWalls() {
 
   // arguments: world, x, y, width, height, fixed
   // top box wall
-  walls[0] = createBox(world, stage[2] / 2, 0, stage[2], (10 * res.multiplier[res_current]));
+  walls[0] = createBox(world, stage[2] / 2, 0, stage[2], (10 * res[res_current].multiplier));
 
   // bottom machine base box
-	walls[1] = createBox(world, stage[2] / 2, stage[3], stage[2], (100 * res.multiplier[res_current]));
+	walls[1] = createBox(world, stage[2] / 2, stage[3], stage[2], (100 * res[res_current].multiplier));
 	
 	// machine polygon left
-	walls[2] = createPoly(world, (stage[2] / 2) + (100 * res.multiplier[res_current]), (stage[3] - (330 * res.multiplier[res_current])), [
-    [(10 * res.multiplier[res_current]), 0],
-    [(40 * res.multiplier[res_current]), 0],
-    [(110 * res.multiplier[res_current]), (60 * res.multiplier[res_current])],
-    [(110 * res.multiplier[res_current]), (330 * res.multiplier[res_current])],
-    [0, (330 * res.multiplier[res_current])]
+	walls[2] = createPoly(world, (stage[2] / 2) + (100 * res[res_current].multiplier), (stage[3] - (330 * res[res_current].multiplier)), [
+    [(10 * res[res_current].multiplier), 0],
+    [(40 * res[res_current].multiplier), 0],
+    [(110 * res[res_current].multiplier), (60 * res[res_current].multiplier)],
+    [(110 * res[res_current].multiplier), (330 * res[res_current].multiplier)],
+    [0, (330 * res[res_current].multiplier)]
   ], true);
   
   // machine polygon right
-  walls[3] = createPoly(world, (stage[2] / 2) - (210 * res.multiplier[res_current]), (stage[3] - (330 * res.multiplier[res_current])), [
-    [(70 * res.multiplier[res_current]), 0],
-    [(100 * res.multiplier[res_current]), 0],
-    [(110 * res.multiplier[res_current]), (330 * res.multiplier[res_current])],
-    [0, (330 * res.multiplier[res_current])],
-    [0, (60 * res.multiplier[res_current])]
+  walls[3] = createPoly(world, (stage[2] / 2) - (210 * res[res_current].multiplier), (stage[3] - (330 * res[res_current].multiplier)), [
+    [(70 * res[res_current].multiplier), 0],
+    [(100 * res[res_current].multiplier), 0],
+    [(110 * res[res_current].multiplier), (330 * res[res_current].multiplier)],
+    [0, (330 * res[res_current].multiplier)],
+    [0, (60 * res[res_current].multiplier)]
   ], true);
 
 	wallsSetted = true;
@@ -970,7 +980,7 @@ function loop(){
 		var element = elements[i];
 		
 		newLeft = (body.m_position0.x - (element.width >> 1));
-		newTop = (body.m_position0.y - (element.height >> 1) - (10 * res.multiplier[res_current]));
+		newTop = (body.m_position0.y - (element.height >> 1) - (10 * res[res_current].multiplier));
 		element.style.left = newLeft + 'px';
 		element.style.top = newTop + 'px';
 
@@ -1008,9 +1018,7 @@ function loop(){
 		    body.m_linearVelocity.Set(body.m_linearVelocity.x, 40);
 		}
 		
-
 	}
-
 }
 
 
