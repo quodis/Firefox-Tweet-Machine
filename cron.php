@@ -8,17 +8,17 @@
 // ############################################################################
 // settings
   // include config file loader
-  require_once "lib/yaml_loader.php";
+  require_once("lib/yaml_loader.php");
   // load Epi
-  include_once('lib/twitteroauth/EpiCurl.php');
-  include_once('lib/twitteroauth/EpiOAuth.php');
-  include_once('lib/twitteroauth/EpiTwitter.php');
-  include_once('lib/twitteroauth/secret.php');
+  require_once('lib/twitteroauth/EpiCurl.php');
+  require_once('lib/twitteroauth/EpiOAuth.php');
+  require_once('lib/twitteroauth/EpiTwitter.php');
+  require_once('lib/twitteroauth/secret.php');
   // instantiate twitter object
   $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $user_token, $user_secret_token);
 
   // memcache
-  $ttl = ($config['memcache_ttl']) ? $config['memcache_ttl'] : '60';
+  $ttl = ($config['memcache_ttl']) ? $config['memcache_ttl'] : '60000';
   $memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
   $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 
