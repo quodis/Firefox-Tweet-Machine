@@ -365,6 +365,8 @@ function search() {
   
   // Set the query and escape it to prevent xss
   search_query = encodeURIComponent($('#search-input').val());
+  // clear the search_query var if the value == 'Search' which is the placeholder text
+  if ($('#search-input').val() == 'Search') { search_query = ''; };
   
   fresh_custom_search = true;
   clearTimeout(timeout_getcustomsearch);

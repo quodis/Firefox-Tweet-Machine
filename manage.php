@@ -11,10 +11,12 @@
   // logout
   if ($_GET['action'] == 'logout') {
     // clear cookies
-    setcookie('fftm_tok', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
-    setcookie('fftm_sec', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+    // setcookie('fftm_tok', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+    // setcookie('fftm_sec', '', time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
     // refresh page
-    die( header('refresh:0;url=manage.php') );
+    // die( header('refresh:0;url=manage.php') );
+
+	die('nope');
   };
   
   include 'lib/twitteroauth/EpiCurl.php';
@@ -24,13 +26,15 @@
   
   $twitterObj = new EpiTwitter($consumer_key, $consumer_secret);
   
-  // if we're returning from twitter
-  if ($_GET['oauth_token']) {
-    $twitterObj->setToken($_GET['oauth_token']);
-    $token = $twitterObj->getAccessToken();
-    // save token and secret using cookies
-    setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
-    setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+  // if we're returning from twitter OR there's already a cookie set
+  if ($_GET['oauth_token'] || ($_COOKIE['fftm_tok'] | $_COOKIE['fftm_sec']) ) {
+    if ($_GET['oauth_token']) {
+      $twitterObj->setToken($_GET['oauth_token']);
+      $token = $twitterObj->getAccessToken();
+      // save token and secret using cookies
+      setcookie('fftm_tok', $token->oauth_token, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);
+      setcookie('fftm_sec', $token->oauth_token_secret, time() + (3600 * 7), '/', $_SERVER['SERVER_NAME'], false, true);    
+    }
 
     // set token either from GET or stored COOKIE values
     $twitterObj->setToken(($token->oauth_token) ? $token->oauth_token : $_COOKIE['fftm_tok'] , ($token->oauth_token_secret) ? $token->oauth_token_secret : $_COOKIE['fftm_sec']);
