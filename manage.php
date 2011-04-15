@@ -365,10 +365,6 @@
             <input id="memcache_port" name="memcache_port" type="text" value="<? print $config['memcache_port']; ?>" />
             <br />
 
-            <label for="memcache_port">Memcache TTL</label>
-            <input id="memcache_ttl" name="memcache_ttl" type="text" value="<? print $config['memcache_ttl']; ?>" />
-            <br />
-            
           </fieldset>
 
           <fieldset>

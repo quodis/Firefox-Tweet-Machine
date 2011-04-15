@@ -18,7 +18,6 @@
   $twitterObj = new EpiTwitter($consumer_key, $consumer_secret, $user_token, $user_secret_token);
 
   // memcache
-  $ttl = ($config['memcache_ttl']) ? $config['memcache_ttl'] : '60000';
   $memcache_host = ($config['memcache_host']) ? $config['memcache_host'] : 'localhost';
   $memcache_port = ($config['memcache_port']) ? $config['memcache_port'] : '11211' ;
 
@@ -139,10 +138,9 @@ $memcache->connect($memcache_host, $memcache_port) or die ("Could not connect");
 // conditional to only store results if twitter is up and returns results
 if ( count($search_data->results) || ($status['timeline']['http_code'] == 200) ) {
 
-  $memcache->set('timeline_data', $timeline_data, false, $ttl) or die ("Failed to save data at the server");
-  $memcache->set('search_data', $search_data, false, $ttl) or die ("Failed to save data at the server");
-  $memcache->set('default_data', $default_data, false, $ttl) or die ("Failed to save data at the server");
-  echo "Stored data in memcache (data will expire in " . $ttl . " seconds)<br/>\n";
+  $memcache->set('timeline_data', $timeline_data) or die ("Failed to save data at the server");
+  $memcache->set('search_data', $search_data) or die ("Failed to save data at the server");
+  $memcache->set('default_data', $default_data) or die ("Failed to save data at the server");
   
   $get_result = array_merge( array($memcache->get('search_data')), array($memcache->get('timeline_data')), array($memcache->get('default_data')) );
   echo "Data from the cache:<br/>\n";
