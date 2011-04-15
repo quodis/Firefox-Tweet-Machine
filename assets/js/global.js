@@ -1123,7 +1123,7 @@ function buildBubbleTweet(data) {
   html = '\
 		<header class="">\
 			<h1><a href="http://twitter.com/' + username + '" title="' + username + '" rel="author external">' + username + '</a> wrote</h1>\
-			<time datetime="' + created_at + '" pubdate><a href="http://twitter.com/' + username + '/status/' + data.id + '" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
+			<time datetime="' + created_at + '" pubdate><a href="http://twitter.com/' + username + '/status/' + data.id_str + '" rel="bookmark external" title="permalink">' + jQuery.timeago(data.created_at.substring(4)) + '</a></time>\
 		</header>\
 		<p class="avatar-wrapper"><a href="http://twitter.com/' + username + '" title="' + username + '" rel="author external"><img alt="' + username + ' avatar" src="\
 		' + profile_image_url + '" height="' + profile_image_size + '" width="' + profile_image_size + '" /></a></p>\
