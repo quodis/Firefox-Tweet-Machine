@@ -25,7 +25,7 @@ ex: memcache host/port (localhost:11211)
 
 **set up cron job**
 
-/usr/bin/php $WEB_ROOT/cron.php >/dev/null 2>&1
+/usr/bin/php $WEB_TOOT/cron.php >/dev/null 2>&1
 
 remember to add the memcache.so extension to you cli php.ini
 
@@ -34,7 +34,7 @@ remember to add the memcache.so extension to you cli php.ini
 cd assets/js ; \
 rm minimized.js ; \
 java -jar ../misc/compiler.jar \
---js=jquery-1.4.2.min.js \
+--js=jquery-1.5.2.min.js \
 --js=box2d-min.js \
 --js=preloadCssImages.jQuery_v5.js \
 --js=jquery.timeago.js \
