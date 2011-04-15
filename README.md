@@ -25,7 +25,7 @@ ex: memcache host/port (localhost:11211)
 
 **set up cron job**
 
-/usr/bin/php $WEB_TOOT/cron.php >/dev/null 2>&1
+/usr/bin/php $WEB_ROOT/cron.php >/dev/null 2>&1
 
 remember to add the memcache.so extension to you cli php.ini
 
